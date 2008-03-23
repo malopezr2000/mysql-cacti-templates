@@ -1,0 +1,2 @@
+Update max values to max bigint unsigned
+Set values to -1 when unknown
