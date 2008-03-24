@@ -67,11 +67,11 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
    $status = array( # Holds the result of SHOW STATUS, SHOW INNODB STATUS, etc
       # Define some indexes so they don't cause errors with += operations.
       'transactions'          => 0,
-      'current_transactions'  => 0,
       'relay_log_space'       => 0,
       'binary_log_space'      => 0,
-      'transaction_time'      => 0,
-      'transaction_lock_time' => 0,
+      'current_transactions'  => 0,
+      'locked_transactions'   => 0,
+      'active_transactions'   => 0,
    );
 
    # Get SHOW SLAVE STATUS.
@@ -169,11 +169,11 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       elseif ( $innodb_txn && strstr($line, '---TRANSACTION')) {
          $status['current_transactions'] += 1;
          if ( strstr($line, 'ACTIVE') ) {
-            $status['transaction_time'] += tonum($row[4]);
+            $status['active_transactions'] += 1;
          }
       }
       elseif ( $innodb_txn && strstr($line, 'LOCK WAIT') ) {
-         $status['transaction_lock_time'] += tonum($row[2]);
+         $status['locked_transactions'] += 1;
       }
       elseif ( strstr($line, 'read views open inside')) {
          $status['read_views'] = tonum($row[0]);
@@ -308,9 +308,9 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       # MyISAM index usage
       'Key_read_requests', 'Key_reads', 'Key_write_requests', 'Key_writes',
       # InnoDB Transactions
-      'unpurged_txns', 'history_list', 'innodb_transactions',
-      'transaction_time', 'transaction_lock_time', 'read_views',
-      'current_transactions',
+      # 'unpurged_txns', 'transaction_time', 'transaction_lock_time', 
+      'history_list', 'innodb_transactions', 'read_views',
+      'current_transactions', 'locked_transactions', 'active_transactions',
       # InnoDB buffer pool
       'pool_size', 'free_pages', 'database_pages', 'modified_pages',
       'pages_read', 'pages_created', 'pages_written',
