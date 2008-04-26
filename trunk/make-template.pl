@@ -65,7 +65,7 @@ my %graph_types = (
    LINE2 => 5,
    LINE3 => 6,
    AREA  => 7,
-   STACK => 8
+   STACK => 8,
    GPRINT => 9,
    LEGEND => 10,
 );
@@ -134,6 +134,7 @@ sub ee { # Element end
 
 sub el { # Element plus contents
    my ( $name, $content ) = @_;
+   die "Uninitialized content for '$name'" unless defined $content;
    print(("\t" x $indent), "<$name>", enc($content), "</$name>\n");
 }
 
