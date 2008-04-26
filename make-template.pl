@@ -58,9 +58,16 @@ my @stack  = ();
 my $hashno = 0;
 
 my %graph_types = (
+   COMMENT => 1,
+   HRULE => 2,
+   VRULE => 3,
    LINE1 => 4,
+   LINE2 => 5,
+   LINE3 => 6,
    AREA  => 7,
+   STACK => 8
    GPRINT => 9,
+   LEGEND => 10,
 );
 
 my @graph_texts = qw(UNUSED Cur: Avg: Max:);
