@@ -63,7 +63,7 @@ my %graph_types = (
    GPRINT => 9,
 );
 
-my @graph_texts = qw(UNUSED Current: Average: Max:); # TODO: shorten
+my @graph_texts = qw(UNUSED Cur: Avg: Max:);
 my @consolidations = qw(1 4 1 3);
 
 # The properties of a graph.
@@ -210,10 +210,9 @@ foreach my $g ( @{ $t->{graphs} } ) {
       el('name', "Data Source [$it->{item}]");
       el('description', '');
       el('column_name', 'task_item_id');
-      # TODO: it looks like this is not exported correctly in my version of
+      # NOTE: it looks like this is not exported correctly in my version of
       # Cacti, so it might not matter at all.
-      el('items', '');
-         # join('|', map { } 
+      el('items', ''); # join('|', map { } 
       ee($it->{task});
    }
    ee('inputs');
@@ -316,7 +315,7 @@ foreach my $k ( keys %{$t->{inputs}} ) {
 # GPRINT formats
 foreach my $k ( keys %{ $t->{gprints} } ) {
    es($t->{gprints}->{$k}->{hash});
-   el('name', $k);
+   el('name', "$name_prefix $k");
    el('gprint_text', $t->{gprints}->{$k}->{gprint_text});
    ee($t->{gprints}->{$k}->{hash});
 }

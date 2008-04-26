@@ -104,23 +104,15 @@
             input => 'Get MySQL Stats',
             Key_read_requests => {
                hash => 'hash_080013b407e61e9948460c99116f7f6a72cf92',
-               data => 'unsigned',
-               type => 'COUNTER',
             },
             Key_reads => {
                hash => 'hash_0800130de2bf128eac0bc672d77085da38f8cf',
-               data => 'unsigned',
-               type => 'COUNTER',
             },
             Key_write_requests => {
                hash => 'hash_080013039d69d0262c783f20b77fa3b3f62e88',
-               data => 'unsigned',
-               type => 'COUNTER',
             },
             Key_writes => {
                hash => 'hash_080013f8851b46ed984a9e8fba454c48995230',
-               data => 'unsigned',
-               type => 'COUNTER',
             },
          },
       },
