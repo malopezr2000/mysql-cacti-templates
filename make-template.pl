@@ -210,9 +210,11 @@ foreach my $g ( @{ $t->{graphs} } ) {
       el('name', "Data Source [$it->{item}]");
       el('description', '');
       el('column_name', 'task_item_id');
-      # NOTE: it looks like this is not exported correctly in my version of
-      # Cacti, so it might not matter at all.
-      el('items', ''); # join('|', map { } 
+      # NOTE: The refererred-to items are not referred to correctly in my
+      # version of Cacti.  To make the items import exactly as they're exported,
+      # I need to zero out the type/version part of the hash.  (I forget whether
+      # it begins with the object type or the version.)
+      el('items', join('|', map {s/hash_1/hash_0/; $_} @{ $it->{hashes} }));
       ee($it->{task});
    }
    ee('inputs');
