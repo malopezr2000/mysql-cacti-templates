@@ -1,2 +1,9 @@
+These things are available for your hacking pleasure.  Please, pitch in and do
+them if they matter to you, then contribute a patch back.
+
 * Set values to -1 when unknown.  Can this be used to prevent spikes in the
   graphs?  I'm not sure what the best way to do this is.
+* Figure out how to get the script server to work.  I think it should work OK
+  but I don't know much about it.
+* There are a few things marked TODO in the PHP script.
+* Make prettier template colors.  Some of them are hard to look at.
