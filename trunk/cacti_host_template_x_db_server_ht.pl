@@ -77,6 +77,8 @@
       },
       {  base_value => '1024',
          dt         => {
+            hash           => 'hash_01001371058b0c913ca3b1c3f4246c628731fc',
+            input          => 'Get MySQL Stats',
             database_pages => {
                data_source_type_id => '1',
                hash => 'hash_0800132ced436e455d14013f6d824e36295005'
@@ -85,8 +87,6 @@
                data_source_type_id => '1',
                hash => 'hash_080013e00cdf7624957fb1206d92c65ea6fcc3'
             },
-            hash           => 'hash_01001371058b0c913ca3b1c3f4246c628731fb',
-            input          => 'Get MySQL Stats',
             modified_pages => {
                data_source_type_id => '1',
                hash => 'hash_080013714b9bccd3200f6d46fb3ff36be3bf16'
@@ -456,6 +456,8 @@
       },
       {  base_value => '1000',
          dt         => {
+            hash            => 'hash_010013f12a4fdc2bbe8cee87181ba0feaf67ee',
+            input           => 'Get MySQL Stats',
             Aborted_clients => {
                data_source_type_id => '2',
                hash => 'hash_080013b9482e8e8f3a6d0e95978e19715ac447'
@@ -476,8 +478,6 @@
                data_source_type_id => '1',
                hash => 'hash_08001355ed0b81457150103747ca82141a7f13'
             },
-            hash            => 'hash_010013f12a4fdc2bbe8cee87181ba0feaf67ed',
-            input           => 'Get MySQL Stats',
             max_connections => {
                data_source_type_id => '1',
                hash => 'hash_08001352dcd9b60564823afc59da8762e9cf56'
@@ -641,7 +641,10 @@
          name => 'MySQL Replication'
       },
       {  base_value => '1024',
+         name       => 'MySQL Query Cache',
          dt         => {
+            hash  => 'hash_010013758e5dfa7c1b43158c99c9ae8f5c9151',
+            input => 'Get MySQL Stats',
             Qcache_hits => {
                data_source_type_id => '2',
                hash => 'hash_080013f07477338949616d6eea54ee637f6d4e'
@@ -662,8 +665,6 @@
                data_source_type_id => '1',
                hash => 'hash_080013311c7406e805f1bba295d81af1d13fe0'
             },
-            hash  => 'hash_010013758e5dfa7c1b43158c99c9ae8f5c9151',
-            input => 'Get MySQL Stats'
          },
          hash  => 'hash_000013410ce15a29ceea4510e211a0abf3c65b',
          items => [
@@ -723,9 +724,9 @@
                type => 'LINE1'
             }
          ],
-         name => 'MySQL Query Cache'
       },
       {  base_value => '1024',
+         name       => 'MySQL Query Cache Memory',
          dt         => {
             Qcache_free_blocks => {
                data_source_type_id => '1',
@@ -739,7 +740,7 @@
                data_source_type_id => '1',
                hash => 'hash_0800138d7e8ced1b5e263e2bc8a85217cf0738'
             },
-            hash             => 'hash_010013758e5dfa7c1b43158c99c9ae8f5c9151',
+            hash             => 'hash_010013758e5dfa7c1b43158c99c9ae8f5c9152',
             input            => 'Get MySQL Stats',
             query_cache_size => {
                data_source_type_id => '1',
@@ -793,7 +794,6 @@
                type => 'LINE1'
             }
          ],
-         name => 'MySQL Query Cache Memory'
       },
       {  base_value => '1000',
          dt         => {
@@ -1734,12 +1734,12 @@
       },
       {  base_value => '1000',
          dt         => {
+            hash  => 'hash_010013f12a4fdc2bbe8cee87181ba0feaf67ed',
+            input => 'Get MySQL Stats',
             Threads_created => {
                data_source_type_id => '2',
                hash => 'hash_080013b46bed6846abf8d3061ff730d770d13e'
             },
-            hash  => 'hash_010013f12a4fdc2bbe8cee87181ba0feaf67ed',
-            input => 'Get MySQL Stats',
             thread_cache_size => {
                data_source_type_id => '1',
                hash => 'hash_0800138983fa5dd8398bfa87abd22a32a1c849'
