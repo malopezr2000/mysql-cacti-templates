@@ -7,3 +7,6 @@ them if they matter to you, then contribute a patch back.
   but I don't know much about it.
 * There are a few things marked TODO in the PHP script.
 * Make prettier template colors.  Some of them are hard to look at.
+* Figure out what's wrong with the InnoDB Unflushed Log value on the InnoDB Log
+  graph.  On my machine it spikes way larger than the log itself, which is
+  impossible.
