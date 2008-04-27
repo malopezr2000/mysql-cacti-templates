@@ -19,7 +19,10 @@
 
 use strict;
 use warnings FATAL => 'all';
-use English qw(-no_match_vars);
+
+our $VERSION = '@VERSION@';
+our $DISTRIB = '@DISTRIB@';
+our $SVN_REV = sprintf("%d", map { $_ || 0 } q$Revision$ =~ m/(\d+)/g);
 
 # ###########################################################################
 # OptionParser package 1844
@@ -470,6 +473,8 @@ if ( $ENV{MKDEBUG} ) {
 
 package main;
 
+use English qw(-no_match_vars);
+
 my @opt_spec = (
    { s => 'graph_height=i', d => 'Height of generated graphs (default 120)' },
    { s => 'graph_width=i',  d => 'Width of generated graphs (default 500)' },
@@ -480,10 +485,13 @@ my @opt_spec = (
 
 my $opt_parser = OptionParser->new(@opt_spec);
 $opt_parser->{prompt} = '<options> FILE';
+$opt_parser->{strict} = 0;
 $opt_parser->{descr}  = q{generates a Cacti template from a definition file.};
 my %opts = $opt_parser->parse();
-$opt_parser->error('You must specify a FILE to parse') unless @ARGV;
-$opt_parser->usage_or_errors();
+if ( !$opts{help} && !@ARGV ) {
+   $opt_parser->error('You must specify a FILE to parse');
+}
+$opt_parser->usage_or_errors(%opts);
 
 my $name_prefix   = $opts{name_prefix} . ' ';
 my $rrd_step      = $opts{poll_interval};
