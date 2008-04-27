@@ -173,7 +173,7 @@
                hash => 'hash_010013039d69d0262c783f20b77fa3b3f62e88',
                data_source_type_id => '2'
             },
-            input             => 'X Get MySQL Stats',
+            input             => 'Get MySQL Stats',
             Key_read_requests => {
                hash => 'hash_010013b407e61e9948460c99116f7f6a72cf92',
                data_source_type_id => '2'
@@ -247,7 +247,7 @@
                hash => 'hash_0100132ced436e455d14013f6d824e36295005',
                data_source_type_id => '1'
             },
-            input     => 'X Get MySQL Stats',
+            input     => 'Get MySQL Stats',
             pool_size => {
                hash => 'hash_01001368cc20ea3e77e990d749356e21a8ed01',
                data_source_type_id => '1'
@@ -311,7 +311,7 @@
                hash => 'hash_0100139faa26c606b6b28778864d5081588c62',
                data_source_type_id => '2'
             },
-            input       => 'X Get MySQL Stats',
+            input       => 'Get MySQL Stats',
             file_writes => {
                hash => 'hash_0100131452aa7aa7147b5a81f90acf29e344a7',
                data_source_type_id => '2'
@@ -385,7 +385,7 @@
                hash => 'hash_010013c289a34d4c63e31f02be38ad26ffb077',
                data_source_type_id => '2'
             },
-            input => 'X Get MySQL Stats'
+            input => 'Get MySQL Stats'
          },
          base_value => '1000',
          name       => 'InnoDB Insert Buffer',
@@ -432,7 +432,7 @@
                data_source_type_id => '2'
             },
             hash       => 'hash_010013c74a58d5af8d4b98f99fa997c7c75480',
-            input      => 'X Get MySQL Stats',
+            input      => 'Get MySQL Stats',
             spin_waits => {
                hash => 'hash_010013d1a72d8ab6137fcf3df95b2e14a89a58',
                data_source_type_id => '2'
@@ -487,7 +487,7 @@
                hash => 'hash_0100139d6fb10c7a6fad13a42d29c5b77a26b1',
                data_source_type_id => '2'
             },
-            input         => 'X Get MySQL Stats',
+            input         => 'Get MySQL Stats',
             rows_inserted => {
                hash => 'hash_010013ac8e609e24e306fef2ec8ef425fe0ea6',
                data_source_type_id => '2'
@@ -557,8 +557,8 @@
                hash => 'hash_0100134b92784bd5b866747c040580383d9619',
                data_source_type_id => '3'
             },
-            input             => 'X Get MySQL Stats',
-            Table_locks_immed => {
+            input             => 'Get MySQL Stats',
+            Table_locks_immediate => {
                hash => 'hash_010013cf7e7c469ad5eccae33784b96136f318',
                data_source_type_id => '3'
             },
@@ -571,11 +571,18 @@
          name       => 'MySQL Table Locks',
          items      => [
             {  color  => 'D2D8F9',
-               item   => 'Table_locks_immed',
+               item   => 'Table_locks_immediate',
                task   => 'hash_0900131f02f1af427e8fbab1bbc6f9f454a9de',
                type   => 'AREA',
                hashes => [
                   'hash_100013985c2c250576fa832083b7350b3ba43e',
+               ],
+            },
+            {  color => '002A8F',
+               item   => 'Table_locks_immediate',
+               task   => 'hash_0900131f02f1af427e8fbab1bbc6f9f454a9de',
+               type   => 'LINE1',
+               hashes => [
                   'hash_1000136388f8353794e11c3ba3ca88ec8092b6',
                   'hash_100013195358fe082e80eea41714386c901af0',
                   'hash_1000132e180568d6e8324d8de0b5de18f9ace7',
@@ -617,12 +624,12 @@
                data_source_type_id => '1'
             },
             hash            => 'hash_010013f12a4fdc2bbe8cee87181ba0feaf67ed',
-            input           => 'X Get MySQL Stats',
+            input           => 'Get MySQL Stats',
             max_connections => {
                hash => 'hash_01001352dcd9b60564823afc59da8762e9cf56',
                data_source_type_id => '1'
             },
-            Max_used_connection => {
+            Max_used_connections => {
                hash => 'hash_0100130ecbbad784c6a0287cb138e0d101159b',
                data_source_type_id => '1'
             },
@@ -648,7 +655,7 @@
                ]
             },
             {  color  => 'FFD660',
-               item   => 'Max_used_connection',
+               item   => 'Max_used_connections',
                task   => 'hash_0900131052774481daf3ea84f80406fd86bceb',
                type   => 'AREA',
                hashes => [
@@ -704,16 +711,16 @@
       },
       {  hash => 'hash_000013b8ab36ff23571c4583154391183380c9',
          dt   => {
-            Slave_retried_trans => {
+            Slave_retried_transactions => {
                hash => 'hash_010013bc1d5cacb2e2c6f0785f369f6baaa349',
                data_source_type_id => '2'
             },
-            Slave_open_temp_tab => {
+            Slave_open_temp_tables => {
                hash => 'hash_01001325cf8ecc2e97a7de94bc1cb48151a5e2',
                data_source_type_id => '1'
             },
-            input               => 'X Get MySQL Stats',
-            seconds_behind_mast => {
+            input               => 'Get MySQL Stats',
+            seconds_behind_master => {
                hash => 'hash_010013102549743bbd45d73dad64e40c5deabd',
                data_source_type_id => '1'
             },
@@ -747,7 +754,7 @@
                hashes => [ 'hash_100013d86914f0587cc89b36795e15f6deb843' ]
             },
             {  color  => 'ED7600',
-               item   => 'seconds_behind_mast',
+               item   => 'seconds_behind_master',
                task   => 'hash_090013eccdbf2fc2b3784ac5392a8438351d6d',
                type   => 'LINE1',
                hashes => [
@@ -769,7 +776,7 @@
                ]
             },
             {  color  => '8D00BA',
-               item   => 'Slave_open_temp_tab',
+               item   => 'Slave_open_temp_tables',
                task   => 'hash_090013223448b07c87f678582c20b90b888d7b',
                type   => 'LINE1',
                hashes => [
@@ -780,7 +787,7 @@
                ]
             },
             {  color  => 'FF0000',
-               item   => 'Slave_retried_trans',
+               item   => 'Slave_retried_transactions',
                task   => 'hash_0900136d91d49c09ae744a110b7ade0c93e0af',
                type   => 'LINE1',
                hashes => [
@@ -799,16 +806,16 @@
                data_source_type_id => '2'
             },
             hash => 'hash_010013758e5dfa7c1b43158c99c9ae8f5c9151',
-            Qcache_lowmem_prune => {
+            Qcache_lowmem_prunes => {
                hash => 'hash_01001314595905d0a5cd47d859662262beced7',
                data_source_type_id => '2'
             },
-            input             => 'X Get MySQL Stats',
+            input             => 'Get MySQL Stats',
             Qcache_not_cached => {
                hash => 'hash_010013bed31c9faf2bd44892d858ca786520ef',
                data_source_type_id => '2'
             },
-            Qcache_queries_in_c => {
+            Qcache_queries_in_cache => {
                hash => 'hash_010013311c7406e805f1bba295d81af1d13fe0',
                data_source_type_id => '1'
             },
@@ -821,7 +828,7 @@
          name       => 'MySQL Query Cache',
          items      => [
             {  color  => '4444FF',
-               item   => 'Qcache_queries_in_c',
+               item   => 'Qcache_queries_in_cache',
                task   => 'hash_0900138e9d3e5965f1de27395fce2bbc5f36d4',
                type   => 'LINE2',
                hashes => [
@@ -865,7 +872,7 @@
                ]
             },
             {  color  => 'FF0000',
-               item   => 'Qcache_lowmem_prune',
+               item   => 'Qcache_lowmem_prunes',
                task   => 'hash_0900131084c6b5757103795d1fec2c17ac9da7',
                type   => 'LINE1',
                hashes => [
@@ -884,7 +891,7 @@
                hash => 'hash_01001376a39fdd8200142dcbc0a924c48d5579',
                data_source_type_id => '1'
             },
-            input              => 'X Get MySQL Stats',
+            input              => 'Get MySQL Stats',
             Qcache_free_blocks => {
                hash => 'hash_0100133e1726404b6d50a895f5809d1ad56a7f',
                data_source_type_id => '1'
@@ -949,6 +956,7 @@
       },
       {  hash => 'hash_000013d62fdf10872359e69b44bc7e2aaf3533',
          dt   => {
+            input      => 'Get MySQL Stats',
             Com_select => {
                hash => 'hash_010013196a931365006b70189f1252a7601ecb',
                data_source_type_id => '2'
@@ -961,7 +969,6 @@
                hash => 'hash_010013338ab0cab8bfed0e33c57639bac678a2',
                data_source_type_id => '2'
             },
-            input      => 'X Get MySQL Stats',
             Com_insert => {
                hash => 'hash_0100133d9a4c7361041aa0bcb36b4bb98e3853',
                data_source_type_id => '2'
@@ -1129,7 +1136,7 @@
                hash => 'hash_01001361fff8036b63b07d8863feeacc81c1d4',
                data_source_type_id => '2'
             },
-            Select_full_range_j => {
+            Select_full_range_join => {
                hash => 'hash_010013c9a6d87d4df6f96364f7bc700fadbc45',
                data_source_type_id => '2'
             },
@@ -1141,7 +1148,7 @@
                hash => 'hash_010013e71fb77d0613171bc9b0fc92f2e58326',
                data_source_type_id => '2'
             },
-            input              => 'X Get MySQL Stats',
+            input              => 'Get MySQL Stats',
             Select_range_check => {
                hash => 'hash_0100138245046cf427baa6fb2a253a533225f3',
                data_source_type_id => '2'
@@ -1162,7 +1169,7 @@
                ]
             },
             {  color  => 'FF7D00',
-               item   => 'Select_full_range_j',
+               item   => 'Select_full_range_join',
                task   => 'hash_090013a29699386c2b6da1f14155617f1ea669',
                type   => 'STACK',
                hashes => [
@@ -1218,7 +1225,7 @@
                hash => 'hash_0100138aa489c6bb70310d14a24e56e31c9592',
                data_source_type_id => '2'
             },
-            input     => 'X Get MySQL Stats',
+            input     => 'Get MySQL Stats',
             Sort_scan => {
                hash => 'hash_010013ef1c94da33bc5d6378f01bd4afdb7c1c',
                data_source_type_id => '2'
@@ -1279,7 +1286,7 @@
       },
       {  hash => 'hash_0000139f74469a04ea366f93adb382bf9feb0d',
          dt   => {
-            Created_tmp_disk_ta => {
+            Created_tmp_disk_tables => {
                hash => 'hash_0100135668ee63d100ff3e25f235b47099e56c',
                data_source_type_id => '2'
             },
@@ -1288,7 +1295,7 @@
                hash => 'hash_010013322a90733977c40c16f4ea07987e39c0',
                data_source_type_id => '2'
             },
-            input             => 'X Get MySQL Stats',
+            input             => 'Get MySQL Stats',
             Created_tmp_files => {
                hash => 'hash_01001310c2532bfb063c2795e0846f5c8466a1',
                data_source_type_id => '2'
@@ -1303,6 +1310,13 @@
                type   => 'AREA',
                hashes => [
                   'hash_10001309a8c0e87dae4f0992ca91ab68ec5073',
+               ],
+            },
+            {  color  => '837C04',
+               item   => 'Created_tmp_tables',
+               task   => 'hash_09001336437272524ecb132ac818f6ab3c6276',
+               type   => 'LINE1',
+               hashes => [
                   'hash_10001388983587ec40912f7323632c80c8d604',
                   'hash_1000133868c9f1c6a36578f03a37e589378ed5',
                   'hash_100013adfd30ecf4b2fbfca111cf83f597928b',
@@ -1310,7 +1324,7 @@
                ]
             },
             {  color  => 'F51D30',
-               item   => 'Created_tmp_disk_ta',
+               item   => 'Created_tmp_disk_tables',
                task   => 'hash_0900135eb6098c631183c1179a906a06f9bcf2',
                type   => 'LINE1',
                hashes => [
@@ -1336,7 +1350,7 @@
       {  hash => 'hash_0000130461c811ce958cecfb41bdbb16b2f72b',
          dt   => {
             hash           => 'hash_01001386055944cd5a58072ab8b2db2488a1ef',
-            input          => 'X Get MySQL Stats',
+            input          => 'Get MySQL Stats',
             Bytes_received => {
                hash => 'hash_0100130dc4474ee42f80143630b1c03f5292c6',
                data_source_type_id => '2'
@@ -1380,7 +1394,7 @@
                data_source_type_id => '2'
             },
             hash          => 'hash_01001371058b0c913ca3b1c3f4246c628731fb',
-            input         => 'X Get MySQL Stats',
+            input         => 'Get MySQL Stats',
             pages_created => {
                hash => 'hash_0100139a01b6e087c3ef063799178d306feb97',
                data_source_type_id => '2'
@@ -1430,21 +1444,21 @@
       },
       {  hash => 'hash_0000138d45ae00a3c6856c8cb4e27e0c10eae6',
          dt   => {
-            pending_ibuf_aio_re => {
+            pending_ibuf_aio_reads => {
                hash => 'hash_010013be22dfb8efd92b9fe309592dec10cc8d',
                data_source_type_id => '1'
             },
-            input               => 'X Get MySQL Stats',
+            input               => 'Get MySQL Stats',
             pending_chkp_writes => {
                hash => 'hash_010013800348e37be481771454d906c1d1d8de',
                data_source_type_id => '1'
             },
-            pending_norm_aio_re => {
+            pending_normal_aio_reads => {
                hash => 'hash_010013e21d7e99fa7ef26cacb7752e46a478cc',
                data_source_type_id => '1'
             },
             hash => 'hash_010013f1e9a48e5e5ee153ebee5aee529b46a6',
-            pending_buf_pool_fl => {
+            pending_buf_pool_flushes => {
                hash => 'hash_0100138c57848b1f40239c68b01e0b66310d4a',
                data_source_type_id => '1'
             },
@@ -1456,11 +1470,11 @@
                hash => 'hash_01001325cc4d35043d3209f5c04d82757c93d2',
                data_source_type_id => '1'
             },
-            pending_aio_sync_io => {
+            pending_aio_sync_ios => {
                hash => 'hash_01001336c9b07cd0ae44be946eac9d2c5990f7',
                data_source_type_id => '1'
             },
-            pending_norm_aio_wr => {
+            pending_normal_aio_writes => {
                hash => 'hash_010013fa7e7dd36bd47498841b103fb0d333a4',
                data_source_type_id => '1'
             },
@@ -1484,7 +1498,7 @@
                ]
             },
             {  color  => 'FF7D00',
-               item   => 'pending_aio_sync_io',
+               item   => 'pending_aio_sync_ios',
                task   => 'hash_09001365cc4c97240cf85f016eb669a1b4f354',
                type   => 'LINE1',
                hashes => [
@@ -1495,7 +1509,7 @@
                ]
             },
             {  color  => 'FFF200',
-               item   => 'pending_buf_pool_fl',
+               item   => 'pending_buf_pool_flushes',
                task   => 'hash_090013101a3323f1645a6d7edb5a0c37198240',
                type   => 'LINE1',
                hashes => [
@@ -1517,7 +1531,7 @@
                ]
             },
             {  color  => '6DC8FE',
-               item   => 'pending_ibuf_aio_re',
+               item   => 'pending_ibuf_aio_reads',
                task   => 'hash_090013272b558c66014863c060908d89448961',
                type   => 'LINE1',
                hashes => [
@@ -1550,7 +1564,7 @@
                ]
             },
             {  color  => 'B90054',
-               item   => 'pending_norm_aio_re',
+               item   => 'pending_normal_aio_reads',
                task   => 'hash_09001331023270b18d06a25de3b4e8d1f81988',
                type   => 'LINE1',
                hashes => [
@@ -1561,7 +1575,7 @@
                ]
             },
             {  color  => '8F9286',
-               item   => 'pending_norm_aio_wr',
+               item   => 'pending_normal_aio_writes',
                task   => 'hash_090013c26c20a87d2cca682599b33fe3863c7e',
                type   => 'LINE1',
                hashes => [
@@ -1588,17 +1602,17 @@
                hash => 'hash_010013de41286a9e5734185c7a4eac909a1580',
                data_source_type_id => '2'
             },
-            innodb_log_buf_size => {
+            innodb_log_buffer_size => {
                hash => 'hash_010013297edbf2eccbdf0dabda7d8166884cd5',
                data_source_type_id => '1'
             },
-            input => 'X Get MySQL Stats'
+            input => 'Get MySQL Stats'
          },
          base_value => '1024',
          name       => 'InnoDB Log',
          items      => [
             {  color  => 'FAFD9E',
-               item   => 'innodb_log_buf_size',
+               item   => 'innodb_log_buffer_size',
                task   => 'hash_09001311fb91244cce5df61a0da010fb524445',
                type   => 'AREA',
                hashes => [
@@ -1647,7 +1661,7 @@
                hash => 'hash_010013f787be2f29e6a6c727d51629d310dd4c',
                data_source_type_id => '2'
             },
-            Binlog_cache_disk_u => {
+            Binlog_cache_disk_use => {
                hash => 'hash_010013c5d1d5f676d73244c30e0d71c9324fd1',
                data_source_type_id => '2'
             },
@@ -1656,7 +1670,7 @@
                hash => 'hash_010013a4b9d1a7f255ad789d348354091cb475',
                data_source_type_id => '1'
             },
-            input           => 'X Get MySQL Stats',
+            input           => 'Get MySQL Stats',
             relay_log_space => {
                hash => 'hash_010013d17011029e29581769e5414579ca2f5c',
                data_source_type_id => '1'
@@ -1677,7 +1691,7 @@
                ]
             },
             {  color  => 'FF0000',
-               item   => 'Binlog_cache_disk_u',
+               item   => 'Binlog_cache_disk_use',
                task   => 'hash_0900136269a13748fd88a1400b82d00a2c7f3c',
                type   => 'LINE1',
                hashes => [
@@ -1717,7 +1731,7 @@
                hash => 'hash_0100134bb48cfeb0c6ba33cd0efc263f17d3d6',
                data_source_type_id => '2'
             },
-            input            => 'X Get MySQL Stats',
+            input            => 'Get MySQL Stats',
             transaction_time => {
                hash => 'hash_010013eebbc6aae3eae872da81fdf51cdf3b63',
                data_source_type_id => '1'
@@ -1731,11 +1745,11 @@
                hash => 'hash_010013d77d77348050b6a61f9df87f2cd0a47c',
                data_source_type_id => '1'
             },
-            transaction_lock_ti => {
+            transaction_lock_time => {
                hash => 'hash_0100133a2b84efcc69304a9362a08cda9c1da2',
                data_source_type_id => '1'
             },
-            current_transaction => {
+            current_transactions => {
                hash => 'hash_01001365dd57fbce5ead54134c6503c037db90',
                data_source_type_id => '1'
             }
@@ -1755,7 +1769,7 @@
                ]
             },
             {  color  => '4444FF',
-               item   => 'current_transaction',
+               item   => 'current_transactions',
                task   => 'hash_090013a34797ac2967209ac53511847683d493',
                type   => 'LINE1',
                hashes => [
@@ -1799,7 +1813,7 @@
                ]
             },
             {  color  => '8D00BA',
-               item   => 'transaction_lock_ti',
+               item   => 'transaction_lock_time',
                task   => 'hash_090013c4b2e1795809d0bf27a6605da2a29b2e',
                type   => 'LINE1',
                hashes => [
@@ -1826,7 +1840,7 @@
                hash => 'hash_0100136a4c5bbc5e1010c27f25ae5099125a9b',
                data_source_type_id => '1'
             },
-            input       => 'X Get MySQL Stats',
+            input       => 'Get MySQL Stats',
             table_cache => {
                hash => 'hash_0100139576ab3e9c3b59b7806af18db882a6ec',
                data_source_type_id => '1'
@@ -1882,7 +1896,7 @@
       {  hash => 'hash_000013f530abf34e8b5a64302b3bd0b5e910be',
          dt   => {
             hash            => 'hash_010013f12a4fdc2bbe8cee87181ba0feaf67ed',
-            input           => 'X Get MySQL Stats',
+            input           => 'Get MySQL Stats',
             Threads_created => {
                hash => 'hash_010013b46bed6846abf8d3061ff730d770d13e',
                data_source_type_id => '2'
