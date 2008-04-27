@@ -4,10 +4,14 @@ This is a set of templates for monitoring MySQL servers with Cacti.  It is also
 a compact, maintainable set of template definitions and a set of tools for
 generating templates from these definitions.
 
-Thanks is due The Rimm-Kaufman Group, who sponsored part of the template
+Thanks are due to The Rimm-Kaufman Group, who sponsored part of the template
 development.  The Rimm-Kaufman Group is a search engine advertising agency that
 helps its clients place ads on Google, Yahoo, and other major search engines.
 Their website is http://www.rimmkaufman.com.
+
+Thanks also to the scripts and templates that inspired this work.  Though
+everything is completely rewritten, these templates bear quite a resemblance to
+the earlier templates, which you can find at http://faemalia.net/mysqlUtils/
 
 DESCRIPTION
 
