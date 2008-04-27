@@ -1,4 +1,5 @@
 INTRODUCTION
+============
 
 This is a set of templates for monitoring MySQL servers with Cacti.  It is also
 a compact, maintainable set of template definitions and a set of tools for
@@ -13,7 +14,32 @@ Thanks also to the scripts and templates that inspired this work.  Though
 everything is completely rewritten, these templates bear quite a resemblance to
 the earlier templates, which you can find at http://faemalia.net/mysqlUtils/
 
+INSTALLATION
+============
+
+The default templates assume you are using the default Cacti polling interval of
+5 minutes (300 seconds).  If you use another polling interval, you'll need to
+generate a template file accordingly.  See "GENERATING YOUR OWN TEMPLATES" later
+in this file for that.
+
+To install,
+
+   1. Create a MySQL user on each server you want to monitor.  This user should
+      have the same username and password on each server for easiest
+      installation.  The user needs only the SUPER privilege.
+   2. Put ss_get_mysql_stats.php into your cacti/scripts/ directory.
+   3. Set the MySQL username and password in the header of that file.  Use the
+      values you chose in step 1.
+   4. Import the template and then create graphs as usual (beyond the scope of
+      this document; see the Cacti website and manual for help).  If you didn't
+      use the same username and password for each server you're monitoring, you
+      will need to generate your own templates.  (Instructions are later in this
+      file).
+
+If you find any bugs or problems, please contact the author.
+
 DESCRIPTION
+===========
 
 Cacti is a nice tool, but the MySQL templates I found weren't what I was looking
 for.  Also, Cacti's design can cause inefficiency if you don't know how to use
@@ -31,3 +57,25 @@ http://forums.cacti.net/viewtopic.php?t=26448.
 I've also added quite a bit of data to the templates, fixed a lot of problems
 with bigint math and other items, made the templates easier to use (no need to
 fill in username and password for every graph you create), and so on.
+
+GENERATING YOUR OWN TEMPLATES
+=============================
+
+Rather than editing the templates inside Cacti and then exporting them, I've
+made a compact definition file and a Perl script to generate templates.  This
+makes the templates easier to maintain.  It also lets you generate custom
+templates easily if the defaults shipped in the tarball aren't to your liking.
+
+The basic idea is to run the make-template.pl script with the template
+definition file as input:
+
+   perl make-template.pl mysql_definitions.pl > my_new_template.xml
+
+You can now import this file as usual.  Examine the --help output of the script
+to see what your options are.
+
+The generated templates don't conflict with your existing Cacti installation.
+They don't use anything pre-defined in Cacti.  That means you can import them
+without fear of overwriting your customized settings.  It also means they may
+create things that look duplicated to you, such as their own RRA settings.  At
+least you know they're separate from your existing installation, though.
