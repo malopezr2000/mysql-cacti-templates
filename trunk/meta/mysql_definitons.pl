@@ -93,6 +93,8 @@
          name => 'MyISAM Indexes'
       },
       {  base_value => '1024',
+         name => 'InnoDB Buffer Pool',
+         # Color palette: http://www.colourlovers.com/palette/354987/DSH
          dt         => {
             hash           => 'hash_01001371058b0c913ca3b1c3f4246c628731fc',
             input          => 'Get MySQL Stats',
@@ -115,7 +117,7 @@
          },
          hash  => 'hash_000013000d2d952ec15762ba04f6384dba51d2',
          items => [
-            {  color  => 'FFD660',
+            {  color  => '3D1500',
                hashes => [
                   'hash_1000136820faaa15e407a4443588d8afc41fdb',
                   'hash_100013cb3addf6f0a3c3b7f4c7ffc2cffb73b9'
@@ -124,7 +126,7 @@
                task => 'hash_0900132cb12f1e0ce4b35cac3f026054f4bee4',
                type => 'AREA'
             },
-            {  color  => '157419',
+            {  color  => 'AA3B27',
                hashes => [
                   'hash_10001381b0c8274aecfa8a5e304eabdaa7f3a9',
                   'hash_100013cc3c68b2b4f7fb46913301aea0a6c1ae',
@@ -135,7 +137,7 @@
                task => 'hash_090013b7800e17a4e0a97464eda1b373839eb7',
                type => 'AREA'
             },
-            {  color  => 'CDCFC4',
+            {  color  => 'EDAA41',
                hashes => [
                   'hash_100013f831741492af46b72bc0a63d11e72869',
                   'hash_1000137abd57dc40efb7827d1424f07b8e98be',
@@ -146,7 +148,7 @@
                task => 'hash_090013d265fe62da24ab1ac26a4a15b3da438e',
                type => 'STACK'
             },
-            {  color  => '4668E4',
+            {  color  => '13343B',
                hashes => [
                   'hash_1000137053cc7687881295d23bc15f108e9433',
                   'hash_1000135ab29120a18ffd753145908aabcb0478',
@@ -158,9 +160,10 @@
                type => 'LINE1'
             }
          ],
-         name => 'InnoDB Buffer Pool'
       },
       {  base_value => '1000',
+         # Palette: http://www.colourlovers.com/palette/299787/What_Shall_I_Do
+         name       => 'InnoDB I/O',
          dt         => {
             file_fsyncs => {
                data_source_type_id => '2',
@@ -183,7 +186,7 @@
          },
          hash  => 'hash_000013da247361e59f209d69be79ada9b05665',
          items => [
-            {  color  => 'ED7600',
+            {  color  => '402204',
                hashes => [
                   'hash_100013d444cf5b2282941e7a2095d0a8c6ed59',
                   'hash_100013910f8d7e8652692960dba852989d6f52',
@@ -194,7 +197,7 @@
                task => 'hash_090013a7dc405b5920611b788cadc936442a0a',
                type => 'LINE1'
             },
-            {  color  => '157419',
+            {  color  => 'B3092B',
                hashes => [
                   'hash_100013a003f2270ea883d97dcf72d1af33f596',
                   'hash_10001334324f39d4a59acdf77d15b4a6959138',
@@ -205,7 +208,7 @@
                task => 'hash_0900130bc38dd83b51bc28d900301642f264b3',
                type => 'LINE1'
             },
-            {  color  => 'DA4725',
+            {  color  => 'FFBF00',
                hashes => [
                   'hash_10001329e59d844c33344ee91e195ce60e8813',
                   'hash_100013bf128e2a5f554016dca014539dc9297e',
@@ -216,7 +219,7 @@
                task => 'hash_0900132e5e7792fce3374c07688a917ee3e1d2',
                type => 'LINE1'
             },
-            {  color  => '4444FF',
+            {  color  => '0ABFCC',
                hashes => [
                   'hash_1000136517b82d8f0c7510026ac494e83068ba',
                   'hash_1000137f5e1b9e217ef5abc70549cab905edd5',
@@ -228,7 +231,6 @@
                type => 'LINE1'
             }
          ],
-         name => 'InnoDB I/O'
       },
       {  base_value => '1000',
          dt         => {
@@ -1204,6 +1206,8 @@
          name => 'MySQL Temporary Objects'
       },
       {  base_value => '1024',
+         # Palette: http://www.colourlovers.com/palette/90901/le_pain_quotidien
+         name => 'MySQL Network Traffic',
          dt         => {
             Bytes_received => {
                data_source_type_id => '2',
@@ -1218,7 +1222,7 @@
          },
          hash  => 'hash_0000130461c811ce958cecfb41bdbb16b2f72b',
          items => [
-            {  color  => '6DC8FE',
+            {  color  => 'E4C576',
                hashes => [
                   'hash_1000132c3bc6cf1e7b659f900870349739fee2',
                   'hash_10001339e91e27c91788433d0aa45874ca4a73',
@@ -1229,7 +1233,7 @@
                task => 'hash_09001310e148a3f5d6bb38c7b10cacc68c5e15',
                type => 'AREA'
             },
-            {  color  => 'F9FD5F',
+            {  color  => '4B2744',
                hashes => [
                   'hash_100013f9276bc645b301cb7ed35be16bfbf863',
                   'hash_100013cc9fe030f9b3acf9ca42f030097b8d59',
@@ -1241,9 +1245,10 @@
                type => 'STACK'
             }
          ],
-         name => 'MySQL Network Traffic'
       },
       {  base_value => '1024',
+         # Color palette: http://www.colourlovers.com/palette/324729/Compliments
+         name       => 'InnoDB Buffer Pool Activity',
          dt         => {
             hash          => 'hash_01001371058b0c913ca3b1c3f4246c628731fb',
             input         => 'Get MySQL Stats',
@@ -1262,7 +1267,7 @@
          },
          hash  => 'hash_0000130769eb5b1fead3b8981e29659105bd17',
          items => [
-            {  color  => 'FFAB00',
+            {  color  => 'D6883A',
                hashes => [
                   'hash_100013462fc089f00bca62dd10b09b5862838f',
                   'hash_1000133c900059ae6cc8145ac328de111cc8a9',
@@ -1273,7 +1278,7 @@
                task => 'hash_0900133f68d0dacb01ae52ee57d32845184b97',
                type => 'AREA'
             },
-            {  color  => 'D8ACE0',
+            {  color  => 'E6D883',
                hashes => [
                   'hash_100013edf22d9ba85d806adb691f9d79450da3',
                   'hash_100013c7fe57ccf638845a30d74557ed005e62',
@@ -1284,7 +1289,7 @@
                task => 'hash_090013a173cf9cad9ebd6394b220700c72887c',
                type => 'STACK'
             },
-            {  color  => '7CB3F1',
+            {  color  => '55AD84',
                hashes => [
                   'hash_100013e0228f620c72daec30dcbdff9baa07da',
                   'hash_100013172bfa89f1bed5ce930a52737af78fa4',
@@ -1296,7 +1301,6 @@
                type => 'STACK'
             }
          ],
-         name => 'InnoDB Buffer Pool Activity'
       },
       {  base_value => '1000',
          dt         => {
@@ -1444,6 +1448,7 @@
          name => 'InnoDB I/O Pending'
       },
       {  base_value => '1024',
+         name => 'InnoDB Log',
          dt         => {
             hash => 'hash_01001331dcfc560537b6f93ced9e6aa6c272e0',
             innodb_log_buffer_size => {
@@ -1466,7 +1471,7 @@
          },
          hash  => 'hash_0000136932388e4d279763fbb5aa8de2ae234f',
          items => [
-            {  color  => 'FAFD9E',
+            {  color  => '2E111A',
                hashes => [
                   'hash_100013c423f770cd7c28ea828f07eafe8a0d8e',
                   'hash_100013944a7ba19cd050a8a7bf97eaf92e2abd'
@@ -1475,7 +1480,7 @@
                task => 'hash_09001311fb91244cce5df61a0da010fb524445',
                type => 'AREA'
             },
-            {  color  => '4444FF',
+            {  color  => '5B8257',
                hashes => [
                   'hash_1000130b5c10093a46c828a111a7cec5a0185f',
                   'hash_100013acf3d6e8c8956e88c608785f45b3aaf3',
@@ -1486,7 +1491,7 @@
                task => 'hash_09001347fac87eaf3a0b2ddaac47352c0e3396',
                type => 'AREA'
             },
-            {  color  => '00FF00',
+            {  color  => 'AB4253',
                hashes => [
                   'hash_1000133e79586e910c279a76578637b0878d10',
                   'hash_100013c0966b24084c40ef5a85e0febd2f4052',
@@ -1497,7 +1502,7 @@
                task => 'hash_090013ccd834528645793e0f8c001dd24ef966',
                type => 'LINE1'
             },
-            {  color  => 'FF4105',
+            {  color  => 'B99B59',
                hashes => [
                   'hash_100013da80bd49abd1bdea5a9cea349b0b199c',
                   'hash_100013316e2c71816a5c05bf978f1d66c122fe',
@@ -1509,7 +1514,6 @@
                type => 'AREA'
             }
          ],
-         name => 'InnoDB Log'
       },
       {  base_value => '1024',
          dt         => {
