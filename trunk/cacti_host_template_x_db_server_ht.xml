@@ -3487,7 +3487,7 @@
 		<items>
 			<hash_100013c56eef30cb2750b8c160595048a6fd40>
 				<task_item_id>hash_0800135e6cf8e6439278754a5ffb80e3bdef57</task_item_id>
-				<color_id>FF0000</color_id>
+				<color_id>3D1500</color_id>
 				<graph_type_id>7</graph_type_id>
 				<consolidation_function_id>1</consolidation_function_id>
 				<cdef_id>0</cdef_id>
@@ -3535,7 +3535,7 @@
 			</hash_100013e8b78bd4b9eaf82a252a1982169363eb>
 			<hash_10001327daf8c1e7a9aebf985c44bc937646ec>
 				<task_item_id>hash_080013c9a6d87d4df6f96364f7bc700fadbc45</task_item_id>
-				<color_id>FF7D00</color_id>
+				<color_id>AA3B27</color_id>
 				<graph_type_id>8</graph_type_id>
 				<consolidation_function_id>1</consolidation_function_id>
 				<cdef_id>0</cdef_id>
@@ -3583,7 +3583,7 @@
 			</hash_100013239e1dacf1a673cae8000e7a22425c8f>
 			<hash_10001383f1b2dbdab4e2d780683f8a9014f451>
 				<task_item_id>hash_08001361fff8036b63b07d8863feeacc81c1d4</task_item_id>
-				<color_id>FFF200</color_id>
+				<color_id>EDAA41</color_id>
 				<graph_type_id>8</graph_type_id>
 				<consolidation_function_id>1</consolidation_function_id>
 				<cdef_id>0</cdef_id>
@@ -3631,7 +3631,7 @@
 			</hash_100013b15bce4c94ef4df5ea1402105e458bd1>
 			<hash_100013488c4bc114ba402b7ed472f7ceabccf2>
 				<task_item_id>hash_0800138245046cf427baa6fb2a253a533225f3</task_item_id>
-				<color_id>00CF00</color_id>
+				<color_id>13343B</color_id>
 				<graph_type_id>8</graph_type_id>
 				<consolidation_function_id>1</consolidation_function_id>
 				<cdef_id>0</cdef_id>
@@ -3679,7 +3679,7 @@
 			</hash_100013f4286ff70508f23c03d619b8f8722c33>
 			<hash_100013e23d1f843362c44acf88bcedb6de2a54>
 				<task_item_id>hash_080013e71fb77d0613171bc9b0fc92f2e58326</task_item_id>
-				<color_id>7CB3F1</color_id>
+				<color_id>686240</color_id>
 				<graph_type_id>8</graph_type_id>
 				<consolidation_function_id>1</consolidation_function_id>
 				<cdef_id>0</cdef_id>
@@ -6010,7 +6010,7 @@
 		<items>
 			<hash_10001333a746dcc4a95dff1b433fee306e0684>
 				<task_item_id>hash_0800139576ab3e9c3b59b7806af18db882a6ec</task_item_id>
-				<color_id>96E78A</color_id>
+				<color_id>D09887</color_id>
 				<graph_type_id>7</graph_type_id>
 				<consolidation_function_id>1</consolidation_function_id>
 				<cdef_id>0</cdef_id>
@@ -6034,7 +6034,7 @@
 			</hash_10001329c6a88d42f3f9bf18fd6d11ca87990d>
 			<hash_100013976798d4f86d71a171872e9f088885fc>
 				<task_item_id>hash_0800136a4c5bbc5e1010c27f25ae5099125a9b</task_item_id>
-				<color_id>9FA4EE</color_id>
+				<color_id>4A6959</color_id>
 				<graph_type_id>4</graph_type_id>
 				<consolidation_function_id>1</consolidation_function_id>
 				<cdef_id>0</cdef_id>
@@ -6082,7 +6082,7 @@
 			</hash_1000139890f3f876ae0ba5d63c7584c49899a5>
 			<hash_100013d9dfa15dcbd8c9e1f48e0e6791898f47>
 				<task_item_id>hash_0800139b2465446100422df23bc22189d93d49</task_item_id>
-				<color_id>FFD660</color_id>
+				<color_id>72111C</color_id>
 				<graph_type_id>4</graph_type_id>
 				<consolidation_function_id>1</consolidation_function_id>
 				<cdef_id>0</cdef_id>
@@ -6130,7 +6130,7 @@
 			</hash_1000137ab18fafaba985d7dd05f1ecb320bee1>
 			<hash_100013e7bb489f5d3384b0100ac76c4448bc79>
 				<task_item_id>hash_080013b31d2e1ef1d9178247ce4e874ae88e33</task_item_id>
-				<color_id>FF0000</color_id>
+				<color_id>1D1159</color_id>
 				<graph_type_id>4</graph_type_id>
 				<consolidation_function_id>1</consolidation_function_id>
 				<cdef_id>0</cdef_id>
