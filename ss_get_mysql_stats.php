@@ -335,6 +335,11 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
             $status[$key] = $val;
          }
       }
+      # TODO: I'm not sure what the deal is here; need to debug this.  But the
+      # unflushed log bytes spikes a lot sometimes and it's impossible for it to
+      # be more than the log buffer.
+      $status['unflushed_log']
+         = max($status['unflushed_log'], $status['innodb_log_buffer_size']);
    }
    if (true) {
       $sql = "SELECT "
