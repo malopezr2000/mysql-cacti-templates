@@ -1,1 +1,2 @@
-Set values to -1 when unknown
+* Set values to -1 when unknown.  Can this be used to prevent spikes in the
+  graphs?  I'm not sure what the best way to do this is.
