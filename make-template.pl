@@ -153,6 +153,21 @@ sub to_words {
    return join(' ', map { ucfirst } split(/_/, $text));
 }
 
+# Removes vowels and compacts repeated letters to shorten text.  In this case,
+# to 19 characters, which is RRDTool's internal limit.  This lets the data
+# source (script) output long variable names, which can then be used as nice
+# descriptive labels, while translating them into crunched text when needed for
+# an RRA.
+sub crunch {
+   my ( $text ) = @_;
+   my $len = 19;
+   return $text if $len && length($text) <= $len;
+   $text =~ s/(?<![_ ])[aeiou]//g;
+   $text =~ s/(.)\1+/$1/g;
+   die "Can't shorten $text enough" if length($text) > $len;
+   return $text;
+}
+
 # Do the work.
 # #############################################################################
 
@@ -256,13 +271,12 @@ foreach my $g ( @{ $t->{graphs} } ) {
    es('inputs');
    foreach my $it ( @{ $g->{items} } ) {
       es($it->{task});
-      el('name', "Data Source [$it->{item}]");
+      el('name', "Data Source [" . crunch($it->{item}) . "]");
       el('description', '');
       el('column_name', 'task_item_id');
       # NOTE: The refererred-to items are not referred to correctly in my
       # version of Cacti.  To make the items import exactly as they're exported,
-      # I need to zero out the type/version part of the hash.  (I forget whether
-      # it begins with the object type or the version.)
+      # I need to zero out the type part of the hash.
       el('items', join('|', map {s/hash_1/hash_0/; $_} @{ $it->{hashes} }));
       ee($it->{task});
    }
@@ -296,7 +310,7 @@ foreach my $g ( @{ $t->{graphs} } ) {
    foreach my $k ( keys %$d ) {
       my $v = $d->{$k};
       next unless ref $v eq 'HASH';
-      $v->{data_source_name} = $k;
+      $v->{data_source_name} = crunch($k);
       $v->{data_input_field_id} = $i->{outputs}->{$k};
       es($v->{hash});
       foreach my $prop ( @ds_props ) {
