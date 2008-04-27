@@ -990,6 +990,8 @@
          name => 'MySQL Command Counters'
       },
       {  base_value => '1000',
+         name => 'MySQL Select Types',
+         # Color palette: http://www.colourlovers.com/palette/354987/DSH
          dt         => {
             Select_full_join => {
                data_source_type_id => '2',
@@ -1016,7 +1018,7 @@
          },
          hash  => 'hash_00001396dd6e8156d0a2e832427ee96623959e',
          items => [
-            {  color  => 'FF0000',
+            {  color  => '3D1500',
                hashes => [
                   'hash_100013c56eef30cb2750b8c160595048a6fd40',
                   'hash_1000137dddaf0db46aed1eed2da9b0af799bc3',
@@ -1027,7 +1029,7 @@
                task => 'hash_090013169dfcc76da4df50c022eb0ad6112def',
                type => 'AREA'
             },
-            {  color  => 'FF7D00',
+            {  color  => 'AA3B27',
                hashes => [
                   'hash_10001327daf8c1e7a9aebf985c44bc937646ec',
                   'hash_100013f23fbb5d3be74ee20efb914d08a849e8',
@@ -1038,7 +1040,7 @@
                task => 'hash_090013a29699386c2b6da1f14155617f1ea669',
                type => 'STACK'
             },
-            {  color  => 'FFF200',
+            {  color  => 'EDAA41',
                hashes => [
                   'hash_10001383f1b2dbdab4e2d780683f8a9014f451',
                   'hash_1000133ca5d0704e28b5c55bcb19325c12f101',
@@ -1049,7 +1051,7 @@
                task => 'hash_0900131a7978d046d330b372907602db5d2f81',
                type => 'STACK'
             },
-            {  color  => '00CF00',
+            {  color  => '13343B',
                hashes => [
                   'hash_100013488c4bc114ba402b7ed472f7ceabccf2',
                   'hash_100013ffdc03f26f6f691f460458e0fcfe1bc4',
@@ -1060,7 +1062,7 @@
                task => 'hash_09001351aa1a3638bff236cd4e0d679a18ade4',
                type => 'STACK'
             },
-            {  color  => '7CB3F1',
+            {  color  => '686240',
                hashes => [
                   'hash_100013e23d1f843362c44acf88bcedb6de2a54',
                   'hash_1000133cb99e0ee36b28fc509f175201b90e4b',
@@ -1072,7 +1074,6 @@
                type => 'STACK'
             }
          ],
-         name => 'MySQL Select Types'
       },
       {  base_value => '1000',
          dt         => {
@@ -1686,6 +1687,8 @@
          name => 'InnoDB Transactions'
       },
       {  base_value => '1000',
+         # http://www.colourlovers.com/palette/354031/MONTE-CARLO_VINTAGE
+         name       => 'MySQL Files and Tables',
          dt         => {
             Open_files => {
                data_source_type_id => '1',
@@ -1708,7 +1711,7 @@
          },
          hash  => 'hash_0000134a866608a68455a7e007c6ed07b1389a',
          items => [
-            {  color  => '96E78A',
+            {  color  => 'D09887',
                hashes => [
                   'hash_10001333a746dcc4a95dff1b433fee306e0684',
                   'hash_10001329c6a88d42f3f9bf18fd6d11ca87990d'
@@ -1717,7 +1720,7 @@
                task => 'hash_09001398b2586579aa124db0a44157312cda88',
                type => 'AREA'
             },
-            {  color  => '9FA4EE',
+            {  color  => '4A6959',
                hashes => [
                   'hash_100013976798d4f86d71a171872e9f088885fc',
                   'hash_10001323f8dc021c342f1a836acc07dd9f6707',
@@ -1728,7 +1731,7 @@
                task => 'hash_0900134b9f13b60f1047b67f585952fcdd523c',
                type => 'LINE1'
             },
-            {  color  => 'FFD660',
+            {  color  => '72111C',
                hashes => [
                   'hash_100013d9dfa15dcbd8c9e1f48e0e6791898f47',
                   'hash_10001380449a7ae5a282757b2b979be8390a2f',
@@ -1739,7 +1742,7 @@
                task => 'hash_090013040612acab7300d2c6774e5f08b789e1',
                type => 'LINE1'
             },
-            {  color  => 'FF0000',
+            {  color  => '1D1159',
                hashes => [
                   'hash_100013e7bb489f5d3384b0100ac76c4448bc79',
                   'hash_100013ba5f7f8444ec9094a1db780cda473702',
@@ -1751,7 +1754,6 @@
                type => 'LINE1'
             }
          ],
-         name => 'MySQL Files and Tables'
       },
       {  base_value => '1000',
          dt         => {
