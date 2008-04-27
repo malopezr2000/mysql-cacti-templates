@@ -1,0 +1,29 @@
+INTRODUCTION
+
+This is a set of templates for monitoring MySQL servers with Cacti.  It is also
+a compact, maintainable set of template definitions and a set of tools for
+generating templates from these definitions.
+
+Thanks is due The Rimm-Kaufman Group, who sponsored part of the template
+development.  The Rimm-Kaufman Group is a search engine advertising agency that
+helps its clients place ads on Google, Yahoo, and other major search engines.
+Their website is http://www.rimmkaufman.com.
+
+DESCRIPTION
+
+Cacti is a nice tool, but the MySQL templates I found weren't what I was looking
+for.  Also, Cacti's design can cause inefficiency if you don't know how to use
+it correctly, and the existing templates didn't avoid those inefficiencies.  The
+templates I've designed should work around all of these problems:
+
+*  No duplicated data in RRD files.
+*  No unused data in RRD files.
+*  No wasted polling for the same data over and over.
+
+The techniques I've used to work around this are caching with one data template
+per graph template.  You can read more at
+http://forums.cacti.net/viewtopic.php?t=26448.
+
+I've also added quite a bit of data to the templates, fixed a lot of problems
+with bigint math and other items, made the templates easier to use (no need to
+fill in username and password for every graph you create), and so on.

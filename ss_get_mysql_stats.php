@@ -2,19 +2,41 @@
 
 # ============================================================================
 # Define MySQL connection constants in config.php.  Arguments explicitly passed
-# will override these.
+# in from Cacti will override these.  However, if you leave them blank in Cacti
+# and set them here, you can make life easier.
 # ============================================================================
 $mysql_user = 'cacti';
 $mysql_pass = 'cacti';
-$heartbeat  = ''; # db.tbl in case you use mk-heartbeat from Maatkit.
+
+$heartbeat  = '';      # db.tbl in case you use mk-heartbeat from Maatkit.
+$cache_dir  = '/tmp/'; # If set, this uses caching to avoid multiple calls.
+$poll_time  = 300;     # Adjust to match your polling interval.
 # ============================================================================
 # You should not need to change anything below this line.
 # ============================================================================
 
 # ============================================================================
+# TODO items, if anyone wants to improve this script:
+# * Make sure that this can be called by the script server.
+# * Calculate query cache fragmentation as a percentage, something like
+#   $status['Qcache_frag_bytes']
+#     = $status['Qcache_free_blocks'] / $status['Qcache_total_blocks']
+#        * $status['query_cache_size'];
+# * Add data to support percentage-based metrics, such as
+#     * MyISAM key cache hit rate
+#     * InnoDB buffer pool hit rate
+#     * InnoDB adaptive hash index hit rate
+#     * Binlog cache hit rate
+# * Calculate relay log position lag
+# * Parse the InnoDB line 'mysql tables in use 4, locked 4'
+# * Parse the InnoDB line
+#   '16 lock struct(s), heap size 3024, undo log entries 1018
+# ============================================================================
+
+# ============================================================================
 # Define whether you want debugging behavior.
 # ============================================================================
-$debug = false;
+$debug = TRUE;
 error_reporting($debug ? E_ALL : E_ERROR);
 
 # Make this a happy little script even when there are errors.
@@ -54,13 +76,37 @@ if (!isset($called_by_script_server)) {
 function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null ) {
 
    # Process connection options and connect to MySQL.
-   global $mysql_user, $mysql_pass, $heartbeat;
+   global $debug, $mysql_user, $mysql_pass, $heartbeat, $cache_dir, $poll_time;
+
    $user = isset($user) ? $user : $mysql_user;
    $pass = isset($pass) ? $pass : $mysql_pass;
    $hb_table = isset($hb_table) ? $hb_table : $heartbeat;
    $conn = @mysql_connect($host, $user, $pass);
    if ( !$conn ) {
       die("Can't connect to MySQL: " . mysql_error());
+   }
+   $cache_file = "$cache_dir/$host-mysql_cacti_stats.txt";
+
+   # First, check the cache.
+   $fp = null;
+   if ( $cache_dir ) {
+      # This will block if someone else is accessing the file.
+      $result = run_query(
+         "SELECT GET_LOCK('cacti_monitoring', $poll_time) AS ok", $conn);
+      $row = @mysql_fetch_assoc($result);
+      if ( $row['ok'] ) { # Nobody else had the file locked.
+         if ( file_exists($cache_file)
+            && filectime($cache_file) + ($poll_time/2) > time() )
+         {
+            # The file is fresh enough to use.
+            $arr = file($cache_file);
+            run_query("SELECT RELEASE_LOCK('cacti_monitoring')", $conn);
+            return $arr[0];
+         }
+      }
+      if ( !$fp = fopen($cache_file, 'w+') ) {
+         die("Cannot open file '$cache_file'");
+      }
    }
 
    # Set up variables.
@@ -117,14 +163,6 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       $status[$row[0]] = $row[1];
    }
 
-   # TODO: add data to support percentages:
-   # MyISAM key cache hit rate
-   # InnoDB buffer pool hit rate
-   # InnoDB adaptive hash index hit rate
-   # Binlog cache hit rate
-   # Query cache free blocks/total blocks
-   # TODO: calculate relay log position lag
-
    # Get SHOW INNODB STATUS and extract the desired metrics from it.
    $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
    $innodb_array  = @mysql_fetch_assoc($result);
@@ -152,8 +190,6 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       }
 
       # TRANSACTIONS
-      # TODO: mysql tables in use 4, locked 4
-      # TODO: 16 lock struct(s), heap size 3024, undo log entries 1018
       elseif ( strstr($line, 'Trx id counter')) {
          # The beginning of the TRANSACTIONS section: start counting
          # transactions
@@ -257,13 +293,6 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
 
    # Derive some values from other values.
 
-   # if ( $status['Qcache_total_blocks'] ) 
-      # Hmmm, not sure what I want to do with this... TODO
-      # $status['Qcache_frag_bytes']
-         # = $status['Qcache_free_blocks'] / $status['Qcache_total_blocks']
-         # * $status['query_cache_size'];
-
-
    # PHP sucks at bigint math, so we use MySQL to calculate things that are
    # too big for it.
    if ( $innodb_txn ) {
@@ -298,10 +327,6 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
          }
       }
    }
-
-   # Pre-crunch.  RRDTool only lets me divide by 1024.
-   $status['relay_log_space']  /= (1024 * 1024); # MB
-   $status['binary_log_space'] /= (1024 * 1024); # MB
 
    # Define the variables to output for each graph.
    $keys = array(
@@ -371,7 +396,15 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       $val      = isset($status[$key]) ? $status[$key] : 0;
       $output[] = "$key:$val";
    }
-   return implode(' ', $output);
+   $result = implode(' ', $output);
+   if ( $fp ) {
+      if ( fwrite($fp, $result) === FALSE ) {
+         die("Cannot write to '$cache_file'");
+      }
+      fclose($fp);
+      run_query("SELECT RELEASE_LOCK('cacti_monitoring')", $conn);
+   }
+   return $result;
 }
 
 # ============================================================================
