@@ -827,7 +827,7 @@ foreach my $gt_row (
       $gt->{dt}->{hash} = "hash_010013" . $dt_row->{hash};
       $gt->{dt}->{input} = $dt_row->{di_name};
       $gt->{dt}->{$dt_row->{data_source_name}} = {
-         hash => "hash_010013" .  $dt_row->{dtr_hash},
+         hash => "hash_080013" .  $dt_row->{dtr_hash},
          data_source_type_id => $dt_row->{data_source_type_id}
       };
    }
