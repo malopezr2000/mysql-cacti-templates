@@ -156,6 +156,47 @@ sub to_words {
 # Do the work.
 # #############################################################################
 
+# Check that nothing is unused, and that everything used exists.
+my @key_not_in_dt;
+my @key_not_in_script;
+my @key_not_used_in_graph;
+foreach my $g ( @{ $t->{graphs} } ) {
+   my %key_used_in_it;
+   foreach my $it ( @{ $g->{items} } ) {
+      my $item = $it->{item};
+      $key_used_in_it{$item}++;
+      if ( !$g->{dt}->{$item} ) {
+         push @key_not_in_dt, $item;
+      }
+   }
+   foreach my $key ( keys %{$g->{dt}} ) {
+      my $val = $g->{dt}->{$key};
+      next unless ref $val eq 'HASH';
+      if ( !$t->{inputs}->{$g->{dt}->{input}}->{outputs}->{$key} ) {
+         push @key_not_in_script, $key;
+      }
+      if ( !$key_used_in_it{$key} ) {
+         push @key_not_used_in_graph, $key;
+      }
+   }
+}
+if ( @key_not_used_in_graph || @key_not_in_dt || @key_not_in_script ) {
+   print "Keys in GT not in DT: " . join(',', @key_not_in_dt), "\n";
+   print "Keys in DT not in DS: " . join(',', @key_not_in_script), "\n";
+   print "Keys in DT not in GT: " . join(',', @key_not_used_in_graph), "\n";
+   exit;
+}
+=pod
+foreach my $h ( values %{$t->{inputs}} ) {
+   foreach my $key ( keys %{$h->{outputs}} ) {
+      if ( !$key_used_in_dt{$key} ) {
+         push @key_not_used_in_script, $key;
+      }
+   }
+}
+=cut
+
+
 es('cacti');
 
 # Print the beginning of the host template
