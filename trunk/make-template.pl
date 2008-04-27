@@ -34,6 +34,7 @@ my $rrd_step      = 300;
 my $rrd_heartbeat = 600;
 my $rrd_maximum   = '18446744073709551615',
 # TODO: 4294967295
+# TODO: add cdefs
 
 # #############################################################################
 # Read the file given on the command line into a string and then into a
@@ -162,8 +163,10 @@ sub crunch {
    my ( $text ) = @_;
    my $len = 19;
    return $text if $len && length($text) <= $len;
-   $text =~ s/(?<![_ ])[aeiou]//g;
-   $text =~ s/(.)\1+/$1/g;
+   $text = reverse $text; # work from the end backwards
+   1 while ( length($text) > $len && $text =~ s/(?<![_ ])[aeiou]// );
+   1 while ( length($text) > $len && $text =~ s/(.)\1+/$1/ );
+   $text = reverse $text;
    die "Can't shorten $text enough" if length($text) > $len;
    return $text;
 }
