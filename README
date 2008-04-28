@@ -3,7 +3,8 @@ INTRODUCTION
 
 This is a set of templates for monitoring MySQL servers with Cacti.  It is also
 a compact, maintainable set of template definitions and a set of tools for
-generating templates from these definitions.
+generating templates from these definitions.  The project is hosted at
+http://code.google.com/p/mysql-cacti-templates/.
 
 Thanks are due to The Rimm-Kaufman Group, who sponsored part of the template
 development.  The Rimm-Kaufman Group is a search engine advertising agency that
@@ -27,16 +28,23 @@ To install,
    1. Create a MySQL user on each server you want to monitor.  This user should
       have the same username and password on each server for easiest
       installation.  The user needs only the SUPER privilege.
+
    2. Put ss_get_mysql_stats.php into your cacti/scripts/ directory.
+
    3. Set the MySQL username and password in the header of that file.  Use the
       values you chose in step 1.
-   4. Import the template and then create graphs as usual (beyond the scope of
-      this document; see the Cacti website and manual for help).  If you didn't
-      use the same username and password for each server you're monitoring, you
-      will need to generate your own templates.  (Instructions are later in this
-      file).
 
-If you find any bugs or problems, please contact the author.
+   4. Import the template (cacti_host_template_x_db_server_ht.xml) and then
+      create graphs as usual (beyond the scope of this document; see the Cacti
+      website and manual for help).  If you didn't use the same username and
+      password for each server you're monitoring, you will need to generate your
+      own templates.  (Instructions are later in this file).
+
+BUGS OR PROBLEMS
+================
+
+If you find any bugs or problems, please enter an issue report on the project's
+homepage at http://code.google.com/p/mysql-cacti-templates/.
 
 DESCRIPTION
 ===========
