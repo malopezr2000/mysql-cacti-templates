@@ -1687,7 +1687,6 @@
          name => 'InnoDB Transactions'
       },
       {  base_value => '1000',
-         # http://www.colourlovers.com/palette/354031/MONTE-CARLO_VINTAGE
          name       => 'MySQL Files and Tables',
          dt         => {
             Open_files => {
@@ -1731,7 +1730,7 @@
                task => 'hash_0900134b9f13b60f1047b67f585952fcdd523c',
                type => 'LINE1'
             },
-            {  color  => '72111C',
+            {  color  => '1D1159',
                hashes => [
                   'hash_100013d9dfa15dcbd8c9e1f48e0e6791898f47',
                   'hash_10001380449a7ae5a282757b2b979be8390a2f',
@@ -1742,7 +1741,7 @@
                task => 'hash_090013040612acab7300d2c6774e5f08b789e1',
                type => 'LINE1'
             },
-            {  color  => '1D1159',
+            {  color  => 'DE0056',
                hashes => [
                   'hash_100013e7bb489f5d3384b0100ac76c4448bc79',
                   'hash_100013ba5f7f8444ec9094a1db780cda473702',
