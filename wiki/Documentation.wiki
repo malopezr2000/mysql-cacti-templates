@@ -7,4 +7,5 @@ There's not much documentation at the moment, but please read the README file fo
 = Frequently Asked Questions =
 
 Q. The output is truncated when I use Spine.  Why?
-A. This is a Cacti bug (see Issue 4).  Use cmd.php for now.
+
+A. This is a Cacti bug (see Issue 2).  Use cmd.php for now.
