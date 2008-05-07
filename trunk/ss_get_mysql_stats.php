@@ -157,7 +157,14 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
    $result = run_query("SHOW MASTER LOGS", $conn);
    while ($row = @mysql_fetch_assoc($result)) {
       $row = array_change_key_case($row, CASE_LOWER);
-      $binlogs[] = $row['file_size'];
+      # Older versions of MySQL may not have the File_size column in the
+      # results of the command.
+      if ( array_key_exists('file_size', $row) ) {
+         $binlogs[] = $row['file_size'];
+      }
+      else {
+         break;
+      }
    }
 
    # Check replication heartbeat
