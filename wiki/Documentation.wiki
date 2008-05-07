@@ -1,0 +1,10 @@
+#summary Documentation index page.
+
+= Introduction =
+
+There's not much documentation at the moment, but please read the README file for instructions on installation, etc.  This page has so little content that I'm going to just put everything on one page to start with.
+
+= Frequently Asked Questions =
+
+Q. The output is truncated when I use Spine.  Why?
+A. This is a Cacti bug (see Issue 4).  Use cmd.php for now.
