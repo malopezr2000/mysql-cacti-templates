@@ -69,8 +69,14 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 # ============================================================================
 # Set up the stuff we need to be called by the script server.
 # ============================================================================
-include_once(dirname(__FILE__) . "/../include/config.php");
-include_once(dirname(__FILE__) . "/../lib/snmp.php");
+if ( file_exists( dirname(__FILE__) . "/../include/global.php") ) {
+   # See issue 5 for the reasoning behind this.
+   include_once(dirname(__FILE__) . "/../include/global.php");
+}
+else {
+   # Some versions don't have global.php.
+   include_once(dirname(__FILE__) . "/../include/config.php");
+}
 
 # ============================================================================
 # Make sure we can also be called as a script.
