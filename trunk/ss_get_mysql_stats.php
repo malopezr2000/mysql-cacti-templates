@@ -29,7 +29,7 @@ $mysql_user = 'cacti';
 $mysql_pass = 'cacti';
 
 $heartbeat  = '';      # db.tbl in case you use mk-heartbeat from Maatkit.
-$cache_dir  = '/tmp/'; # If set, this uses caching to avoid multiple calls.
+$cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300;     # Adjust to match your polling interval.
 # ============================================================================
 # You should not need to change anything below this line.
@@ -121,13 +121,22 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
          "SELECT GET_LOCK('cacti_monitoring', $poll_time) AS ok", $conn);
       $row = @mysql_fetch_assoc($result);
       if ( $row['ok'] ) { # Nobody else had the file locked.
-         if ( file_exists($cache_file)
+         if ( file_exists($cache_file) && filesize($cache_file) > 0
             && filectime($cache_file) + ($poll_time/2) > time() )
          {
             # The file is fresh enough to use.
             $arr = file($cache_file);
-            run_query("SELECT RELEASE_LOCK('cacti_monitoring')", $conn);
-            return $arr[0];
+            # The file ought to have some contents in it!  But just in case it
+            # doesn't... (see issue #6).
+            if ( count($arr) ) {
+               run_query("SELECT RELEASE_LOCK('cacti_monitoring')", $conn);
+               return $arr[0];
+            }
+            else {
+               if ( $debug ) {
+                  trigger_error("The function file($cache_file) returned nothing!\n");
+               }
+            }
          }
       }
       if ( !$fp = fopen($cache_file, 'w+') ) {
@@ -174,7 +183,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
 
    # Get info on master logs.
    $binlogs = array(0);
-   if ( $status['log_bin'] == 'ON' ) {
+   if ( $status['log_bin'] == 'ON' ) { # See issue #8
       $result = run_query("SHOW MASTER LOGS", $conn);
       while ($row = @mysql_fetch_assoc($result)) {
          $row = array_change_key_case($row, CASE_LOWER);
@@ -199,7 +208,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
    }
 
    # Get SHOW INNODB STATUS and extract the desired metrics from it.
-   if ( $status['have_innodb'] == 'YES' ) {
+   if ( $status['have_innodb'] == 'YES' ) { # See issue #8.
       $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
       $innodb_array  = @mysql_fetch_assoc($result);
       $innodb_txn    = false;
