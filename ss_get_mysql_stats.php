@@ -146,42 +146,6 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       'active_transactions'   => 0,
    );
 
-   # Get SHOW SLAVE STATUS.
-   $result = run_query("SHOW SLAVE STATUS", $conn);
-   while ($row = @mysql_fetch_assoc($result)) {
-      # Must lowercase keys because different versions have different
-      # lettercase.
-      $row = array_change_key_case($row, CASE_LOWER);
-      $status['relay_log_space']       = $row['relay_log_space'];
-      $status['seconds_behind_master'] = $row['seconds_behind_master'];
-      $status['slave_running'] = ($row['slave_sql_running'] == 'Yes') ? 10 : 0;
-      $status['slave_stopped'] = ($row['slave_sql_running'] == 'Yes') ?  0 : 10;
-   }
-
-   # Get info on master logs.
-   $binlogs = array(0);
-   $result = run_query("SHOW MASTER LOGS", $conn);
-   while ($row = @mysql_fetch_assoc($result)) {
-      $row = array_change_key_case($row, CASE_LOWER);
-      # Older versions of MySQL may not have the File_size column in the
-      # results of the command.
-      if ( array_key_exists('file_size', $row) ) {
-         $binlogs[] = $row['file_size'];
-      }
-      else {
-         break;
-      }
-   }
-
-   # Check replication heartbeat
-   if ( $hb_table ) {
-      $result = run_query(
-         "SELECT GREATEST(0, UNIX_TIMESTAMP() - UNIX_TIMESTAMP(ts) - 1)"
-         . "FROM $hb_table WHERE id = 1", $conn);
-      $row = @mysql_fetch_row($result);
-      $status['slave_lag'] = $row[0];
-   }
-
    # Get SHOW STATUS and convert the name-value array into a simple
    # associative array.
    $result = run_query("SHOW /*!50002 GLOBAL */ STATUS", $conn);
@@ -196,131 +160,171 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       $status[$row[0]] = $row[1];
    }
 
-   # Get SHOW INNODB STATUS and extract the desired metrics from it.
-   $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
-   $innodb_array  = @mysql_fetch_assoc($result);
-   $innodb_txn    = false;
-   $flushed_to    = false;
-   $innodb_lsn    = false;
-   $innodb_prg    = false;
-   $spin_waits    = array();
-   $spin_rounds   = array();
-   $os_waits      = array();
-   foreach ( explode("\n", $innodb_array['Status']) as $line ) {
-      $row = explode(' ', $line);
+   # Get SHOW SLAVE STATUS.
+   $result = run_query("SHOW SLAVE STATUS", $conn);
+   while ($row = @mysql_fetch_assoc($result)) {
+      # Must lowercase keys because different versions have different
+      # lettercase.
+      $row = array_change_key_case($row, CASE_LOWER);
+      $status['relay_log_space']       = $row['relay_log_space'];
+      $status['seconds_behind_master'] = $row['seconds_behind_master'];
+      $status['slave_running'] = ($row['slave_sql_running'] == 'Yes') ? 10 : 0;
+      $status['slave_stopped'] = ($row['slave_sql_running'] == 'Yes') ?  0 : 10;
+   }
 
-      # SEMAPHORES
-      if (strstr($line, 'Mutex spin waits')) {
-         $spin_waits[]  = tonum($row[3]);
-         $spin_rounds[] = tonum($row[5]);
-         $os_waits[]    = tonum($row[8]);
-      }
-      elseif (strstr($line, 'RW-shared spins')) {
-         $spin_waits[] = tonum($row[2]);
-         $spin_waits[] = tonum($row[8]);
-         $os_waits[]   = tonum($row[5]);
-         $os_waits[]   = tonum($row[11]);
-      }
-
-      # TRANSACTIONS
-      elseif ( strstr($line, 'Trx id counter')) {
-         # The beginning of the TRANSACTIONS section: start counting
-         # transactions
-         $innodb_txn = array($row[3], $row[4]);
-      }
-      elseif (strstr($line, 'Purge done for trx')) {
-         # PHP can't do big math, so I send it to MySQL.
-         $innodb_prg = array($row[6], $row[7]);
-      }
-      elseif (strstr($line, 'History list length')) {
-         $status['history_list'] = tonum($row[3]);
-      }
-      elseif ( $innodb_txn && strstr($line, '---TRANSACTION')) {
-         $status['current_transactions'] += 1;
-         if ( strstr($line, 'ACTIVE') ) {
-            $status['active_transactions'] += 1;
+   # Get info on master logs.
+   $binlogs = array(0);
+   if ( $status['log_bin'] == 'ON' ) {
+      $result = run_query("SHOW MASTER LOGS", $conn);
+      while ($row = @mysql_fetch_assoc($result)) {
+         $row = array_change_key_case($row, CASE_LOWER);
+         # Older versions of MySQL may not have the File_size column in the
+         # results of the command.
+         if ( array_key_exists('file_size', $row) ) {
+            $binlogs[] = $row['file_size'];
+         }
+         else {
+            break;
          }
       }
-      elseif ( $innodb_txn && strstr($line, 'LOCK WAIT') ) {
-         $status['locked_transactions'] += 1;
-      }
-      elseif ( strstr($line, 'read views open inside')) {
-         $status['read_views'] = tonum($row[0]);
-      }
+   }
 
-      # FILE I/O
-      elseif (strstr($line, 'OS file reads')) {
-         $status['file_reads']  = tonum($row[0]);
-         $status['file_writes'] = tonum($row[4]);
-         $status['file_fsyncs'] = tonum($row[8]);
-      }
-      elseif (strstr($line, 'Pending normal aio')) {
-         $status['pending_normal_aio_reads']  = tonum($row[4]);
-         $status['pending_normal_aio_writes'] = tonum($row[7]);
-      }
-      elseif (strstr($line, 'ibuf aio reads')) {
-         $status['pending_ibuf_aio_reads'] = tonum($row[4]);
-         $status['pending_aio_log_ios']    = tonum($row[7]);
-         $status['pending_aio_sync_ios']   = tonum($row[10]);
-      }
-      elseif (strstr($line, 'Pending flushes (fsync)')) {
-         $status['pending_log_flushes']      = tonum($row[4]);
-         $status['pending_buf_pool_flushes'] = tonum($row[7]);
-      }
+   # Check replication heartbeat
+   if ( $hb_table ) {
+      $result = run_query(
+         "SELECT GREATEST(0, UNIX_TIMESTAMP() - UNIX_TIMESTAMP(ts) - 1)"
+         . "FROM $hb_table WHERE id = 1", $conn);
+      $row = @mysql_fetch_row($result);
+      $status['slave_lag'] = $row[0];
+   }
 
-      # INSERT BUFFER AND ADAPTIVE HASH INDEX
-      elseif (strstr($line, 'merged recs')) {
-         $status['ibuf_inserts'] = tonum($row[0]);
-         $status['ibuf_merged']  = tonum($row[2]);
-         $status['ibuf_merges']  = tonum($row[5]);
-      }
+   # Get SHOW INNODB STATUS and extract the desired metrics from it.
+   if ( $status['have_innodb'] == 'YES' ) {
+      $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
+      $innodb_array  = @mysql_fetch_assoc($result);
+      $innodb_txn    = false;
+      $flushed_to    = false;
+      $innodb_lsn    = false;
+      $innodb_prg    = false;
+      $spin_waits    = array();
+      $spin_rounds   = array();
+      $os_waits      = array();
+      foreach ( explode("\n", $innodb_array['Status']) as $line ) {
+         $row = explode(' ', $line);
 
-      # LOG
-      elseif (strstr($line, "log i/o's done")) {
-         $status['log_writes'] = tonum($row[0]);
-      }
-      elseif (strstr($line, "pending log writes")) {
-         $status['pending_log_writes']  = tonum($row[0]);
-         $status['pending_chkp_writes'] = tonum($row[4]);
-      }
-      elseif (strstr($line, "Log sequence number")) {
-         $innodb_lsn = array($row[3], $row[4]);
-      }
-      elseif (strstr($line, "Log flushed up to")) {
-         # Since PHP can't handle 64-bit numbers, we'll ask MySQL to do it for
-         # us instead.  And we get it to cast them to strings, too.
-         $flushed_to = array($row[6], $row[7]);
-      }
+         # SEMAPHORES
+         if (strstr($line, 'Mutex spin waits')) {
+            $spin_waits[]  = tonum($row[3]);
+            $spin_rounds[] = tonum($row[5]);
+            $os_waits[]    = tonum($row[8]);
+         }
+         elseif (strstr($line, 'RW-shared spins')) {
+            $spin_waits[] = tonum($row[2]);
+            $spin_waits[] = tonum($row[8]);
+            $os_waits[]   = tonum($row[5]);
+            $os_waits[]   = tonum($row[11]);
+         }
 
-      # BUFFER POOL AND MEMORY
-      elseif (strstr($line, "Buffer pool size")) {
-          $status['pool_size'] = tonum($row[5]);
-      }
-      elseif (strstr($line, "Free buffers")) {
-          $status['free_pages'] = tonum($row[8]);
-      }
-      elseif (strstr($line, "Database pages")) {
-          $status['database_pages'] = tonum($row[6]);
-      }
-      elseif (strstr($line, "Modified db pages")) {
-          $status['modified_pages'] = tonum($row[4]);
-      }
-      elseif (strstr($line, "Pages read") ) {
-          $status['pages_read']    = tonum($row[2]);
-          $status['pages_created'] = tonum($row[4]);
-          $status['pages_written'] = tonum($row[6]);
-      }
+         # TRANSACTIONS
+         elseif ( strstr($line, 'Trx id counter')) {
+            # The beginning of the TRANSACTIONS section: start counting
+            # transactions
+            $innodb_txn = array($row[3], $row[4]);
+         }
+         elseif (strstr($line, 'Purge done for trx')) {
+            # PHP can't do big math, so I send it to MySQL.
+            $innodb_prg = array($row[6], $row[7]);
+         }
+         elseif (strstr($line, 'History list length')) {
+            $status['history_list'] = tonum($row[3]);
+         }
+         elseif ( $innodb_txn && strstr($line, '---TRANSACTION')) {
+            $status['current_transactions'] += 1;
+            if ( strstr($line, 'ACTIVE') ) {
+               $status['active_transactions'] += 1;
+            }
+         }
+         elseif ( $innodb_txn && strstr($line, 'LOCK WAIT') ) {
+            $status['locked_transactions'] += 1;
+         }
+         elseif ( strstr($line, 'read views open inside')) {
+            $status['read_views'] = tonum($row[0]);
+         }
 
-      # ROW OPERATIONS
-      elseif (strstr($line, 'Number of rows inserted')) {
-         $status['rows_inserted'] = tonum($row[4]);
-         $status['rows_updated']  = tonum($row[6]);
-         $status['rows_deleted']  = tonum($row[8]);
-         $status['rows_read']     = tonum($row[10]);
-      }
-      elseif (strstr($line, "queries inside InnoDB")) {
-          $status['queries_inside'] = tonum($row[0]);
-          $status['queries_queued']  = tonum($row[4]);
+         # FILE I/O
+         elseif (strstr($line, 'OS file reads')) {
+            $status['file_reads']  = tonum($row[0]);
+            $status['file_writes'] = tonum($row[4]);
+            $status['file_fsyncs'] = tonum($row[8]);
+         }
+         elseif (strstr($line, 'Pending normal aio')) {
+            $status['pending_normal_aio_reads']  = tonum($row[4]);
+            $status['pending_normal_aio_writes'] = tonum($row[7]);
+         }
+         elseif (strstr($line, 'ibuf aio reads')) {
+            $status['pending_ibuf_aio_reads'] = tonum($row[4]);
+            $status['pending_aio_log_ios']    = tonum($row[7]);
+            $status['pending_aio_sync_ios']   = tonum($row[10]);
+         }
+         elseif (strstr($line, 'Pending flushes (fsync)')) {
+            $status['pending_log_flushes']      = tonum($row[4]);
+            $status['pending_buf_pool_flushes'] = tonum($row[7]);
+         }
+
+         # INSERT BUFFER AND ADAPTIVE HASH INDEX
+         elseif (strstr($line, 'merged recs')) {
+            $status['ibuf_inserts'] = tonum($row[0]);
+            $status['ibuf_merged']  = tonum($row[2]);
+            $status['ibuf_merges']  = tonum($row[5]);
+         }
+
+         # LOG
+         elseif (strstr($line, "log i/o's done")) {
+            $status['log_writes'] = tonum($row[0]);
+         }
+         elseif (strstr($line, "pending log writes")) {
+            $status['pending_log_writes']  = tonum($row[0]);
+            $status['pending_chkp_writes'] = tonum($row[4]);
+         }
+         elseif (strstr($line, "Log sequence number")) {
+            $innodb_lsn = array($row[3], $row[4]);
+         }
+         elseif (strstr($line, "Log flushed up to")) {
+            # Since PHP can't handle 64-bit numbers, we'll ask MySQL to do it for
+            # us instead.  And we get it to cast them to strings, too.
+            $flushed_to = array($row[6], $row[7]);
+         }
+
+         # BUFFER POOL AND MEMORY
+         elseif (strstr($line, "Buffer pool size")) {
+             $status['pool_size'] = tonum($row[5]);
+         }
+         elseif (strstr($line, "Free buffers")) {
+             $status['free_pages'] = tonum($row[8]);
+         }
+         elseif (strstr($line, "Database pages")) {
+             $status['database_pages'] = tonum($row[6]);
+         }
+         elseif (strstr($line, "Modified db pages")) {
+             $status['modified_pages'] = tonum($row[4]);
+         }
+         elseif (strstr($line, "Pages read") ) {
+             $status['pages_read']    = tonum($row[2]);
+             $status['pages_created'] = tonum($row[4]);
+             $status['pages_written'] = tonum($row[6]);
+         }
+
+         # ROW OPERATIONS
+         elseif (strstr($line, 'Number of rows inserted')) {
+            $status['rows_inserted'] = tonum($row[4]);
+            $status['rows_updated']  = tonum($row[6]);
+            $status['rows_deleted']  = tonum($row[8]);
+            $status['rows_read']     = tonum($row[10]);
+         }
+         elseif (strstr($line, "queries inside InnoDB")) {
+             $status['queries_inside'] = tonum($row[0]);
+             $status['queries_queued']  = tonum($row[4]);
+         }
       }
    }
 
@@ -354,7 +358,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       $status['unflushed_log']
          = max($status['unflushed_log'], $status['innodb_log_buffer_size']);
    }
-   if (true) {
+   if (count($binlogs)) {
       $sql = "SELECT "
            . "CONCAT('', " . implode('+', $binlogs) . ") AS binary_log_space ";
       # echo("$sql\n");
