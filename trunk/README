@@ -91,7 +91,8 @@ definition file as input:
    perl make-template.pl mysql_definitions.pl > my_new_template.xml
 
 You can now import this file as usual.  Examine the --help output of the script
-to see what your options are.
+to see what your options are.  You might want to generate templates for a
+specific Cacti version, for example.
 
 The generated templates don't conflict with your existing Cacti installation.
 They don't use anything pre-defined in Cacti.  That means you can import them

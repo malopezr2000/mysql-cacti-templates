@@ -474,8 +474,10 @@ if ( $ENV{MKDEBUG} ) {
 package main;
 
 use English qw(-no_match_vars);
+use List::Util qw(max);
 
 my @opt_spec = (
+   { s => 'cactiver=s',     d => 'Create templates for this Cacti version' },
    { s => 'graph_height=i', d => 'Height of generated graphs (default 120)' },
    { s => 'graph_width=i',  d => 'Width of generated graphs (default 500)' },
    { s => 'poll_interval=i',d => 'Polling interval (default 300)' },
@@ -519,6 +521,30 @@ if ( $EVAL_ERROR ) {
 my $indent = 0;
 my @stack  = ();
 my $hashno = 0;
+
+my %hash_version_codes = (
+   "0.8.4"  => "0000",
+   "0.8.5"  => "0001",
+   "0.8.5a" => "0002",
+   "0.8.6"  => "0003",
+   "0.8.6a" => "0004",
+   "0.8.6b" => "0005",
+   "0.8.6c" => "0006",
+   "0.8.6d" => "0007",
+   "0.8.6e" => "0008",
+   "0.8.6f" => "0009",
+   "0.8.6g" => "0010",
+   "0.8.6h" => "0011",
+   "0.8.6i" => "0012",
+   "0.8.6j" => "0013"
+);
+my $ver;
+if ( $opts{cactiver} && defined $hash_version_codes{$opts{cactiver}} ) {
+   $ver = $hash_version_codes{$opts{cactiver}};
+}
+else {
+   $ver = max(values %hash_version_codes);
+}
 
 my %graph_types = (
    COMMENT => 1,
@@ -577,17 +603,20 @@ my $is_magic = qr{
    |snmp_port
    |snmp_timeout
    |snmp_version}x;
+
 # #############################################################################
 # Subroutines.
 # #############################################################################
 sub es { # Element start
    my ( $name ) = @_;
+   $name =~ s/_VER_/$ver/g;
    print(("\t" x $indent++), "<$name>\n");
    push @stack, $name;
 }
 
 sub ee { # Element end
    my ( $sanity ) = @_;
+   $sanity =~ s/_VER_/$ver/g;
    my ( $name ) = pop @stack;
    if ( ($sanity || $name) ne $name ) {
       die "You tried to end the '$sanity' element but stack has '$name'";
@@ -597,6 +626,8 @@ sub ee { # Element end
 
 sub el { # Element plus contents
    my ( $name, $content ) = @_;
+   $name =~ s/_VER_/$ver/g;
+   $content =~ s/_VER_/$ver/g;
    die "Uninitialized content for '$name'" unless defined $content;
    print(("\t" x $indent), "<$name>", enc($content), "</$name>\n");
 }
