@@ -581,10 +581,6 @@
             },
             hash  => 'hash_010013b4e58a773aa9fb5b2b40c13850434ef5',
             input => 'Get MySQL Stats',
-            seconds_behind_master => {
-               data_source_type_id => '1',
-               hash => 'hash_080013102549743bbd45d73dad64e40c5deabd'
-            },
             slave_lag => {
                data_source_type_id => '1',
                hash => 'hash_0800132f22ea85e927b9904204281cd730b9c7'
@@ -611,17 +607,6 @@
                item   => 'slave_stopped',
                task   => 'hash_090013408d1c93dd785e1c37853e715155357d',
                type   => 'AREA'
-            },
-            {  color  => 'ED7600',
-               hashes => [
-                  'hash_100013e21668631327b37ef7598c6fb15a7cb1',
-                  'hash_1000132e1ea72957dd1e63c398539de800f138',
-                  'hash_1000131b440c837fc00f3d48a2bfc954f036d8',
-                  'hash_100013d38edb63f55e33b65076a4e268be6391'
-               ],
-               item => 'seconds_behind_master',
-               task => 'hash_090013eccdbf2fc2b3784ac5392a8438351d6d',
-               type => 'LINE1'
             },
             {  color  => '4444FF',
                hashes => [
@@ -1953,8 +1938,6 @@
             rows_inserted    => 'hash_0700135b48ba3c3a988f25757cfe44c3741e50',
             rows_read        => 'hash_0700139f6faa993da08c83488ba60448256a44',
             rows_updated     => 'hash_07001379b393539feac8db3a0b993805f1b8f3',
-            seconds_behind_master =>
-               'hash_070013e58a27d656265dc48d8fd9d905784ec5',
             slave_lag     => 'hash_07001379a4a74739a9d8a1a158c464991900d8',
             slave_running => 'hash_0700138ae23d9b7b2f593774a0ab3e228a7974',
             slave_stopped => 'hash_07001322d491113778e27af564a683bb7a9aaa',

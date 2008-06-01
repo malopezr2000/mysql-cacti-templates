@@ -175,10 +175,23 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       # Must lowercase keys because different versions have different
       # lettercase.
       $row = array_change_key_case($row, CASE_LOWER);
-      $status['relay_log_space']       = $row['relay_log_space'];
-      $status['seconds_behind_master'] = $row['seconds_behind_master'];
-      $status['slave_running'] = ($row['slave_sql_running'] == 'Yes') ? 10 : 0;
-      $status['slave_stopped'] = ($row['slave_sql_running'] == 'Yes') ?  0 : 10;
+      $status['relay_log_space']  = $row['relay_log_space'];
+      $status['slave_lag']        = $row['seconds_behind_master'];
+
+      # Check replication heartbeat, if present.
+      if ( $hb_table ) {
+         $result = run_query(
+            "SELECT GREATEST(0, UNIX_TIMESTAMP() - UNIX_TIMESTAMP(ts) - 1)"
+            . "FROM $hb_table WHERE id = 1", $conn);
+         $row2 = @mysql_fetch_row($result);
+         $status['slave_lag'] = $row2[0];
+      }
+
+      # Scale slave_running and slave_stopped relative to the slave lag.
+      $status['slave_running'] = ($row['slave_sql_running'] == 'Yes')
+         ? $status['slave_lag'] : 0;
+      $status['slave_stopped'] = ($row['slave_sql_running'] == 'Yes')
+         ? 0 : $status['slave_lag'];
    }
 
    # Get info on master logs.
@@ -196,15 +209,6 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
             break;
          }
       }
-   }
-
-   # Check replication heartbeat
-   if ( $hb_table ) {
-      $result = run_query(
-         "SELECT GREATEST(0, UNIX_TIMESTAMP() - UNIX_TIMESTAMP(ts) - 1)"
-         . "FROM $hb_table WHERE id = 1", $conn);
-      $row = @mysql_fetch_row($result);
-      $status['slave_lag'] = $row[0];
    }
 
    # Get SHOW INNODB STATUS and extract the desired metrics from it.
@@ -415,7 +419,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       'thread_cache_size', 'Connections',
       # Slave status
       'slave_running', 'slave_stopped', 'Slave_retried_transactions',
-      'seconds_behind_master', 'slave_lag', 'Slave_open_temp_tables',
+      'slave_lag', 'Slave_open_temp_tables',
       # Query Cache
       'Qcache_free_blocks', 'Qcache_free_memory', 'Qcache_hits',
       'Qcache_inserts', 'Qcache_lowmem_prunes', 'Qcache_not_cached',

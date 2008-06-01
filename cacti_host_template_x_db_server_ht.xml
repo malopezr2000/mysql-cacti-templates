@@ -2013,54 +2013,6 @@
 				<hard_return>on</hard_return>
 				<sequence>2</sequence>
 			</hash_100013d86914f0587cc89b36795e15f6deb843>
-			<hash_100013e21668631327b37ef7598c6fb15a7cb1>
-				<task_item_id>hash_080013102549743bbd45d73dad64e40c5deabd</task_item_id>
-				<color_id>ED7600</color_id>
-				<graph_type_id>4</graph_type_id>
-				<consolidation_function_id>1</consolidation_function_id>
-				<cdef_id>0</cdef_id>
-				<value></value>
-				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
-				<text_format>Seconds Behind Master</text_format>
-				<hard_return></hard_return>
-				<sequence>3</sequence>
-			</hash_100013e21668631327b37ef7598c6fb15a7cb1>
-			<hash_1000132e1ea72957dd1e63c398539de800f138>
-				<task_item_id>hash_080013102549743bbd45d73dad64e40c5deabd</task_item_id>
-				<color_id>0</color_id>
-				<graph_type_id>9</graph_type_id>
-				<consolidation_function_id>4</consolidation_function_id>
-				<cdef_id>0</cdef_id>
-				<value></value>
-				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
-				<text_format>Cur:</text_format>
-				<hard_return></hard_return>
-				<sequence>4</sequence>
-			</hash_1000132e1ea72957dd1e63c398539de800f138>
-			<hash_1000131b440c837fc00f3d48a2bfc954f036d8>
-				<task_item_id>hash_080013102549743bbd45d73dad64e40c5deabd</task_item_id>
-				<color_id>0</color_id>
-				<graph_type_id>9</graph_type_id>
-				<consolidation_function_id>1</consolidation_function_id>
-				<cdef_id>0</cdef_id>
-				<value></value>
-				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
-				<text_format>Avg:</text_format>
-				<hard_return></hard_return>
-				<sequence>5</sequence>
-			</hash_1000131b440c837fc00f3d48a2bfc954f036d8>
-			<hash_100013d38edb63f55e33b65076a4e268be6391>
-				<task_item_id>hash_080013102549743bbd45d73dad64e40c5deabd</task_item_id>
-				<color_id>0</color_id>
-				<graph_type_id>9</graph_type_id>
-				<consolidation_function_id>3</consolidation_function_id>
-				<cdef_id>0</cdef_id>
-				<value></value>
-				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
-				<text_format>Max:</text_format>
-				<hard_return>on</hard_return>
-				<sequence>6</sequence>
-			</hash_100013d38edb63f55e33b65076a4e268be6391>
 			<hash_100013caf39e137752bd9a38ecf7ceb5d53ce3>
 				<task_item_id>hash_0800132f22ea85e927b9904204281cd730b9c7</task_item_id>
 				<color_id>4444FF</color_id>
@@ -2071,7 +2023,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Slave Lag</text_format>
 				<hard_return></hard_return>
-				<sequence>7</sequence>
+				<sequence>3</sequence>
 			</hash_100013caf39e137752bd9a38ecf7ceb5d53ce3>
 			<hash_1000136ec9f26cd661cef295cc1c76e4130b68>
 				<task_item_id>hash_0800132f22ea85e927b9904204281cd730b9c7</task_item_id>
@@ -2083,7 +2035,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Cur:</text_format>
 				<hard_return></hard_return>
-				<sequence>8</sequence>
+				<sequence>4</sequence>
 			</hash_1000136ec9f26cd661cef295cc1c76e4130b68>
 			<hash_1000137c1a9200037f834bd71010f1f7708aa6>
 				<task_item_id>hash_0800132f22ea85e927b9904204281cd730b9c7</task_item_id>
@@ -2095,7 +2047,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Avg:</text_format>
 				<hard_return></hard_return>
-				<sequence>9</sequence>
+				<sequence>5</sequence>
 			</hash_1000137c1a9200037f834bd71010f1f7708aa6>
 			<hash_10001381aa16ca185a61f50f52d6d5342115a6>
 				<task_item_id>hash_0800132f22ea85e927b9904204281cd730b9c7</task_item_id>
@@ -2107,7 +2059,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Max:</text_format>
 				<hard_return>on</hard_return>
-				<sequence>10</sequence>
+				<sequence>6</sequence>
 			</hash_10001381aa16ca185a61f50f52d6d5342115a6>
 			<hash_1000139ef146d43565ac74eb3a14219e6a38f2>
 				<task_item_id>hash_08001325cf8ecc2e97a7de94bc1cb48151a5e2</task_item_id>
@@ -2119,7 +2071,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Slave Open Temp Tables</text_format>
 				<hard_return></hard_return>
-				<sequence>11</sequence>
+				<sequence>7</sequence>
 			</hash_1000139ef146d43565ac74eb3a14219e6a38f2>
 			<hash_10001331621db648be7acd543886ea43a02a89>
 				<task_item_id>hash_08001325cf8ecc2e97a7de94bc1cb48151a5e2</task_item_id>
@@ -2131,7 +2083,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Cur:</text_format>
 				<hard_return></hard_return>
-				<sequence>12</sequence>
+				<sequence>8</sequence>
 			</hash_10001331621db648be7acd543886ea43a02a89>
 			<hash_1000136cc5f7709b2390de0b8ee2580f91dba5>
 				<task_item_id>hash_08001325cf8ecc2e97a7de94bc1cb48151a5e2</task_item_id>
@@ -2143,7 +2095,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Avg:</text_format>
 				<hard_return></hard_return>
-				<sequence>13</sequence>
+				<sequence>9</sequence>
 			</hash_1000136cc5f7709b2390de0b8ee2580f91dba5>
 			<hash_100013991855b6e433018ad55edad34fdce9d4>
 				<task_item_id>hash_08001325cf8ecc2e97a7de94bc1cb48151a5e2</task_item_id>
@@ -2155,7 +2107,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Max:</text_format>
 				<hard_return>on</hard_return>
-				<sequence>14</sequence>
+				<sequence>10</sequence>
 			</hash_100013991855b6e433018ad55edad34fdce9d4>
 			<hash_100013bc17c6a7692fbb31c18a8d6e7c491f04>
 				<task_item_id>hash_080013bc1d5cacb2e2c6f0785f369f6baaa349</task_item_id>
@@ -2167,7 +2119,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Slave Retried Transactions</text_format>
 				<hard_return></hard_return>
-				<sequence>15</sequence>
+				<sequence>11</sequence>
 			</hash_100013bc17c6a7692fbb31c18a8d6e7c491f04>
 			<hash_100013876d9459ba58d69d04d78fa2d376c555>
 				<task_item_id>hash_080013bc1d5cacb2e2c6f0785f369f6baaa349</task_item_id>
@@ -2179,7 +2131,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Cur:</text_format>
 				<hard_return></hard_return>
-				<sequence>16</sequence>
+				<sequence>12</sequence>
 			</hash_100013876d9459ba58d69d04d78fa2d376c555>
 			<hash_100013491d413a794cac1a923d6c9988b75416>
 				<task_item_id>hash_080013bc1d5cacb2e2c6f0785f369f6baaa349</task_item_id>
@@ -2191,7 +2143,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Avg:</text_format>
 				<hard_return></hard_return>
-				<sequence>17</sequence>
+				<sequence>13</sequence>
 			</hash_100013491d413a794cac1a923d6c9988b75416>
 			<hash_100013348cd8082e7f7c6e28c2a82df019b4e0>
 				<task_item_id>hash_080013bc1d5cacb2e2c6f0785f369f6baaa349</task_item_id>
@@ -2203,7 +2155,7 @@
 				<gprint_id>hash_060013e9c43831e54eca8069317a2ce8c6f752</gprint_id>
 				<text_format>Max:</text_format>
 				<hard_return>on</hard_return>
-				<sequence>18</sequence>
+				<sequence>14</sequence>
 			</hash_100013348cd8082e7f7c6e28c2a82df019b4e0>
 		</items>
 		<inputs>
@@ -2219,12 +2171,6 @@
 				<column_name>task_item_id</column_name>
 				<items>hash_000013d86914f0587cc89b36795e15f6deb843</items>
 			</hash_090013408d1c93dd785e1c37853e715155357d>
-			<hash_090013eccdbf2fc2b3784ac5392a8438351d6d>
-				<name>Data Source [seconds_behind_mstr]</name>
-				<description></description>
-				<column_name>task_item_id</column_name>
-				<items>hash_000013e21668631327b37ef7598c6fb15a7cb1|hash_0000132e1ea72957dd1e63c398539de800f138|hash_0000131b440c837fc00f3d48a2bfc954f036d8|hash_000013d38edb63f55e33b65076a4e268be6391</items>
-			</hash_090013eccdbf2fc2b3784ac5392a8438351d6d>
 			<hash_0900138929e6500dfc2213bf024c549c468ea9>
 				<name>Data Source [slave_lag]</name>
 				<description></description>
@@ -7041,20 +6987,6 @@
 			<rra_items>hash_150013c21df5178e5c955013591239eb0afd47|hash_1500130d9c0af8b8acdc7807943937b3208e30|hash_1500136fc2d038fb42950138b0ce3e9874cc61|hash_150013e36f3adb9f152adfa5dc50fd2b23337f</rra_items>
 		</ds>
 		<items>
-			<hash_080013102549743bbd45d73dad64e40c5deabd>
-				<t_data_source_name></t_data_source_name>
-				<data_source_name>seconds_behind_mstr</data_source_name>
-				<t_rrd_minimum></t_rrd_minimum>
-				<rrd_minimum>0</rrd_minimum>
-				<t_rrd_maximum></t_rrd_maximum>
-				<rrd_maximum>18446744073709551615</rrd_maximum>
-				<t_data_source_type_id></t_data_source_type_id>
-				<data_source_type_id>1</data_source_type_id>
-				<t_rrd_heartbeat></t_rrd_heartbeat>
-				<rrd_heartbeat>600</rrd_heartbeat>
-				<t_data_input_field_id></t_data_input_field_id>
-				<data_input_field_id>hash_070013e58a27d656265dc48d8fd9d905784ec5</data_input_field_id>
-			</hash_080013102549743bbd45d73dad64e40c5deabd>
 			<hash_080013a2b5fb54622eccf34fd7891c7dd846d9>
 				<t_data_source_name></t_data_source_name>
 				<data_source_name>slave_running</data_source_name>
@@ -8751,15 +8683,6 @@
 				<input_output>out</input_output>
 				<data_name>log_writes</data_name>
 			</hash_070013bd1957bb74760e72094707f078f44217>
-			<hash_070013e58a27d656265dc48d8fd9d905784ec5>
-				<name>Seconds Behind Master</name>
-				<update_rra>on</update_rra>
-				<regexp_match></regexp_match>
-				<allow_nulls></allow_nulls>
-				<type_code></type_code>
-				<input_output>out</input_output>
-				<data_name>seconds_behind_master</data_name>
-			</hash_070013e58a27d656265dc48d8fd9d905784ec5>
 			<hash_070013271505777b4d851f19e0a6fa4377a4fc>
 				<name>Pending Aio Log Ios</name>
 				<update_rra>on</update_rra>
