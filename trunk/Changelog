@@ -1,5 +1,16 @@
 Changes for templates:
 
+2008-06-01: version 1.0.0
+
+	* Fixed when SHOW MASTER LOGS has no File_size column.
+	* Fixed Cacti-version-specific problems with include files.
+	* Fixed when binary log is not enabled.
+	* Fixed some caching issues.
+	* Fixed make-template.pl issues when downloaded from SVN.
+	* Replication graph shows only slave_lag instead of Seconds_behind_master
+	* Generate a version for Cacti 0.8.6i.
+	* Support generating custom versions with make-template.pl.
+
 2008-04-27:
 
-   * Initial release.
+	* Initial release.
