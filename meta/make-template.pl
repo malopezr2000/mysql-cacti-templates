@@ -539,8 +539,14 @@ my %hash_version_codes = (
    "0.8.6j" => "0013"
 );
 my $ver;
-if ( $opts{cactiver} && defined $hash_version_codes{$opts{cactiver}} ) {
-   $ver = $hash_version_codes{$opts{cactiver}};
+if ( $opts{cactiver} ) {
+   if ( defined $hash_version_codes{$opts{cactiver}} ) {
+      $ver = $hash_version_codes{$opts{cactiver}};
+   }
+   else {
+      die "No such version '$opts{cactiver}', try one of "
+         . join(' ', sort keys %hash_version_codes);
+   }
 }
 else {
    $ver = max(values %hash_version_codes);
