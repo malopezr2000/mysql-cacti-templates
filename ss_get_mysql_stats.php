@@ -37,6 +37,7 @@ $poll_time  = 300;     # Adjust to match your polling interval.
 
 # ============================================================================
 # TODO items, if anyone wants to improve this script:
+# * Aggregate the processlist and report.
 # * Make sure that this can be called by the script server.
 # * Calculate query cache fragmentation as a percentage, something like
 #   $status['Qcache_frag_bytes']
