@@ -25,8 +25,8 @@
 # in from Cacti will override these.  However, if you leave them blank in Cacti
 # and set them here, you can make life easier.
 # ============================================================================
-$mysql_user = 'cacti';
-$mysql_pass = 'cacti';
+$mysql_user = 'cactiuser';
+$mysql_pass = 'cactiuser';
 
 $heartbeat  = '';      # db.tbl in case you use mk-heartbeat from Maatkit.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
