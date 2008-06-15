@@ -214,10 +214,10 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
    }
 
    # Get SHOW INNODB STATUS and extract the desired metrics from it.
+   $innodb_txn = false;
    if ( $status['have_innodb'] == 'YES' ) { # See issue #8.
       $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
       $innodb_array  = @mysql_fetch_assoc($result);
-      $innodb_txn    = false;
       $flushed_to    = false;
       $innodb_lsn    = false;
       $innodb_prg    = false;
