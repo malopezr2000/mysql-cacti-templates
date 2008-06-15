@@ -871,7 +871,12 @@ foreach my $k ( keys %{$t->{inputs}} ) {
       el('allow_nulls', '');
       el('type_code', '');
       el('input_output', 'out');
-      el('data_name', $k);
+      # Compressed so more information can fit in cactid's limited buffer size;
+      # so use the short name.  This list of short names must be kept in sync
+      # with the output variable names of the script that gets the data.
+      my $short_name = $t->{short_names}->{$k};
+      die "No short name for $k" unless $short_name;
+      el('data_name', $short_name);
       ee($v->{outputs}->{$k});
    }
 
