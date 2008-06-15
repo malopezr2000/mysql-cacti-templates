@@ -37,6 +37,7 @@ $poll_time  = 300;     # Adjust to match your polling interval.
 
 # ============================================================================
 # TODO items, if anyone wants to improve this script:
+# * Permit only some graphs to be fetched/output.
 # * Aggregate the processlist and report.
 # * Make sure that this can be called by the script server.
 # * Calculate query cache fragmentation as a percentage, something like
@@ -384,73 +385,125 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       }
    }
 
-   # Define the variables to output for each graph.
+   # Define the variables to output.  I use shortened variable names so maybe
+   # it'll all fit in 1024 bytes for Cactid and Spine's benefit.  This list must
+   # stay in sync with the Perl script that generates the templates.
    $keys = array(
-      # MyISAM index usage
-      'Key_read_requests', 'Key_reads', 'Key_write_requests', 'Key_writes',
-      # InnoDB Transactions
-      # 'unpurged_txns', 'transaction_time', 'transaction_lock_time', 
-      'history_list', 'innodb_transactions', 'read_views',
-      'current_transactions', 'locked_transactions', 'active_transactions',
-      # InnoDB buffer pool
-      'pool_size', 'free_pages', 'database_pages', 'modified_pages',
-      'pages_read', 'pages_created', 'pages_written',
-      # InnoDB I/O
-      'file_fsyncs', 'file_reads', 'file_writes', 'log_writes',
-      # InnoDB I/O Pending
-      'pending_aio_log_ios', 'pending_aio_sync_ios', 'pending_buf_pool_flushes',
-      'pending_chkp_writes', 'pending_ibuf_aio_reads', 'pending_log_flushes',
-      'pending_log_writes', 'pending_normal_aio_reads',
-      'pending_normal_aio_writes',
-      # InnoDB Insert Buffer
-      'ibuf_inserts', 'ibuf_merged', 'ibuf_merges',
-      # InnoDB Semaphores
-      'spin_waits', 'spin_rounds', 'os_waits',
-      # InnoDB Row Operations
-      'rows_inserted', 'rows_updated', 'rows_deleted', 'rows_read',
-      # Table locks and slow queries
-      'Table_locks_waited', 'Table_locks_immediate', 'Slow_queries',
-      # Files and tables
-      'Open_files', 'Open_tables', 'Opened_tables',
-      'innodb_open_files', 'open_files_limit', 'table_cache',
-      # Connections
-      'Aborted_clients', 'Aborted_connects', 'Max_used_connections',
-      'Slow_launch_threads', 'Threads_cached', 'Threads_connected',
-      'Threads_created', 'Threads_running', 'max_connections',
-      'thread_cache_size', 'Connections',
-      # Slave status
-      'slave_running', 'slave_stopped', 'Slave_retried_transactions',
-      'slave_lag', 'Slave_open_temp_tables',
-      # Query Cache
-      'Qcache_free_blocks', 'Qcache_free_memory', 'Qcache_hits',
-      'Qcache_inserts', 'Qcache_lowmem_prunes', 'Qcache_not_cached',
-      'Qcache_queries_in_cache', 'Qcache_total_blocks', 'query_cache_size',
-      # General Com_ stats
-      'Questions', 'Com_update', 'Com_insert', 'Com_select', 'Com_delete',
-      'Com_replace', 'Com_load', 'Com_update_multi', 'Com_insert_select',
-      'Com_delete_multi', 'Com_replace_select',
-      # Select types
-      'Select_full_join', 'Select_full_range_join', 'Select_range',
-      'Select_range_check', 'Select_scan',
-      # Sorts
-      'Sort_merge_passes', 'Sort_range', 'Sort_rows', 'Sort_scan',
-      # Temporary objects
-      'Created_tmp_tables', 'Created_tmp_disk_tables', 'Created_tmp_files',
-      # Network traffic
-      'Bytes_sent', 'Bytes_received',
-      # InnoDB Log Buffer
-      'innodb_log_buffer_size', 'unflushed_log', 'log_bytes_flushed',
-      'log_bytes_written',
-      # Binlog / Relay Log
-      'relay_log_space', 'binlog_cache_size', 'Binlog_cache_disk_use',
-      'Binlog_cache_use', 'binary_log_space',
+       'Key_read_requests'          => 'a0',
+       'Key_reads'                  => 'a1',
+       'Key_write_requests'         => 'a2',
+       'Key_writes'                 => 'a3',
+       'history_list'               => 'a4',
+       'innodb_transactions'        => 'a5',
+       'read_views'                 => 'a6',
+       'current_transactions'       => 'a7',
+       'locked_transactions'        => 'a8',
+       'active_transactions'        => 'a9',
+       'pool_size'                  => 'aa',
+       'free_pages'                 => 'ab',
+       'database_pages'             => 'ac',
+       'modified_pages'             => 'ad',
+       'pages_read'                 => 'ae',
+       'pages_created'              => 'af',
+       'pages_written'              => 'ag',
+       'file_fsyncs'                => 'ah',
+       'file_reads'                 => 'ai',
+       'file_writes'                => 'aj',
+       'log_writes'                 => 'ak',
+       'pending_aio_log_ios'        => 'al',
+       'pending_aio_sync_ios'       => 'am',
+       'pending_buf_pool_flushes'   => 'an',
+       'pending_chkp_writes'        => 'ao',
+       'pending_ibuf_aio_reads'     => 'ap',
+       'pending_log_flushes'        => 'aq',
+       'pending_log_writes'         => 'ar',
+       'pending_normal_aio_reads'   => 'as',
+       'pending_normal_aio_writes'  => 'at',
+       'ibuf_inserts'               => 'au',
+       'ibuf_merged'                => 'av',
+       'ibuf_merges'                => 'aw',
+       'spin_waits'                 => 'ax',
+       'spin_rounds'                => 'ay',
+       'os_waits'                   => 'az',
+       'rows_inserted'              => 'b0',
+       'rows_updated'               => 'b1',
+       'rows_deleted'               => 'b2',
+       'rows_read'                  => 'b3',
+       'Table_locks_waited'         => 'b4',
+       'Table_locks_immediate'      => 'b5',
+       'Slow_queries'               => 'b6',
+       'Open_files'                 => 'b7',
+       'Open_tables'                => 'b8',
+       'Opened_tables'              => 'b9',
+       'innodb_open_files'          => 'ba',
+       'open_files_limit'           => 'bb',
+       'table_cache'                => 'bc',
+       'Aborted_clients'            => 'bd',
+       'Aborted_connects'           => 'be',
+       'Max_used_connections'       => 'bf',
+       'Slow_launch_threads'        => 'bg',
+       'Threads_cached'             => 'bh',
+       'Threads_connected'          => 'bi',
+       'Threads_created'            => 'bj',
+       'Threads_running'            => 'bk',
+       'max_connections'            => 'bl',
+       'thread_cache_size'          => 'bm',
+       'Connections'                => 'bn',
+       'slave_running'              => 'bo',
+       'slave_stopped'              => 'bp',
+       'Slave_retried_transactions' => 'bq',
+       'slave_lag'                  => 'br',
+       'Slave_open_temp_tables'     => 'bs',
+       'Qcache_free_blocks'         => 'bt',
+       'Qcache_free_memory'         => 'bu',
+       'Qcache_hits'                => 'bv',
+       'Qcache_inserts'             => 'bw',
+       'Qcache_lowmem_prunes'       => 'bx',
+       'Qcache_not_cached'          => 'by',
+       'Qcache_queries_in_cache'    => 'bz',
+       'Qcache_total_blocks'        => 'c0',
+       'query_cache_size'           => 'c1',
+       'Questions'                  => 'c2',
+       'Com_update'                 => 'c3',
+       'Com_insert'                 => 'c4',
+       'Com_select'                 => 'c5',
+       'Com_delete'                 => 'c6',
+       'Com_replace'                => 'c7',
+       'Com_load'                   => 'c8',
+       'Com_update_multi'           => 'c9',
+       'Com_insert_select'          => 'ca',
+       'Com_delete_multi'           => 'cb',
+       'Com_replace_select'         => 'cc',
+       'Select_full_join'           => 'cd',
+       'Select_full_range_join'     => 'ce',
+       'Select_range'               => 'cf',
+       'Select_range_check'         => 'cg',
+       'Select_scan'                => 'ch',
+       'Sort_merge_passes'          => 'ci',
+       'Sort_range'                 => 'cj',
+       'Sort_rows'                  => 'ck',
+       'Sort_scan'                  => 'cl',
+       'Created_tmp_tables'         => 'cm',
+       'Created_tmp_disk_tables'    => 'cn',
+       'Created_tmp_files'          => 'co',
+       'Bytes_sent'                 => 'cp',
+       'Bytes_received'             => 'cq',
+       'innodb_log_buffer_size'     => 'cr',
+       'unflushed_log'              => 'cs',
+       'log_bytes_flushed'          => 'ct',
+       'log_bytes_written'          => 'cu',
+       'relay_log_space'            => 'cv',
+       'binlog_cache_size'          => 'cw',
+       'Binlog_cache_disk_use'      => 'cx',
+       'Binlog_cache_use'           => 'cy',
+       'binary_log_space'           => 'cz',
    );
 
    # Return the output.
    $output = array();
-   foreach ($keys as $key) {
+   foreach ($keys as $key => $short ) {
       $val      = isset($status[$key]) ? $status[$key] : 0;
-      $output[] = "$key:$val";
+      $output[] = "$short:$val";
    }
    $result = implode(' ', $output);
    if ( $fp ) {
