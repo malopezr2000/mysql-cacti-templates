@@ -57,6 +57,10 @@ FAQ
   A. It is unlikely that it's these templates.  Please use the Cacti forums
      for help with your graphs.
 
+  Q. My graphs show only 'nan'.  What's wrong?
+  A. It is unlikely that it's these templates.  Please use the Cacti forums
+     for help with your graphs.
+
   Q. Are there any known problems?
   A. Yes.  It's not compatible with cactid or Spine.
 
