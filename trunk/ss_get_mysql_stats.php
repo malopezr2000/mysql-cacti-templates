@@ -31,6 +31,9 @@ $mysql_pass = 'cactiuser';
 $heartbeat  = '';      # db.tbl in case you use mk-heartbeat from Maatkit.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300;     # Adjust to match your polling interval.
+$chk_innodb = true;    # Do you want to check InnoDB statistics?
+$chk_master = true;    # Do you want to check binary logging?
+$chk_slave  = true;    # Do you want to check slave status?
 # ============================================================================
 # You should not need to change anything below this line.
 # ============================================================================
@@ -104,7 +107,8 @@ if (!isset($called_by_script_server)) {
 function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null ) {
 
    # Process connection options and connect to MySQL.
-   global $debug, $mysql_user, $mysql_pass, $heartbeat, $cache_dir, $poll_time;
+   global $debug, $mysql_user, $mysql_pass, $heartbeat, $cache_dir, $poll_time,
+          $chk_innodb, $chk_master, $chk_slave;
 
    $user = isset($user) ? $user : $mysql_user;
    $pass = isset($pass) ? $pass : $mysql_pass;
@@ -172,33 +176,35 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
    }
 
    # Get SHOW SLAVE STATUS.
-   $result = run_query("SHOW SLAVE STATUS", $conn);
-   while ($row = @mysql_fetch_assoc($result)) {
-      # Must lowercase keys because different versions have different
-      # lettercase.
-      $row = array_change_key_case($row, CASE_LOWER);
-      $status['relay_log_space']  = $row['relay_log_space'];
-      $status['slave_lag']        = $row['seconds_behind_master'];
+   if ( $chk_slave ) {
+      $result = run_query("SHOW SLAVE STATUS", $conn);
+      while ($row = @mysql_fetch_assoc($result)) {
+         # Must lowercase keys because different versions have different
+         # lettercase.
+         $row = array_change_key_case($row, CASE_LOWER);
+         $status['relay_log_space']  = $row['relay_log_space'];
+         $status['slave_lag']        = $row['seconds_behind_master'];
 
-      # Check replication heartbeat, if present.
-      if ( $hb_table ) {
-         $result = run_query(
-            "SELECT GREATEST(0, UNIX_TIMESTAMP() - UNIX_TIMESTAMP(ts) - 1)"
-            . "FROM $hb_table WHERE id = 1", $conn);
-         $row2 = @mysql_fetch_row($result);
-         $status['slave_lag'] = $row2[0];
+         # Check replication heartbeat, if present.
+         if ( $hb_table ) {
+            $result = run_query(
+               "SELECT GREATEST(0, UNIX_TIMESTAMP() - UNIX_TIMESTAMP(ts) - 1)"
+               . "FROM $hb_table WHERE id = 1", $conn);
+            $row2 = @mysql_fetch_row($result);
+            $status['slave_lag'] = $row2[0];
+         }
+
+         # Scale slave_running and slave_stopped relative to the slave lag.
+         $status['slave_running'] = ($row['slave_sql_running'] == 'Yes')
+            ? $status['slave_lag'] : 0;
+         $status['slave_stopped'] = ($row['slave_sql_running'] == 'Yes')
+            ? 0 : $status['slave_lag'];
       }
-
-      # Scale slave_running and slave_stopped relative to the slave lag.
-      $status['slave_running'] = ($row['slave_sql_running'] == 'Yes')
-         ? $status['slave_lag'] : 0;
-      $status['slave_stopped'] = ($row['slave_sql_running'] == 'Yes')
-         ? 0 : $status['slave_lag'];
    }
 
    # Get info on master logs.
    $binlogs = array(0);
-   if ( $status['log_bin'] == 'ON' ) { # See issue #8
+   if ( $chk_master && $status['log_bin'] == 'ON' ) { # See issue #8
       $result = run_query("SHOW MASTER LOGS", $conn);
       while ($row = @mysql_fetch_assoc($result)) {
          $row = array_change_key_case($row, CASE_LOWER);
@@ -215,7 +221,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
 
    # Get SHOW INNODB STATUS and extract the desired metrics from it.
    $innodb_txn = false;
-   if ( $status['have_innodb'] == 'YES' ) { # See issue #8.
+   if ( $chk_innodb && $status['have_innodb'] == 'YES' ) { # See issue #8.
       $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
       $innodb_array  = @mysql_fetch_assoc($result);
       $flushed_to    = false;
