@@ -36,6 +36,8 @@ To install,
    3. Set the MySQL username and password in the header of that file.  Use the
       values you chose in step 1.  If you want to monitor the replication lag
       with mk-heartbeat, specify the table that contains the heartbeat record.
+      You can also customize this file if you want to disable certain things,
+      such as checking InnoDB.
 
    4. Import the template (cacti_host_template_x_db_server_ht.xml) and then
       create graphs as usual (beyond the scope of this document; see the Cacti
