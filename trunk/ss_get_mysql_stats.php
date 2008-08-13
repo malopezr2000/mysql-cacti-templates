@@ -209,8 +209,10 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       while ($row = @mysql_fetch_assoc($result)) {
          $row = array_change_key_case($row, CASE_LOWER);
          # Older versions of MySQL may not have the File_size column in the
-         # results of the command.
-         if ( array_key_exists('file_size', $row) ) {
+         # results of the command.  Zero-size files indicate the user is
+         # deleting binlogs manually from disk (bad user! bad!) but we should
+         # not croak with a thread-stack error just because of the bad user.
+         if ( array_key_exists('file_size', $row) && $row['file_size'] > 0 ) {
             $binlogs[] = $row['file_size'];
          }
          else {
