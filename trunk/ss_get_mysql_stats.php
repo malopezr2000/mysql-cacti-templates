@@ -100,6 +100,19 @@ if (!isset($called_by_script_server)) {
 }
 
 # ============================================================================
+# Work around the lack of array_change_key_case in older PHP.
+# ============================================================================
+if ( !function_exists('array_change_key_case') ) {
+   function array_change_key_case($arr) {
+      $res = array();
+      foreach ( $arr as $key => $val ) {
+         $res[strtolower($key)] = $val;
+      }
+      return $res;
+   }
+}
+
+# ============================================================================
 # This is the main function.  Only the $host parameter must be specified.
 # Others are filled in from defaults at the top of this file.  If you want to
 # specify a port, you must include it in the hostname, like "localhost:3306".
