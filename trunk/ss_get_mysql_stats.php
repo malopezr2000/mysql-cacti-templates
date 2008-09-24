@@ -215,7 +215,8 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       }
    }
 
-   # Get info on master logs.
+   # Get info on master logs. TODO: is there a way to do this without querying
+   # mysql again?
    $binlogs = array(0);
    if ( $chk_master && $status['log_bin'] == 'ON' ) { # See issue #8
       $result = run_query("SHOW MASTER LOGS", $conn);
