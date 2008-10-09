@@ -27,9 +27,9 @@ To install,
 
    1. Create a MySQL user on each server you want to monitor.  This user should
       have the same username and password on each server for easiest
-      installation.  The user needs the SUPER privilege.  If you want to monitor
-      replication with mk-heartbeat from the Maatkit toolkit (recommended), you
-      must grant SELECT on the heartbeat table also.
+      installation.  The user needs the SUPER and PROCESS privileges.  If you
+      want to monitor replication with mk-heartbeat from the Maatkit toolkit
+      (recommended), you must grant SELECT on the heartbeat table also.
 
    2. Put ss_get_mysql_stats.php into your cacti/scripts/ directory.
 
