@@ -542,6 +542,8 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
 # Returns SQL to create a bigint from two ulint
 # ============================================================================
 function make_bigint_sql ($hi, $lo) {
+   $hi = $hi ? $hi : '0'; # Handle empty-string or whatnot
+   $lo = $lo ? $lo : '0';
    return "(($hi << 32) + $lo)";
 }
 
