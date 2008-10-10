@@ -1,0 +1,30 @@
+#summary How to create a new graph
+
+= Introduction =
+
+The stuff you need is in meta/mysql_definitions.pl.
+
+This file is read in as a big variable by make_template.pl.  It consists of the following sections, which will be combined to form a template for Cacti:
+
+  * name and hash -- properties for the template.
+  * gprints -- Custom sprintf formats.  You don't need to modify these.
+  * graphs -- a graph is a data template plus a collection of graph items.
+  * inputs -- this basically defines how the command-line script is called.
+  * rras -- these are just some custome RRA definitions so you can keep more than the usual amount of data.
+  * short_names -- these *must* match the values in the ss_get_mysql_stats.php file.
+
+The hardest part is keeping track of how all these things are related to each other.  I have simplified the relationships significantly: one data template per each graph template, etc.
+
+A graph will really be input to Cacti as a graph template and a data template.
+
+The graph item in the meta/mysql_definitions.pl file has the following properties:
+
+  * base_value -- either 1024 or 1000 depending on whether the unit is an amount of data or not.  (Rule: don't mix things with different units on a single graph.  If you do, you get meaningless crap most of the time.)
+  * name -- the name of the graph.  Keep it short.
+  * hash -- the Cacti hash.  See CactiHashes.
+  * dt -- the data template.
+    * hash.
+    * Name of the data input.  This is the name of an item in the inputs section at the top level.
+    * items to get from the data input.  These are a hash reference.  The key is the name of the value to get from the data input (e.g. pool_size for the InnoDB Buffer Pool graph template).  The hash reference's children are the:
+      * type: 1, 2, 3.  (These are GAUGE, COUNTER, DERIVE, but TODO I'm not sure in that order).
+      * hash.
