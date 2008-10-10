@@ -665,6 +665,7 @@ sub crunch {
    $text = reverse $text; # work from the end backwards
    1 while ( length($text) > $len && $text =~ s/(?<![_ ])[aeiou]// );
    1 while ( length($text) > $len && $text =~ s/(.)\1+/$1/ );
+   1 while ( length($text) > $len && $text =~ s/(_.)[^_](._)/$1$2/ );
    $text = reverse $text;
    die "Can't shorten $text enough" if length($text) > $len;
    return $text;
@@ -698,9 +699,9 @@ foreach my $g ( @{ $t->{graphs} } ) {
    }
 }
 if ( @key_not_used_in_graph || @key_not_in_dt || @key_not_in_script ) {
-   print "Keys in GT not in DT: " . join(',', @key_not_in_dt), "\n";
-   print "Keys in DT not in DS: " . join(',', @key_not_in_script), "\n";
-   print "Keys in DT not in GT: " . join(',', @key_not_used_in_graph), "\n";
+   print STDERR "Keys in GT not in DT: " . join(',', @key_not_in_dt), "\n";
+   print STDERR "Keys in DT not in DS: " . join(',', @key_not_in_script), "\n";
+   print STDERR "Keys in DT not in GT: " . join(',', @key_not_used_in_graph), "\n";
    exit;
 }
 =pod
