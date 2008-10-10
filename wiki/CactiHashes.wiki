@@ -17,3 +17,5 @@ hash_100010ac260a1434298e088f15f70cd1a5f726
 }}}
 
 Hah.  Take that you backward-incompatible system.
+
+The hashes in mysql_definitions.pl should all be globally unique.  It's kind of a pain to generate them, so you can just copy and paste some stuff and run the result through the unique-hashes.pl script.
