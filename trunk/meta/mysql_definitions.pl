@@ -448,7 +448,7 @@
                   'hash_10_VER_48fe37efb3fe5559477598182c6ea902'
                ],
                item => 'Table_locks_immediate',
-               task => 'hash_09_VER_1f02f1af427e8fbab1bbc6f9f454a9de',
+               task => 'hash_09_VER_df0afbcc423f20acfaf53f4b4dbe3ebc',
                type => 'LINE1'
             },
             {  color  => 'FF3932',
@@ -1166,7 +1166,7 @@
                   'hash_10_VER_46d958f121c20c56e49e2649099ba494'
                ],
                item => 'Created_tmp_tables',
-               task => 'hash_09_VER_36437272524ecb132ac818f6ab3c6276',
+               task => 'hash_09_VER_a7f11fafd09476b0be060eb957bd51bb',
                type => 'LINE1'
             },
             {  color  => 'F51D30',
@@ -2171,6 +2171,22 @@
             thread_cache_size =>
                'hash_07_VER_a12707d396d3414a4ebed49ccc83b4d8',
             unflushed_log    => 'hash_07_VER_13f0bccec0c2682a2dd1c0a0264496f2',
+            State_closing_tables       => 'hash_07_VER_017cf9e69460748eff5a01e05d52f917',
+            State_copying_to_tmp_table => 'hash_07_VER_55973b3e6e1863efcbd9631af86cf052',
+            State_end                  => 'hash_07_VER_62510dd94dc08d9c08c577e7a0ffd208',
+            State_freeing_items        => 'hash_07_VER_e475d04b3dadbe5245121b14a6122a54',
+            State_init                 => 'hash_07_VER_cd3bf36ab8a437c4f3fd084401a1975f',
+            State_locked               => 'hash_07_VER_5ba6c35bdb762734558b5ec8de170f1b',
+            State_login                => 'hash_07_VER_ee725ae084daf658be5f56080db2533e',
+            State_preparing            => 'hash_07_VER_50e24f967a8f2853c126f81e59312e6b',
+            State_reading_from_net     => 'hash_07_VER_788b5c58c28f9d174cd5dad3db213162',
+            State_sending_data         => 'hash_07_VER_78501d7348c4c65936d6ca459fe84a37',
+            State_sorting_result       => 'hash_07_VER_698edc5749d8823980a9a891e03bb638',
+            State_statistics           => 'hash_07_VER_f6ab471ca91d49741b4498ffe303418b',
+            State_updating             => 'hash_07_VER_23b5e17fafa9301d8da410227423e351',
+            State_writing_to_net       => 'hash_07_VER_c3d4dd8ee7af85bc893eaa828acba796',
+            State_none                 => 'hash_07_VER_f5a6ed7e86aefe1908473f0c330cb58a',
+            State_other                => 'hash_07_VER_0776c8e20eb4f8890dbba7c975556065',
          },
          type_id => 1
       }
