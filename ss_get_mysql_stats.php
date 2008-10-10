@@ -34,6 +34,7 @@ $poll_time  = 300;     # Adjust to match your polling interval.
 $chk_innodb = true;    # Do you want to check InnoDB statistics?
 $chk_master = true;    # Do you want to check binary logging?
 $chk_slave  = true;    # Do you want to check slave status?
+$chk_procs  = true;    # Do you want to check SHOW PROCESSLIST?
 # ============================================================================
 # You should not need to change anything below this line.
 # ============================================================================
@@ -47,15 +48,7 @@ $chk_slave  = true;    # Do you want to check slave status?
 #   $status['Qcache_frag_bytes']
 #     = $status['Qcache_free_blocks'] / $status['Qcache_total_blocks']
 #        * $status['query_cache_size'];
-# * Add data to support percentage-based metrics, such as
-#     * MyISAM key cache hit rate
-#     * InnoDB buffer pool hit rate
-#     * InnoDB adaptive hash index hit rate
-#     * Binlog cache hit rate
 # * Calculate relay log position lag
-# * Parse the InnoDB line 'mysql tables in use 4, locked 4'
-# * Parse the InnoDB line
-#   '16 lock struct(s), heap size 3024, undo log entries 1018
 # ============================================================================
 
 # ============================================================================
@@ -172,6 +165,26 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       'current_transactions'  => 0,
       'locked_transactions'   => 0,
       'active_transactions'   => 0,
+      'innodb_locked_tables'  => 0,
+      'innodb_lock_structs'   => 0,
+      # Values for the 'state' column from SHOW PROCESSLIST (converted to
+      # lowercase, with spaces replaced by underscores)
+      'State_closing_tables'       => 0,
+      'State_copying_to_tmp_table' => 0,
+      'State_end'                  => 0,
+      'State_freeing_items'        => 0,
+      'State_init'                 => 0,
+      'State_locked'               => 0,
+      'State_login'                => 0,
+      'State_preparing'            => 0,
+      'State_reading_from_net'     => 0,
+      'State_sending_data'         => 0,
+      'State_sorting_result'       => 0,
+      'State_statistics'           => 0,
+      'State_updating'             => 0,
+      'State_writing_to_net'       => 0,
+      'State_none'                 => 0,
+      'State_other'                => 0, # Everything not listed above
    );
 
    # Get SHOW STATUS and convert the name-value array into a simple
@@ -235,6 +248,27 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       }
    }
 
+   # Get SHOW PROCESSLIST and aggregate it.
+   if ( $chk_procs ) {
+      $result = run_query('SHOW PROCESSLIST');
+      while ($row = @mysql_fetch_assoc($result)) {
+         $state = $row['State'];
+         if ( is_null($state) ) {
+            $state = 'NULL';
+         }
+         if ( $state == '' ) {
+            $state = 'none';
+         }
+         $state = str_replace(strtolower($state), ' ', '_');
+         if ( array_key_exists($status["State_$state"]) ) {
+            $status["State_$state"]++;
+         }
+         else {
+            $status["State_other"]++;
+         }
+      }
+   }
+
    # Get SHOW INNODB STATUS and extract the desired metrics from it.
    $innodb_txn = false;
    if ( $chk_innodb && $status['have_innodb'] == 'YES' ) { # See issue #8.
@@ -286,6 +320,12 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
          }
          elseif ( strstr($line, 'read views open inside')) {
             $status['read_views'] = tonum($row[0]);
+         }
+         elseif ( strstr($line, 'mysql tables in use') ) {
+            $status['innodb_locked_tables'] += tonum($row[6]);
+         }
+         elseif ( strstr($line, 'lock struct(s)') ) {
+            $status['innodb_lock_structs'] += tonum($row[0]);
          }
 
          # FILE I/O
@@ -409,7 +449,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
 
    # Define the variables to output.  I use shortened variable names so maybe
    # it'll all fit in 1024 bytes for Cactid and Spine's benefit.  This list must
-   # stay in sync with the Perl script that generates the templates.
+   # stay in sync with mysql_definitions.pl
    $keys = array(
        'Key_read_requests'          => 'a0',
        'Key_reads'                  => 'a1',
@@ -519,6 +559,24 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
        'Binlog_cache_disk_use'      => 'cx',
        'Binlog_cache_use'           => 'cy',
        'binary_log_space'           => 'cz',
+       'innodb_locked_tables'       => 'd0',
+       'innodb_lock_structs'        => 'd1',
+       'State_closing_tables'       => 'd2',
+       'State_copying_to_tmp_table' => 'd3',
+       'State_end'                  => 'd4',
+       'State_freeing_items'        => 'd5',
+       'State_init'                 => 'd6',
+       'State_locked'               => 'd7',
+       'State_login'                => 'd8',
+       'State_preparing'            => 'd9',
+       'State_reading_from_net'     => 'da',
+       'State_sending_data'         => 'db',
+       'State_sorting_result'       => 'dc',
+       'State_statistics'           => 'dd',
+       'State_updating'             => 'de',
+       'State_writing_to_net'       => 'df',
+       'State_none'                 => 'dg',
+       'State_other'                => 'dh',
    );
 
    # Return the output.

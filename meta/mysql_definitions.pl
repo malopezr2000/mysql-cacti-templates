@@ -1751,7 +1751,7 @@
          name => 'MySQL Threads'
       },
       {  base_value => '1000',
-         name       => 'MySQL Processlist'
+         name       => 'MySQL Processlist',
          hash       => 'hash_00_VER_f979e60cec40499495c8f9a0739db4dd',
          dt         => {
             hash  => 'hash_01_VER_f12a4fdc2a2838ee87181ba0feaf67ed',
