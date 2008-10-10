@@ -15,7 +15,10 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA.
 
-{  gprints => {
+{
+   name   => 'DB Server',
+   hash   => 'hash_02_VER_3df221ff7893faad48ecc15026687215',
+   gprints => {
       Normal => {
          gprint_text => '%8.2lf %s',
          hash        => 'hash_06_VER_e9c43831e54eca8069317a2ce8c6f752'
@@ -126,17 +129,6 @@
                task => 'hash_09_VER_2cb12f1e0ce4b35cac3f026054f4bee4',
                type => 'AREA'
             },
-            {  color  => 'AA3B27',
-               hashes => [
-                  'hash_10_VER_81b0c8274aecfa8a5e304eabdaa7f3a9',
-                  'hash_10_VER_cc3c68b2b4f7fb46913301aea0a6c1ae',
-                  'hash_10_VER_0e7d24bce7e20e0a0b393d529a55a15c',
-                  'hash_10_VER_ec9b15475d486e684c1e3c9c099cedf6'
-               ],
-               item => 'free_pages',
-               task => 'hash_09_VER_b7800e17a4e0a97464eda1b373839eb7',
-               type => 'AREA'
-            },
             {  color  => 'EDAA41',
                hashes => [
                   'hash_10_VER_f831741492af46b72bc0a63d11e72869',
@@ -146,6 +138,17 @@
                ],
                item => 'database_pages',
                task => 'hash_09_VER_d265fe62da24ab1ac26a4a15b3da438e',
+               type => 'AREA'
+            },
+            {  color  => 'AA3B27',
+               hashes => [
+                  'hash_10_VER_81b0c8274aecfa8a5e304eabdaa7f3a9',
+                  'hash_10_VER_cc3c68b2b4f7fb46913301aea0a6c1ae',
+                  'hash_10_VER_0e7d24bce7e20e0a0b393d529a55a15c',
+                  'hash_10_VER_ec9b15475d486e684c1e3c9c099cedf6'
+               ],
+               item => 'free_pages',
+               task => 'hash_09_VER_b7800e17a4e0a97464eda1b373839eb7',
                type => 'STACK'
             },
             {  color  => '13343B',
@@ -1746,9 +1749,260 @@
             }
          ],
          name => 'MySQL Threads'
-      }
+      },
+      {  base_value => '1000',
+         name       => 'MySQL Processlist'
+         hash       => 'hash_00_VER_f979e60cec40499495c8f9a0739db4dd',
+         dt         => {
+            hash  => 'hash_01_VER_f12a4fdc2a2838ee87181ba0feaf67ed',
+            input => 'Get MySQL Stats',
+            State_closing_tables => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf8d1061ff730d770d13e'
+            },
+            State_copying_to_tmp_table => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf8d2061ff730d770d13e'
+            },
+            State_end                  => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf8d4061ff730d770d13e'
+            },
+            State_freeing_items        => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf8d5061ff730d770d13e'
+            },
+            State_init                 => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf8d6061ff730d770d13e'
+            },
+            State_locked               => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf8d7061ff730d770d13e'
+            },
+            State_login                => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf8d8061ff730d770d13e'
+            },
+            State_preparing            => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf8d9061ff730d770d13e'
+            },
+            State_reading_from_net     => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf1d3061ff730d770d13e'
+            },
+            State_sending_data         => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf2d3061ff730d770d13e'
+            },
+            State_sorting_result       => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf3d3061ff730d770d13e'
+            },
+            State_statistics           => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf4d3061ff730d770d13e'
+            },
+            State_updating             => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf5d3061ff730d770d13e'
+            },
+            State_writing_to_net       => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf6d3061ff730d770d13e'
+            },
+            State_none                 => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf7d3061ff730d770d13e'
+            },
+            State_other                => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b46bed6846abf9d3061ff730d770d13e'
+            },
+         },
+         items => [
+# 784890 D1642E 907890 784860 487860 783030 906030 306078 B83A04 6E3803 B56414
+         # 6E645A 521808 194240 146E69 CC7956 CF6436 CF480E 803405 540202
+            {  color  => 'DE0056',
+               hashes => [
+                  'hash_10_VER_84e9d86de5c1114cfb8a1600cc3f88e7',
+                  'hash_10_VER_e7718d2cb9f2a22e250a741d404be8a6',
+                  'hash_10_VER_6bbc94b9366ca53ae2b2ff6b6930cd1a',
+                  'hash_10_VER_db21a5d6734464c7796f7571146a98a5'
+               ],
+               item => 'State_closing_tables',
+               task => 'hash_09_VER_465942b335de1c95920252ccacf9e21f',
+               type => 'AREA'
+            },
+            {  color  => '784890',
+               hashes => [
+                  'hash_10_VER_283e1a91c71b707665c5c91578780d61',
+                  'hash_10_VER_5ad8e662fab946269ec9dc6c33683ce2',
+                  'hash_10_VER_6b5c2e71824c6843e225df9a3de07bc9',
+                  'hash_10_VER_314e5704a31a9d38cb60ced5c37663ae'
+               ],
+               item => 'State_copying_to_tmp_table',
+               task => 'hash_09_VER_6b50193bc288e737d2f750dcc7d6efbb',
+               type => 'STACK'
+            },
+            {  color  => 'D1642E',
+               hashes => [
+                  'hash_10_VER_2a04a77295c535690870f758e74faedc',
+                  'hash_10_VER_7a9bf3a9ed453411890b02042f32f95a',
+                  'hash_10_VER_b7de1a6198895b29b660680128882004',
+                  'hash_10_VER_c5ae4b0d5707dcf645b21625de3dd9a6'
+               ],
+               item => 'State_end',
+               task => 'hash_09_VER_f6f2d4f71a5d4bcd7de269b39c19341e',
+               type => 'STACK'
+            },
+            {  color  => '907890',
+               hashes => [
+                  'hash_10_VER_7a82cd2cc8b648dce65c7ec3802462a4',
+                  'hash_10_VER_9cc8addbc34b486aa53bbb3e713b300c',
+                  'hash_10_VER_20761ec1ddc008eb4656a7b9115e9226',
+                  'hash_10_VER_8e043c9ad079fbe46cc04331c4b78e53'
+               ],
+               item => 'State_freeing_items',
+               task => 'hash_09_VER_15ea28c4a4ac8d4664af10a3997c2acb',
+               type => 'STACK'
+            },
+            {  color  => '784860',
+               hashes => [
+                  'hash_10_VER_96fad6b497522628c10b4cd019179603',
+                  'hash_10_VER_702974da20f0907184384840cac6578f',
+                  'hash_10_VER_c7999f6a9beda2345f53265fff43d8ca',
+                  'hash_10_VER_021c012fa5d9a5f7cf048b61c15f2da3'
+               ],
+               item => 'State_init',
+               task => 'hash_09_VER_5d3b8ed48971f2350fe76c6fa31e6a61',
+               type => 'STACK'
+            },
+            {  color  => '487860',
+               hashes => [
+                  'hash_10_VER_a4f6af1550598966dda534218cfd3784',
+                  'hash_10_VER_9a7e3da9807e775e05116cbdf2947480',
+                  'hash_10_VER_84e5a85ee5ba28187eab33bdb12ed140',
+                  'hash_10_VER_e363bff9440fa3c68fb9af3e1a9b3e99'
+               ],
+               item => 'State_locked',
+               task => 'hash_09_VER_96920071e28ee28afa3dbaa318ff93a1',
+               type => 'STACK'
+            },
+            {  color  => '783030',
+               hashes => [
+                  'hash_10_VER_6d2c06c20e934bfed61a4a30646001fe',
+                  'hash_10_VER_5550d5816489d4068b92c549a60a9886',
+                  'hash_10_VER_3a46d5f08fefb8dec8114bc50a144fc2',
+                  'hash_10_VER_23e3b48ff55394e0139cebc3a5fcddc7'
+               ],
+               item => 'State_login',
+               task => 'hash_09_VER_18e48d0a2450dae25c44f46b526ddde9',
+               type => 'STACK'
+            },
+            {  color  => '906030',
+               hashes => [
+                  'hash_10_VER_c358ddcea377a992a291c8a5aebf887f',
+                  'hash_10_VER_9530c1d35d09c7fdf35d92933f2c0b50',
+                  'hash_10_VER_2fac9d6879067880e6b7ef45ade60c4f',
+                  'hash_10_VER_3d97138092a0f13eaf08bf519e1d0b90'
+               ],
+               item => 'State_preparing',
+               task => 'hash_09_VER_c0d6ba166a4c0c72fc8cf8df2310747f',
+               type => 'STACK'
+            },
+            {  color  => '906030',
+               hashes => [
+                  'hash_10_VER_dddb98067b260e22b260651a8b5d7a8f',
+                  'hash_10_VER_e06b233a1b546980db71108f39a12d7a',
+                  'hash_10_VER_8fc73b57e2c7284e46fc66e0d41dfa53',
+                  'hash_10_VER_5e0808e7926436f078884661ef815d4f'
+               ],
+               item => 'State_reading_from_net',
+               task => 'hash_09_VER_7a4ad819c2ffdb406ee6c9a5ce8d25e8',
+               type => 'STACK'
+            },
+            {  color  => '306078',
+               hashes => [
+                  'hash_10_VER_dcc867aef7185941f9371e2171a61a50',
+                  'hash_10_VER_b09cf2592c17fb796d6df640d6427de7',
+                  'hash_10_VER_2590b2a8908ac100ee28527808c110a5',
+                  'hash_10_VER_c7441bddeb24900abf9a926cbaa2d577'
+               ],
+               item => 'State_sending_data',
+               task => 'hash_09_VER_a3e9905fce8f2314eafcf9e5a3145b94',
+               type => 'STACK'
+            },
+            {  color  => 'B83A04',
+               hashes => [
+                  'hash_10_VER_6570e5db3835b51ee3ab2ea64f37eafb',
+                  'hash_10_VER_6db3754986d28351e61cbcfdc603ccbc',
+                  'hash_10_VER_48f85282ddef3c161cd7a66a382a08af',
+                  'hash_10_VER_44876cff438108ab5e501bebb1fe41f7'
+               ],
+               item => 'State_sorting_result',
+               task => 'hash_09_VER_d034fb3a0304bc06d48abd11d055bde4',
+               type => 'STACK'
+            },
+            {  color  => '6E3803',
+               hashes => [
+                  'hash_10_VER_e6089aed8d6ed3af0018a49944096d82',
+                  'hash_10_VER_4112a18aec131ee18b4e39d825a4b8ef',
+                  'hash_10_VER_2eb1bb265440758e4589d6806e79c527',
+                  'hash_10_VER_50df4a255c011b4ead7c0d6546b07aa3'
+               ],
+               item => 'State_statistics',
+               task => 'hash_09_VER_d46a82fd14f3bcbb1bc775fd87119399',
+               type => 'STACK'
+            },
+            {  color  => 'B56414',
+               hashes => [
+                  'hash_10_VER_b48d6e58a9527c743ee00315b6637ec2',
+                  'hash_10_VER_090c9bfb3f5e5d982c5b94272a9f3883',
+                  'hash_10_VER_830d7ad831e0464d3e28199959a7fa3f',
+                  'hash_10_VER_182dbd0eb886db1f3bb0ad7158d83504'
+               ],
+               item => 'State_updating',
+               task => 'hash_09_VER_a04bcb8107eb0181a4ba3891ebc0082d',
+               type => 'STACK'
+            },
+            {  color  => '6E645A',
+               hashes => [
+                  'hash_10_VER_5a339642f5735a36037c707b9c06d982',
+                  'hash_10_VER_3b6956b1cd2a74f681c61b6f5df3d0c6',
+                  'hash_10_VER_5cc2b7b09968e06252557662ca586ae6',
+                  'hash_10_VER_23b2b07be24730bbc01a9c96f9430efe'
+               ],
+               item => 'State_writing_to_net',
+               task => 'hash_09_VER_5fa295c26247465a5ba4eb4b8f5b8938',
+               type => 'STACK'
+            },
+            {  color  => '521808',
+               hashes => [
+                  'hash_10_VER_ca492930762bbfb52ba41808d10fabf1',
+                  'hash_10_VER_576fe9338095625df387e5d7b4e95351',
+                  'hash_10_VER_70367a44b497d745c9952338aa8b1164',
+                  'hash_10_VER_ace2ed6aea8edc90089129bdab7cf897'
+               ],
+               item => 'State_none',
+               task => 'hash_09_VER_732fd5c0bf964ffc5355aca638f4bd9b',
+               type => 'STACK'
+            },
+            {  color  => '194240',
+               hashes => [
+                  'hash_10_VER_1f3acc29a48d9a807992ab48955a51d4',
+                  'hash_10_VER_56f9b28ee40df1491bb5cc765692ea10',
+                  'hash_10_VER_7cf87142ef848654707e3ad68d75cc1f',
+                  'hash_10_VER_5182ec6dfc1bfba9489cfa134369d1c3'
+               ],
+               item => 'State_other',
+               task => 'hash_09_VER_741c297f0581d15c205873dd1faa6740',
+               type => 'STACK'
+            },
+         ],
+      },
    ],
-   hash   => 'hash_02_VER_3df221ff7893faad48ecc15026687215',
    inputs => {
       'Get MySQL Stats' => {
          hash => 'hash_03_VER_a7b8dc9089ba40cbb293524024e51129',
@@ -1921,7 +2175,6 @@
          type_id => 1
       }
    },
-   name => 'DB Server',
    rras => [
       {  cf_items       => '1|3',
          hash           => 'hash_15_VER_c21df5178e5c955013591239eb0afd47',
@@ -2065,5 +2318,23 @@
       'Binlog_cache_disk_use'      => 'cx',
       'Binlog_cache_use'           => 'cy',
       'binary_log_space'           => 'cz',
+      'innodb_locked_tables'       => 'd0',
+      'innodb_lock_structs'        => 'd1',
+      'State_closing_tables'       => 'd2',
+      'State_copying_to_tmp_table' => 'd3',
+      'State_end'                  => 'd4',
+      'State_freeing_items'        => 'd5',
+      'State_init'                 => 'd6',
+      'State_locked'               => 'd7',
+      'State_login'                => 'd8',
+      'State_preparing'            => 'd9',
+      'State_reading_from_net'     => 'da',
+      'State_sending_data'         => 'db',
+      'State_sorting_result'       => 'dc',
+      'State_statistics'           => 'dd',
+      'State_updating'             => 'de',
+      'State_writing_to_net'       => 'df',
+      'State_none'                 => 'dg',
+      'State_other'                => 'dh',
    },
 };
