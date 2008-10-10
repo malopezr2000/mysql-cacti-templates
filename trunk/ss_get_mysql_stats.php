@@ -114,7 +114,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
 
    # Process connection options and connect to MySQL.
    global $debug, $mysql_user, $mysql_pass, $heartbeat, $cache_dir, $poll_time,
-          $chk_innodb, $chk_master, $chk_slave;
+          $chk_innodb, $chk_master, $chk_slave, $chk_procs;
 
    $user = isset($user) ? $user : $mysql_user;
    $pass = isset($pass) ? $pass : $mysql_pass;
@@ -250,7 +250,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
 
    # Get SHOW PROCESSLIST and aggregate it.
    if ( $chk_procs ) {
-      $result = run_query('SHOW PROCESSLIST');
+      $result = run_query('SHOW PROCESSLIST', $conn);
       while ($row = @mysql_fetch_assoc($result)) {
          $state = $row['State'];
          if ( is_null($state) ) {
@@ -260,7 +260,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
             $state = 'none';
          }
          $state = str_replace(strtolower($state), ' ', '_');
-         if ( array_key_exists($status["State_$state"]) ) {
+         if ( array_key_exists("State_$state", $status) ) {
             $status["State_$state"]++;
          }
          else {
