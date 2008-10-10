@@ -28,3 +28,9 @@ The graph item in the meta/mysql_definitions.pl file has the following propertie
     * items to get from the data input.  These are a hash reference.  The key is the name of the value to get from the data input (e.g. pool_size for the InnoDB Buffer Pool graph template).  The hash reference's children are the:
       * type: 1, 2, 3.  (These are GAUGE, COUNTER, DERIVE, but TODO I'm not sure in that order).
       * hash.
+  * items -- the array of graph items (lines and such).  Each item is a hash.  There are these properties:
+    * color -- a hex color code.
+    * item -- the name of the data item to graph.
+    * type -- the RRD type, such as LINE1 or AREA or STACK.  Text items will automatically be added for each thing that is drawn on the graph.
+    * task -- a hash.
+    * hashes -- an array of hashes.  These are used for the items.  Depending on how many hashes are in the array, the graph will get varying bits of text below the picture.  The texts are Cur: Avg: Max: and you'll get them in that order, as many as you specify.  So if you only specify one hash, you'll just get Cur: on the graph.
