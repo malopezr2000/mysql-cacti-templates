@@ -259,7 +259,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
          if ( $state == '' ) {
             $state = 'none';
          }
-         $state = str_replace(strtolower($state), ' ', '_');
+         $state = str_replace(' ', '_', strtolower($state));
          if ( array_key_exists("State_$state", $status) ) {
             $status["State_$state"]++;
          }
