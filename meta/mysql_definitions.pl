@@ -20,7 +20,7 @@
    hash   => 'hash_02_VER_3df221ff7893faad48ecc15026687215',
    gprints => {
       Normal => {
-         gprint_text => '%8.2lf %s',
+         gprint_text => '%6.1lf%s',
          hash        => 'hash_06_VER_e9c43831e54eca8069317a2ce8c6f752'
       }
    },
