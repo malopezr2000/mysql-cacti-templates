@@ -483,6 +483,7 @@ my @opt_spec = (
    { s => 'poll_interval=i',d => 'Polling interval (default 300)' },
    { s => 'name_prefix=s',  d => 'Template name prefix (default X)' },
    { s => 'smallint',       d => 'Create templates for 32-bit MySQL' },
+   { s => 'script=s',       d => 'Command-line script to use (required)' },
 );
 
 my $opt_parser = OptionParser->new(@opt_spec);
@@ -514,6 +515,27 @@ my $t = eval($code);
 if ( $EVAL_ERROR ) {
    die $EVAL_ERROR;
 }
+
+# #############################################################################
+# Read the command-line script and extract the short names from it.
+# #############################################################################
+open $fh, '<', $opts{script} or die "Can't open $opts{script}: $OS_ERROR";
+my %short_names;
+{ 
+   local $INPUT_RECORD_SEPARATOR = '';
+   PARA:
+   while ( my $para = <$fh> ) {
+      if ( $para =~ m/MAGIC_VARS_DEFINITIONS/ ) {
+         $para =~ s/\$\w+ = array\(/(/; # Convert $foo = array() to ()
+         %short_names = eval($para);
+         if ( $EVAL_ERROR ) {
+            die $EVAL_ERROR;
+         }
+         last PARA;
+      }
+   }
+}
+close $fh;
 
 # #############################################################################
 # Global variables.
@@ -704,15 +726,6 @@ if ( @key_not_used_in_graph || @key_not_in_dt || @key_not_in_script ) {
    print STDERR "Keys in DT not in GT: " . join(',', @key_not_used_in_graph), "\n";
    exit;
 }
-=pod
-foreach my $h ( values %{$t->{inputs}} ) {
-   foreach my $key ( keys %{$h->{outputs}} ) {
-      if ( !$key_used_in_dt{$key} ) {
-         push @key_not_used_in_script, $key;
-      }
-   }
-}
-=cut
 
 
 es('cacti');
@@ -840,7 +853,11 @@ foreach my $g ( @{ $t->{graphs} } ) {
    ee($d->{hash});
 }
 
-# Input script definitions
+# Input script definitions.  Each script can output the data for any of a number
+# of graphs, but unfortunately Cacti doesn't make that easy on us.  So, this
+# system assumes that each script has an --items option which takes a
+# comma-separated list of things to output, like --items a0,a1,a2.  And then we
+# make a data input for each graph, using that command-line.
 foreach my $k ( keys %{$t->{inputs}} ) {
    my $v = $t->{inputs}->{$k};
    es($v->{hash});
@@ -873,9 +890,8 @@ foreach my $k ( keys %{$t->{inputs}} ) {
       el('type_code', '');
       el('input_output', 'out');
       # Compressed so more information can fit in cactid's limited buffer size;
-      # so use the short name.  This list of short names must be kept in sync
-      # with the output variable names of the script that gets the data.
-      my $short_name = $t->{short_names}->{$k};
+      # so use the short name.
+      my $short_name = $short_names{$k};
       die "No short name for $k" unless $short_name;
       el('data_name', $short_name);
       ee($v->{outputs}->{$k});
