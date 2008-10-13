@@ -31,18 +31,18 @@ $mysql_pass = 'cactiuser';
 $heartbeat  = '';      # db.tbl in case you use mk-heartbeat from Maatkit.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300;     # Adjust to match your polling interval.
-$chk_innodb = true;    # Do you want to check InnoDB statistics?
-$chk_master = true;    # Do you want to check binary logging?
-$chk_slave  = true;    # Do you want to check slave status?
-$chk_procs  = true;    # Do you want to check SHOW PROCESSLIST?
+$chk_options = array (
+   'innodb' => true,    # Do you want to check InnoDB statistics?
+   'master' => true,    # Do you want to check binary logging?
+   'slave'  => true,    # Do you want to check slave status?
+   'procs'  => true,    # Do you want to check SHOW PROCESSLIST?
+);
 # ============================================================================
 # You should not need to change anything below this line.
 # ============================================================================
 
 # ============================================================================
 # TODO items, if anyone wants to improve this script:
-# * Permit only some graphs to be fetched/output.
-# * Aggregate the processlist and report.
 # * Make sure that this can be called by the script server.
 # * Calculate query cache fragmentation as a percentage, something like
 #   $status['Qcache_frag_bytes']
@@ -80,8 +80,10 @@ else {
 # Make sure we can also be called as a script.
 # ============================================================================
 if (!isset($called_by_script_server)) {
-   array_shift($_SERVER["argv"]);
-   $result = call_user_func_array("ss_get_mysql_stats", $_SERVER["argv"]);
+   array_shift($_SERVER["argv"]); # Strip off ss_get_mysql_stats.php
+   $options = parse_cmdline($_SERVER["argv"]);
+   validate_options($options);
+   $result = ss_get_mysql_stats($options);
    if ( !$debug ) {
       # Throw away the buffer, which ought to contain only errors.
       ob_end_clean();
@@ -89,7 +91,16 @@ if (!isset($called_by_script_server)) {
    else {
       ob_end_flush(); # In debugging mode, print out the errors.
    }
-   print($result);
+
+   # Split the result up and extract only the desired parts of it.
+   $wanted = explode(',', $options['items']);
+   $output = array();
+   foreach ( explode(' ', $result) as $item ) {
+      if ( in_array(substr($item, 0, 2), $wanted) ) {
+         $output[] = $item;
+      }
+   }
+   print(implode(' ', $output));
 }
 
 # ============================================================================
@@ -106,28 +117,98 @@ if ( !function_exists('array_change_key_case') ) {
 }
 
 # ============================================================================
+# Validate that the command-line options are here and correct
+# ============================================================================
+function validate_options($options) {
+   $opts = array('host', 'items', 'user', 'pass', 'heartbeat', 'nocache');
+   # Required command-line options
+   foreach ( array('host', 'items') as $option ) {
+      if ( !isset($options[$option]) || !$options[$option] ) {
+         usage("Required option --$option is missing");
+      }
+   }
+   foreach ( $options as $key => $val ) {
+      if ( !in_array($key, $opts) ) {
+         usage("Unknown option --$key");
+      }
+   }
+}
+
+# ============================================================================
+# Print out a brief usage summary
+# ============================================================================
+function usage($message) {
+   global $mysql_user, $mysql_pass, $heartbeat;
+
+   $usage = <<<EOF
+$message
+Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
+
+   --host      Hostname to connect to; use host:port syntax to specify a port
+   --items     Comma-separated list of the items whose data you want
+   --user      MySQL username; defaults to $mysql_user if not given
+   --pass      MySQL password; defaults to $mysql_pass if not given
+   --heartbeat MySQL heartbeat table; defaults to '$heartbeat' (see mk-heartbeat)
+
+EOF;
+   die($usage);
+}
+
+# ============================================================================
+# Parse command-line arguments, in the format --arg value --arg value, and
+# return them as an array ( arg => value )
+# ============================================================================
+function parse_cmdline( $args ) {
+   $result = array();
+   $cur_arg = '';
+   foreach ($args as $val) {
+      if ( strpos($val, '--') === 0 ) {
+         if ( strpos($val, '--no') === 0 ) {
+            # It's an option without an argument, but it's a --nosomething
+            $result[substr($val, 2)] = 1;
+            $cur_arg = '';
+         }
+         elseif ( $cur_arg ) { # Maybe the last --arg was an option with no arg
+            die("Missing argument to $cur_arg\n");
+         }
+         else {
+            $cur_arg = $val;
+         }
+      }
+      else {
+         $result[substr($cur_arg, 2)] = $val;
+         $cur_arg = '';
+      }
+   }
+   if ( $cur_arg ) {
+      die("Missing argument to $cur_arg\n");
+   }
+   return $result;
+}
+
+# ============================================================================
 # This is the main function.  Only the $host parameter must be specified.
 # Others are filled in from defaults at the top of this file.  If you want to
 # specify a port, you must include it in the hostname, like "localhost:3306".
 # ============================================================================
-function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null ) {
-
+function ss_get_mysql_stats( $options ) {
    # Process connection options and connect to MySQL.
    global $debug, $mysql_user, $mysql_pass, $heartbeat, $cache_dir, $poll_time,
-          $chk_innodb, $chk_master, $chk_slave, $chk_procs;
+          $chk_options;
 
-   $user = isset($user) ? $user : $mysql_user;
-   $pass = isset($pass) ? $pass : $mysql_pass;
-   $hb_table = isset($hb_table) ? $hb_table : $heartbeat;
-   $conn = @mysql_connect($host, $user, $pass);
+   # Connect to MySQL.
+   $user = isset($options['user']) ? $options['user'] : $mysql_user;
+   $pass = isset($options['pass']) ? $options['pass'] : $mysql_pass;
+   $heartbeat = isset($options['heartbeat']) ? $options['heartbeat'] : $heartbeat;
+   $conn = @mysql_connect($options['host'], $user, $pass);
    if ( !$conn ) {
       die("Can't connect to MySQL: " . mysql_error());
    }
-   $cache_file = "$cache_dir/$host-mysql_cacti_stats.txt";
+   $cache_file = "$cache_dir/$options[host]-mysql_cacti_stats.txt";
 
    # First, check the cache.
    $fp = null;
-   if ( $cache_dir ) {
+   if ( !isset($options['nocache']) ) {
       # This will block if someone else is accessing the file.
       $result = run_query(
          "SELECT GET_LOCK('cacti_monitoring', $poll_time) AS ok", $conn);
@@ -202,7 +283,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
    }
 
    # Get SHOW SLAVE STATUS.
-   if ( $chk_slave ) {
+   if ( $chk_options['slave'] ) {
       $result = run_query("SHOW SLAVE STATUS", $conn);
       while ($row = @mysql_fetch_assoc($result)) {
          # Must lowercase keys because different versions have different
@@ -212,10 +293,10 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
          $status['slave_lag']        = $row['seconds_behind_master'];
 
          # Check replication heartbeat, if present.
-         if ( $hb_table ) {
+         if ( $heartbeat ) {
             $result = run_query(
                "SELECT GREATEST(0, UNIX_TIMESTAMP() - UNIX_TIMESTAMP(ts) - 1)"
-               . "FROM $hb_table WHERE id = 1", $conn);
+               . "FROM $heartbeat WHERE id = 1", $conn);
             $row2 = @mysql_fetch_row($result);
             $status['slave_lag'] = $row2[0];
          }
@@ -231,7 +312,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
    # Get info on master logs. TODO: is there a way to do this without querying
    # mysql again?
    $binlogs = array(0);
-   if ( $chk_master && $status['log_bin'] == 'ON' ) { # See issue #8
+   if ( $chk_options['master'] && $status['log_bin'] == 'ON' ) { # See issue #8
       $result = run_query("SHOW MASTER LOGS", $conn);
       while ($row = @mysql_fetch_assoc($result)) {
          $row = array_change_key_case($row, CASE_LOWER);
@@ -249,7 +330,7 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
    }
 
    # Get SHOW PROCESSLIST and aggregate it.
-   if ( $chk_procs ) {
+   if ( $chk_options['procs'] ) {
       $result = run_query('SHOW PROCESSLIST', $conn);
       while ($row = @mysql_fetch_assoc($result)) {
          $state = $row['State'];
@@ -269,9 +350,10 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
       }
    }
 
-   # Get SHOW INNODB STATUS and extract the desired metrics from it.
+   # Get SHOW INNODB STATUS and extract the desired metrics from it. See issue
+   # #8.
    $innodb_txn = false;
-   if ( $chk_innodb && $status['have_innodb'] == 'YES' ) { # See issue #8.
+   if ( $chk_options['innodb'] && $status['have_innodb'] == 'YES' ) {
       $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
       $innodb_array  = @mysql_fetch_assoc($result);
       $flushed_to    = false;
@@ -284,12 +366,12 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
          $row = explode(' ', $line);
 
          # SEMAPHORES
-         if (strstr($line, 'Mutex spin waits')) {
+         if (strpos($line, 'Mutex spin waits') !== FALSE ) {
             $spin_waits[]  = tonum($row[3]);
             $spin_rounds[] = tonum($row[5]);
             $os_waits[]    = tonum($row[8]);
          }
-         elseif (strstr($line, 'RW-shared spins')) {
+         elseif (strpos($line, 'RW-shared spins') !== FALSE ) {
             $spin_waits[] = tonum($row[2]);
             $spin_waits[] = tonum($row[8]);
             $os_waits[]   = tonum($row[5]);
@@ -297,108 +379,108 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
          }
 
          # TRANSACTIONS
-         elseif ( strstr($line, 'Trx id counter')) {
+         elseif ( strpos($line, 'Trx id counter') !== FALSE ) {
             # The beginning of the TRANSACTIONS section: start counting
             # transactions
             $innodb_txn = array($row[3], $row[4]);
          }
-         elseif (strstr($line, 'Purge done for trx')) {
+         elseif (strpos($line, 'Purge done for trx') !== FALSE ) {
             # PHP can't do big math, so I send it to MySQL.
             $innodb_prg = array($row[6], $row[7]);
          }
-         elseif (strstr($line, 'History list length')) {
+         elseif (strpos($line, 'History list length') !== FALSE ) {
             $status['history_list'] = tonum($row[3]);
          }
-         elseif ( $innodb_txn && strstr($line, '---TRANSACTION')) {
+         elseif ( $innodb_txn && strpos($line, '---TRANSACTION') !== FALSE ) {
             $status['current_transactions'] += 1;
-            if ( strstr($line, 'ACTIVE') ) {
+            if ( strpos($line, 'ACTIVE') !== FALSE  ) {
                $status['active_transactions'] += 1;
             }
          }
-         elseif ( $innodb_txn && strstr($line, 'LOCK WAIT') ) {
+         elseif ( $innodb_txn && strpos($line, 'LOCK WAIT') !== FALSE  ) {
             $status['locked_transactions'] += 1;
          }
-         elseif ( strstr($line, 'read views open inside')) {
+         elseif ( strpos($line, 'read views open inside') !== FALSE ) {
             $status['read_views'] = tonum($row[0]);
          }
-         elseif ( strstr($line, 'mysql tables in use') ) {
+         elseif ( strpos($line, 'mysql tables in use') !== FALSE  ) {
             $status['innodb_locked_tables'] += tonum($row[6]);
          }
-         elseif ( strstr($line, 'lock struct(s)') ) {
+         elseif ( strpos($line, 'lock struct(s) !== FALSE ') ) {
             $status['innodb_lock_structs'] += tonum($row[0]);
          }
 
          # FILE I/O
-         elseif (strstr($line, 'OS file reads')) {
+         elseif (strpos($line, 'OS file reads') !== FALSE ) {
             $status['file_reads']  = tonum($row[0]);
             $status['file_writes'] = tonum($row[4]);
             $status['file_fsyncs'] = tonum($row[8]);
          }
-         elseif (strstr($line, 'Pending normal aio')) {
+         elseif (strpos($line, 'Pending normal aio') !== FALSE ) {
             $status['pending_normal_aio_reads']  = tonum($row[4]);
             $status['pending_normal_aio_writes'] = tonum($row[7]);
          }
-         elseif (strstr($line, 'ibuf aio reads')) {
+         elseif (strpos($line, 'ibuf aio reads') !== FALSE ) {
             $status['pending_ibuf_aio_reads'] = tonum($row[4]);
             $status['pending_aio_log_ios']    = tonum($row[7]);
             $status['pending_aio_sync_ios']   = tonum($row[10]);
          }
-         elseif (strstr($line, 'Pending flushes (fsync)')) {
+         elseif (strpos($line, 'Pending flushes (fsync) !== FALSE ')) {
             $status['pending_log_flushes']      = tonum($row[4]);
             $status['pending_buf_pool_flushes'] = tonum($row[7]);
          }
 
          # INSERT BUFFER AND ADAPTIVE HASH INDEX
-         elseif (strstr($line, 'merged recs')) {
+         elseif (strpos($line, 'merged recs') !== FALSE ) {
             $status['ibuf_inserts'] = tonum($row[0]);
             $status['ibuf_merged']  = tonum($row[2]);
             $status['ibuf_merges']  = tonum($row[5]);
          }
 
          # LOG
-         elseif (strstr($line, "log i/o's done")) {
+         elseif (strpos($line, "log i/o's done") !== FALSE ) {
             $status['log_writes'] = tonum($row[0]);
          }
-         elseif (strstr($line, "pending log writes")) {
+         elseif (strpos($line, "pending log writes") !== FALSE ) {
             $status['pending_log_writes']  = tonum($row[0]);
             $status['pending_chkp_writes'] = tonum($row[4]);
          }
-         elseif (strstr($line, "Log sequence number")) {
+         elseif (strpos($line, "Log sequence number") !== FALSE ) {
             $innodb_lsn = array($row[3], $row[4]);
          }
-         elseif (strstr($line, "Log flushed up to")) {
+         elseif (strpos($line, "Log flushed up to") !== FALSE ) {
             # Since PHP can't handle 64-bit numbers, we'll ask MySQL to do it for
             # us instead.  And we get it to cast them to strings, too.
             $flushed_to = array($row[6], $row[7]);
          }
 
          # BUFFER POOL AND MEMORY
-         elseif (strstr($line, "Buffer pool size")) {
+         elseif (strpos($line, "Buffer pool size") !== FALSE ) {
              $status['pool_size'] = tonum($row[5]);
          }
-         elseif (strstr($line, "Free buffers")) {
+         elseif (strpos($line, "Free buffers") !== FALSE ) {
              $status['free_pages'] = tonum($row[8]);
          }
-         elseif (strstr($line, "Database pages")) {
+         elseif (strpos($line, "Database pages") !== FALSE ) {
              $status['database_pages'] = tonum($row[6]);
          }
-         elseif (strstr($line, "Modified db pages")) {
+         elseif (strpos($line, "Modified db pages") !== FALSE ) {
              $status['modified_pages'] = tonum($row[4]);
          }
-         elseif (strstr($line, "Pages read") ) {
+         elseif (strpos($line, "Pages read") !== FALSE  ) {
              $status['pages_read']    = tonum($row[2]);
              $status['pages_created'] = tonum($row[4]);
              $status['pages_written'] = tonum($row[6]);
          }
 
          # ROW OPERATIONS
-         elseif (strstr($line, 'Number of rows inserted')) {
+         elseif (strpos($line, 'Number of rows inserted') !== FALSE ) {
             $status['rows_inserted'] = tonum($row[4]);
             $status['rows_updated']  = tonum($row[6]);
             $status['rows_deleted']  = tonum($row[8]);
             $status['rows_read']     = tonum($row[10]);
          }
-         elseif (strstr($line, "queries inside InnoDB")) {
+         elseif (strpos($line, "queries inside InnoDB") !== FALSE ) {
              $status['queries_inside'] = tonum($row[0]);
              $status['queries_queued']  = tonum($row[4]);
          }
@@ -449,7 +531,8 @@ function ss_get_mysql_stats( $host, $user = null, $pass = null, $hb_table = null
 
    # Define the variables to output.  I use shortened variable names so maybe
    # it'll all fit in 1024 bytes for Cactid and Spine's benefit.  This list must
-   # stay in sync with mysql_definitions.pl
+   # come right after the word MAGIC_VARS_DEFINITIONS.  The Perl script parses
+   # it and uses it as a Perl variable.
    $keys = array(
        'Key_read_requests'          => 'a0',
        'Key_reads'                  => 'a1',
