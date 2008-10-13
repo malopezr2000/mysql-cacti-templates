@@ -195,9 +195,9 @@ function parse_cmdline( $args ) {
 }
 
 # ============================================================================
-# This is the main function.  Only the $host parameter must be specified.
-# Others are filled in from defaults at the top of this file.  If you want to
-# specify a port, you must include it in the hostname, like "localhost:3306".
+# This is the main function.  Some parameters are filled in from defaults at the
+# top of this file.  If you want to specify a port, you must include it in the
+# hostname, like "localhost:3306".
 # ============================================================================
 function ss_get_mysql_stats( $options ) {
    # Process connection options and connect to MySQL.
@@ -360,7 +360,8 @@ function ss_get_mysql_stats( $options ) {
 
    # Get SHOW INNODB STATUS and extract the desired metrics from it. See issue
    # #8.
-   $innodb_txn = false;
+   $innodb_txn      = false;
+   $innodb_complete = false;
    if ( $chk_options['innodb'] && $status['have_innodb'] == 'YES' ) {
       $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
       $innodb_array  = @mysql_fetch_assoc($result);
@@ -493,6 +494,12 @@ function ss_get_mysql_stats( $options ) {
              $status['queries_queued']  = tonum($row[4]);
          }
       }
+      $innodb_complete
+         = strpos($innodb_array['Status'], 'END OF INNODB MONITOR OUTPUT');
+   }
+
+   if ( !$innodb_complete ) {
+      # TODO: Fill in some values with stuff from SHOW STATUS.
    }
 
    # Derive some values from other values.
