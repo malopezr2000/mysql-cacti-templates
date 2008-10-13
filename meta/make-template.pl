@@ -475,6 +475,8 @@ package main;
 
 use English qw(-no_match_vars);
 use List::Util qw(max);
+use Carp qw(croak);
+use Digest::MD5 qw(md5_hex);
 
 my @opt_spec = (
    { s => 'cactiver=s',     d => 'Create templates for this Cacti version' },
@@ -647,7 +649,7 @@ sub ee { # Element end
    $sanity =~ s/_VER_/$ver/g;
    my ( $name ) = pop @stack;
    if ( ($sanity || $name) ne $name ) {
-      die "You tried to end the '$sanity' element but stack has '$name'";
+      croak "You tried to end the '$sanity' element but stack has '$name'";
    }
    print(("\t" x --$indent), "</$name>\n");
 }
@@ -691,6 +693,17 @@ sub crunch {
    $text = reverse $text;
    die "Can't shorten $text enough" if length($text) > $len;
    return $text;
+}
+
+# Makes a new hash from two existing hashes by summing them together.  Keeps the
+# properties of the first one (type, etc).  This is useful for making new hashes
+# for every combination (cross product) of an X and a Y, but not duplicating the
+# Y for every X in the template definition file.
+sub mash_hash {
+   my ( $hash1, $hash2 ) = @_;
+   my $hash3 = substr($hash1, 0, length('hash_XX_VER_'))
+      . md5_hex($hash1 . $hash2);
+   return $hash3;
 }
 
 # Do the work.
@@ -812,7 +825,8 @@ foreach my $g ( @{ $t->{graphs} } ) {
    es('ds');
    el('t_name', '');
    el('name', "|host_description| - $g->{name}");
-   el('data_input_id', $t->{inputs}->{$d->{input}}->{hash} );
+   # Must generate a unique input ID hash for each DT, hence mash_hash.
+   el('data_input_id', mash_hash($i->{hash}, $d->{hash}));
    el('t_rra_id', '');
    el('t_rrd_step', '');
    el('rrd_step', $rrd_step);
@@ -842,7 +856,10 @@ foreach my $g ( @{ $t->{graphs} } ) {
    my $cnt = 0;
    foreach my $input ( @{ $i->{inputs} } ) {
       es(sprintf('item_%03d', $cnt));
-      el('data_input_field_id', $input->{hash});
+      # Must generate a unique input ID hash for each DT, hence mash_hash.  The
+      # result should be the same value as the one above that does the same
+      # thing (in the previous loop, printing out DTs).
+      el('data_input_field_id', mash_hash($input->{hash}, $d->{hash}));
       el('t_value', '');
       el('value', '');
       ee(sprintf('item_%03d', $cnt));
@@ -858,31 +875,44 @@ foreach my $g ( @{ $t->{graphs} } ) {
 # system assumes that each script has an --items option which takes a
 # comma-separated list of things to output, like --items a0,a1,a2.  And then we
 # make a data input for each graph, using that command-line.
-foreach my $k ( keys %{$t->{inputs}} ) {
-   my $v = $t->{inputs}->{$k};
-   es($v->{hash});
-   el('name', "$name_prefix$v->{name}");
-   el('type_id', $v->{type_id});
-   el('input_string', $v->{input_string});
+foreach my $g ( @{ $t->{graphs} } ) {
+   # Get the graph's data template's input, and a list of the data items it
+   # needs.
+   my $dt = $g->{dt};
+   my $i = $t->{inputs}->{$dt->{input}};
+   my @needed = grep { ref($dt->{$_}) eq 'HASH' } sort keys %$dt;
+   my $needed = join(',', map { $short_names{$_} } @needed);
+
+   # And again, re-generate the hash.
+   my $input_hash = mash_hash($i->{hash}, $dt->{hash});
+   es($input_hash);
+   el('name', "$name_prefix$dt->{input}/$g->{name}");
+   el('type_id', $i->{type_id});
+
+   # Fix up the --items argument.
+   (my $input_string = $i->{input_string}) =~ s/<items>/$needed/;
+   el('input_string', $input_string);
 
    es('fields');
 
-   # Input fields (arguments) to the script
-   foreach my $i ( @{$v->{inputs}} ) {
-      es($i->{hash});
-      el('name', to_words($i->{name}));
+   # Input fields (arguments) to the script.  The --items argument is magical
+   # and has already been replaced above.
+   foreach my $it ( @{$i->{inputs}} ) {
+      my $hash = mash_hash($it->{hash}, $dt->{hash});
+      es($hash);
+      el('name', to_words($it->{name}));
       el('update_rra', '');
       el('regexp_match', '');
-      el('allow_nulls', $i->{allow_nulls});
-      el('type_code', ($i->{name} =~ m/$is_magic/ ? $i->{name} : ''));
+      el('allow_nulls', $it->{allow_nulls});
+      el('type_code', ($it->{name} =~ m/$is_magic/ ? $it->{name} : ''));
       el('input_output', 'in');
-      el('data_name', $i->{name});
-      ee($i->{hash});
+      el('data_name', $it->{name});
+      ee($hash);
    }
 
    # Data returned by the script
-   foreach my $k ( keys %{ $v->{outputs} } ) {
-      es($v->{outputs}->{$k});
+   foreach my $k ( @needed ) {
+      es($i->{outputs}->{$k});
       el('name', to_words($k));
       el('update_rra', 'on');
       el('regexp_match', '');
@@ -894,11 +924,11 @@ foreach my $k ( keys %{$t->{inputs}} ) {
       my $short_name = $short_names{$k};
       die "No short name for $k" unless $short_name;
       el('data_name', $short_name);
-      ee($v->{outputs}->{$k});
+      ee($i->{outputs}->{$k});
    }
 
    ee('fields');
-   ee($v->{hash});
+   ee($input_hash);
 }
 
 # GPRINT formats

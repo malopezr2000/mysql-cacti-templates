@@ -2005,9 +2005,10 @@
    ],
    inputs => {
       'Get MySQL Stats' => {
-         hash => 'hash_03_VER_a7b8dc9089ba40cbb293524024e51129',
+         hash         => 'hash_03_VER_a7b8dc9089ba40cbb293524024e51129',
          input_string =>
-            '<path_php_binary> -q <path_cacti>/scripts/ss_get_mysql_stats.php <hostname> <username><password>',
+            '<path_php_binary> -q <path_cacti>/scripts/ss_get_mysql_stats.php '
+            . '--host <hostname> --items <items> --user <username> --pass <password>',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_c89cbc8b1c987e050a310ee5414b2a02',
@@ -2022,7 +2023,6 @@
                name        => 'password'
             }
          ],
-         name    => 'Get MySQL Stats',
          outputs => {
             Aborted_clients  => 'hash_07_VER_c44a197ff40a95758cf75c0cade30652',
             Aborted_connects => 'hash_07_VER_caf8529043654bbe8ecd836b5ba5025e',
