@@ -1857,28 +1857,6 @@
                task => 'hash_09_VER_f6f2d4f71a5d4bcd7de269b39c19341e',
                type => 'STACK'
             },
-            {  color  => '907890',
-               hashes => [
-                  'hash_10_VER_7a82cd2cc8b648dce65c7ec3802462a4',
-                  'hash_10_VER_9cc8addbc34b486aa53bbb3e713b300c',
-                  'hash_10_VER_20761ec1ddc008eb4656a7b9115e9226',
-                  'hash_10_VER_8e043c9ad079fbe46cc04331c4b78e53'
-               ],
-               item => 'State_freeing_items',
-               task => 'hash_09_VER_15ea28c4a4ac8d4664af10a3997c2acb',
-               type => 'STACK'
-            },
-            {  color  => '784860',
-               hashes => [
-                  'hash_10_VER_96fad6b497522628c10b4cd019179603',
-                  'hash_10_VER_702974da20f0907184384840cac6578f',
-                  'hash_10_VER_c7999f6a9beda2345f53265fff43d8ca',
-                  'hash_10_VER_021c012fa5d9a5f7cf048b61c15f2da3'
-               ],
-               item => 'State_init',
-               task => 'hash_09_VER_5d3b8ed48971f2350fe76c6fa31e6a61',
-               type => 'STACK'
-            },
             {  color  => '487860',
                hashes => [
                   'hash_10_VER_a4f6af1550598966dda534218cfd3784',
@@ -1886,41 +1864,19 @@
                   'hash_10_VER_84e5a85ee5ba28187eab33bdb12ed140',
                   'hash_10_VER_e363bff9440fa3c68fb9af3e1a9b3e99'
                ],
-               item => 'State_locked',
+               item => 'State_freeing_items',
                task => 'hash_09_VER_96920071e28ee28afa3dbaa318ff93a1',
                type => 'STACK'
             },
-            {  color  => '783030',
+            {  color  => '907890',
                hashes => [
-                  'hash_10_VER_6d2c06c20e934bfed61a4a30646001fe',
-                  'hash_10_VER_5550d5816489d4068b92c549a60a9886',
-                  'hash_10_VER_3a46d5f08fefb8dec8114bc50a144fc2',
-                  'hash_10_VER_23e3b48ff55394e0139cebc3a5fcddc7'
+                  'hash_10_VER_7a82cd2cc8b648dce65c7ec3802462a4',
+                  'hash_10_VER_9cc8addbc34b486aa53bbb3e713b300c',
+                  'hash_10_VER_20761ec1ddc008eb4656a7b9115e9226',
+                  'hash_10_VER_8e043c9ad079fbe46cc04331c4b78e53'
                ],
-               item => 'State_login',
-               task => 'hash_09_VER_18e48d0a2450dae25c44f46b526ddde9',
-               type => 'STACK'
-            },
-            {  color  => '906030',
-               hashes => [
-                  'hash_10_VER_c358ddcea377a992a291c8a5aebf887f',
-                  'hash_10_VER_9530c1d35d09c7fdf35d92933f2c0b50',
-                  'hash_10_VER_2fac9d6879067880e6b7ef45ade60c4f',
-                  'hash_10_VER_3d97138092a0f13eaf08bf519e1d0b90'
-               ],
-               item => 'State_preparing',
-               task => 'hash_09_VER_c0d6ba166a4c0c72fc8cf8df2310747f',
-               type => 'STACK'
-            },
-            {  color  => '906030',
-               hashes => [
-                  'hash_10_VER_dddb98067b260e22b260651a8b5d7a8f',
-                  'hash_10_VER_e06b233a1b546980db71108f39a12d7a',
-                  'hash_10_VER_8fc73b57e2c7284e46fc66e0d41dfa53',
-                  'hash_10_VER_5e0808e7926436f078884661ef815d4f'
-               ],
-               item => 'State_reading_from_net',
-               task => 'hash_09_VER_7a4ad819c2ffdb406ee6c9a5ce8d25e8',
+               item => 'State_init',
+               task => 'hash_09_VER_15ea28c4a4ac8d4664af10a3997c2acb',
                type => 'STACK'
             },
             {  color  => '306078',
@@ -1930,8 +1886,52 @@
                   'hash_10_VER_2590b2a8908ac100ee28527808c110a5',
                   'hash_10_VER_c7441bddeb24900abf9a926cbaa2d577'
                ],
-               item => 'State_sending_data',
+               item => 'State_locked',
                task => 'hash_09_VER_a3e9905fce8f2314eafcf9e5a3145b94',
+               type => 'STACK'
+            },
+            {  color  => '1693A7',
+               hashes => [
+                  'hash_10_VER_96fad6b497522628c10b4cd019179603',
+                  'hash_10_VER_702974da20f0907184384840cac6578f',
+                  'hash_10_VER_c7999f6a9beda2345f53265fff43d8ca',
+                  'hash_10_VER_021c012fa5d9a5f7cf048b61c15f2da3'
+               ],
+               item => 'State_login',
+               task => 'hash_09_VER_5d3b8ed48971f2350fe76c6fa31e6a61',
+               type => 'STACK'
+            },
+            {  color  => '783030',
+               hashes => [
+                  'hash_10_VER_6d2c06c20e934bfed61a4a30646001fe',
+                  'hash_10_VER_5550d5816489d4068b92c549a60a9886',
+                  'hash_10_VER_3a46d5f08fefb8dec8114bc50a144fc2',
+                  'hash_10_VER_23e3b48ff55394e0139cebc3a5fcddc7'
+               ],
+               item => 'State_preparing',
+               task => 'hash_09_VER_18e48d0a2450dae25c44f46b526ddde9',
+               type => 'STACK'
+            },
+            {  color  => 'FF7F00',
+               hashes => [
+                  'hash_10_VER_c358ddcea377a992a291c8a5aebf887f',
+                  'hash_10_VER_9530c1d35d09c7fdf35d92933f2c0b50',
+                  'hash_10_VER_2fac9d6879067880e6b7ef45ade60c4f',
+                  'hash_10_VER_3d97138092a0f13eaf08bf519e1d0b90'
+               ],
+               item => 'State_reading_from_net',
+               task => 'hash_09_VER_c0d6ba166a4c0c72fc8cf8df2310747f',
+               type => 'STACK'
+            },
+            {  color  => '54382A',
+               hashes => [
+                  'hash_10_VER_dddb98067b260e22b260651a8b5d7a8f',
+                  'hash_10_VER_e06b233a1b546980db71108f39a12d7a',
+                  'hash_10_VER_8fc73b57e2c7284e46fc66e0d41dfa53',
+                  'hash_10_VER_5e0808e7926436f078884661ef815d4f'
+               ],
+               item => 'State_sending_data',
+               task => 'hash_09_VER_7a4ad819c2ffdb406ee6c9a5ce8d25e8',
                type => 'STACK'
             },
             {  color  => 'B83A04',
