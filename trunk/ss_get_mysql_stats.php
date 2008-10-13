@@ -149,6 +149,7 @@ Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
    --user      MySQL username; defaults to $mysql_user if not given
    --pass      MySQL password; defaults to $mysql_pass if not given
    --heartbeat MySQL heartbeat table; defaults to '$heartbeat' (see mk-heartbeat)
+   --nocache   Do not cache results in a file
 
 EOF;
    die($usage);
@@ -164,12 +165,19 @@ function parse_cmdline( $args ) {
    foreach ($args as $val) {
       if ( strpos($val, '--') === 0 ) {
          if ( strpos($val, '--no') === 0 ) {
-            # It's an option without an argument, but it's a --nosomething
+            # It's an option without an argument, but it's a --nosomething so
+            # it's OK.
             $result[substr($val, 2)] = 1;
             $cur_arg = '';
          }
          elseif ( $cur_arg ) { # Maybe the last --arg was an option with no arg
-            die("Missing argument to $cur_arg\n");
+            if ( $cur_arg == '--user' || $cur_arg == '--pass' ) {
+               # Special case because Cacti will pass --user without an arg
+               $cur_arg = '';
+            }
+            else {
+               die("Missing argument to $cur_arg\n");
+            }
          }
          else {
             $cur_arg = $val;
@@ -180,7 +188,7 @@ function parse_cmdline( $args ) {
          $cur_arg = '';
       }
    }
-   if ( $cur_arg ) {
+   if ( $cur_arg && ($cur_arg != '--user' && $cur_arg != '--pass') ) {
       die("Missing argument to $cur_arg\n");
    }
    return $result;
