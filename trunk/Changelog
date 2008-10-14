@@ -1,5 +1,16 @@
 Changes for templates:
 
+	* Graphs fetched too much data, causing errors (incompatible; issue 28, 23).
+	* Output of the poller script is compressed with short value names.
+	* Checks can be disabled; no need to fetch INNODB STATUS if unwanted.
+	* Queries could cause a MySQL thread stack overflow (issue 19).
+	* Older PHP didn't have array_change_key_case function (issue 21).
+	* The PROCESS privilege is required for MySQL 5.1.29 with InnoDB (issue 22).
+	* Added an aggregated view of SHOW PROCESSLIST; requires PROCESS privilege.
+	* The text on the graph could overflow the right-hand edge.
+	* Truncated SHOW INNODB STATUS could cause an SQL error (issue 27).
+	* The poller script requires proper cmdline options (incompatible change).
+
 2008-06-01: version 1.0.0
 
 	* Fixed when SHOW MASTER LOGS has no File_size column.
