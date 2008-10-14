@@ -1,5 +1,5 @@
 NAME = mysql-cacti-templates
-VERSION = 1.0.0
+VERSION = 1.1.0
 DISTFILES = COPYING \
 	README \
 	ss_get_mysql_stats.php \

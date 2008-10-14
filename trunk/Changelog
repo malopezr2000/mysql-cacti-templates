@@ -1,5 +1,7 @@
 Changes for templates:
 
+2008-10-14: version 1.1.0
+
 	* Graphs fetched too much data, causing errors (incompatible; issue 28, 23).
 	* Output of the poller script is compressed with short value names.
 	* Checks can be disabled; no need to fetch INNODB STATUS if unwanted.
