@@ -3,7 +3,9 @@ VERSION = 1.1.0
 DISTFILES = COPYING \
 	README \
 	ss_get_mysql_stats.php \
-	Changelog
+	Changelog \
+	meta/make-template.pl \
+	meta/mysql_definitions.pl
 
 DISTDIR = $(NAME)-$(VERSION)
 

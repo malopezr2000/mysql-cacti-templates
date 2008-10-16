@@ -1,5 +1,9 @@
 Changes for templates:
 
+2008-10-15: version 1.1.1
+
+	* The tarball didn't have make-template.pl mysql_definitions.pl (issue 34)
+
 2008-10-14: version 1.1.0
 
 	* Graphs fetched too much data, causing errors (incompatible; issue 28, 23).
