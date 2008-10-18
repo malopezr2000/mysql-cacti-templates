@@ -7,11 +7,16 @@ The stuff you need is in meta/mysql_definitions.pl.
 This file is read in as a big variable by make_template.pl.  It consists of the following sections, which will be combined to form a template for Cacti:
 
   * name and hash -- properties for the template.
-  * gprints -- Custom sprintf formats.  You don't need to modify these.
   * graphs -- a graph is a data template plus a collection of graph items.
   * inputs -- this basically defines how the command-line script is called.
-  * rras -- these are just some custome RRA definitions so you can keep more than the usual amount of data.
   * short_names -- these *must* match the values in the ss_get_mysql_stats.php file.
+
+Optionally, you can define these:
+
+  * gprints -- Custom sprintf formats.  You don't need to modify these.
+  * rras -- these are just some custome RRA definitions so you can keep more than the usual amount of data.
+
+If you don't define these, built-in defaults are used.  They're kept in the make-template.pl script.
 
 The hardest part is keeping track of how all these things are related to each other.  I have simplified the relationships significantly: one data template per each graph template, etc.
 
