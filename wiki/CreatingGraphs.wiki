@@ -9,7 +9,6 @@ This file is read in as a big variable by make_template.pl.  It consists of the 
   * name and hash -- properties for the template.
   * graphs -- a graph is a data template plus a collection of graph items.
   * inputs -- this basically defines how the command-line script is called.
-  * short_names -- these *must* match the values in the ss_get_mysql_stats.php file.
 
 Optionally, you can define these:
 
@@ -17,6 +16,8 @@ Optionally, you can define these:
   * rras -- these are just some custome RRA definitions so you can keep more than the usual amount of data.
 
 If you don't define these, built-in defaults are used.  They're kept in the make-template.pl script.
+
+In addition, there's a magical word that you can put into the script file that'll be read with the --script option.  This will cause the entire paragraph to be read in and included into the definition too.  This lets you specify a short_names array/hash that shortens the command-line output to avoid problems with Cacti's limited built-in buffer sizes.
 
 The hardest part is keeping track of how all these things are related to each other.  I have simplified the relationships significantly: one data template per each graph template, etc.
 
