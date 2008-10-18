@@ -18,12 +18,6 @@
 {
    name   => 'DB Server',
    hash   => 'hash_02_VER_3df221ff7893faad48ecc15026687215',
-   gprints => {
-      Normal => {
-         gprint_text => '%6.1lf%s',
-         hash        => 'hash_06_VER_e9c43831e54eca8069317a2ce8c6f752'
-      }
-   },
    graphs => [
       {  base_value => '1000',
          dt         => {
@@ -2191,38 +2185,4 @@
          type_id => 1
       }
    },
-   rras => [
-      {  cf_items       => '1|3',
-         hash           => 'hash_15_VER_c21df5178e5c955013591239eb0afd47',
-         name           => 'Daily (5 Minute Average)',
-         rows           => 600,
-         steps          => 1,
-         timespan       => 86400,
-         x_files_factor => '0.5'
-      },
-      {  cf_items       => '1|3',
-         hash           => 'hash_15_VER_0d9c0af8b8acdc7807943937b3208e30',
-         name           => 'Weekly (30 Minute Average)',
-         rows           => '700',
-         steps          => '6',
-         timespan       => '604800',
-         x_files_factor => '0.5'
-      },
-      {  cf_items       => '1|3',
-         hash           => 'hash_15_VER_6fc2d038fb42950138b0ce3e9874cc61',
-         name           => 'Monthly (2 Hour Average)',
-         rows           => '775',
-         steps          => '24',
-         timespan       => '2678400',
-         x_files_factor => '0.5'
-      },
-      {  cf_items       => '1|3',
-         hash           => 'hash_15_VER_e36f3adb9f152adfa5dc50fd2b23337f',
-         name           => 'Yearly (1 Day Average)',
-         rows           => '797',
-         steps          => '288',
-         timespan       => '33053184',
-         x_files_factor => '0.5'
-      }
-   ],
 };
