@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
-# This is a script that uniqueifies hashes in a file.
+# This is a script that uniqueifies hashes in a file.  When given the --refresh
+# option it will replace every hash with a new one.
 #
 # This program is copyright (c) 2008 Baron Schwartz. Feedback and improvements
 # are welcome.
@@ -28,11 +29,17 @@ my %seen;
 
 my $hash_pat = qr/_VER_([a-fA-F0-9]+)/;
 
+my $refresh;
+if ( @ARGV && $ARGV[0] eq '--refresh' ) {
+   shift @ARGV;
+   $refresh = 1;
+}
+
 while ( my $line = <> ) {
    my ( $hash ) = $line =~ m/$hash_pat/g;
    if ( $hash ) {
       die "hash $hash isn't the right length" unless length($hash) == 32;
-      if ( $seen{$hash}++ ) {
+      if ( $refresh || $seen{$hash}++ ) {
          my $new = md5_hex('abcd' . gettimeofday() . rand());
          $line =~ s/$hash/$new/;
       }
