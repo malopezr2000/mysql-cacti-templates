@@ -309,7 +309,7 @@
          },
          hash  => 'hash_00_VER_9b3e0b4a8c49be86a7cb1486ba9ab88d',
          items => [
-            {  color  => 'DE0056',
+            {  color  => '306078',
                hashes => [
                   'hash_10_VER_000801874164cf6cf266929cc34d8462',
                   'hash_10_VER_6b0538d65229502662c88ee69966f1f4',
@@ -1879,7 +1879,7 @@
                task => 'hash_09_VER_15ea28c4a4ac8d4664af10a3997c2acb',
                type => 'STACK'
             },
-            {  color  => '306078',
+            {  color  => 'DE0056',
                hashes => [
                   'hash_10_VER_dcc867aef7185941f9371e2171a61a50',
                   'hash_10_VER_b09cf2592c17fb796d6df640d6427de7',
