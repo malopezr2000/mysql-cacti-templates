@@ -268,8 +268,9 @@ function ss_get_by_ssh( $options ) {
 }
 
 function get_stats_apache ( $cmd ) {
-   $url = '/server-status';
-   $cmd = "$cmd wget -q -O - -T 5 'http://localhost$url?auto'";
+   $url = '/server-status'; # TODO
+   # TODO: allow --http-user --http-password
+   $cmd = "$cmd wget -U Cacti/1.0 -q -O - -T 5 'http://localhost$url?auto'";
    $str = `$cmd`;
 
    $result = array(
