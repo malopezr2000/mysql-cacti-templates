@@ -25,7 +25,7 @@
 # ============================================================================
 $ssh_user = 'cacti';                      # SSH username
 $ssh_port = 22;                           # SSH port
-$ssh_iden = '-i /etc/cacti/.ssh/id_rsa';  # SSH identity
+$ssh_iden = '-i /var/www/cacti/.ssh/id_rsa';  # SSH identity
 $cache_dir  = '';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300;     # Adjust to match your polling interval.
 
