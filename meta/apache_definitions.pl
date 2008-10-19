@@ -1,4 +1,5 @@
-# This is the template definition file.  To use it, see make-template.pl.
+# This is the template definition file.  To use it, see make-template.pl.  This
+# one goes with the ss_get_by_ssh.php script.
 #
 # This program is copyright (c) 2008 Baron Schwartz. Feedback and improvements
 # are welcome.
@@ -14,8 +15,6 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA.
-
-# TODO: there can also be a CPULoad line in the output of /server-status.
 
 {
    name   => 'Apache Server',
