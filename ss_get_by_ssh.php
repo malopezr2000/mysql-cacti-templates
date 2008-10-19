@@ -232,22 +232,22 @@ function ss_get_by_ssh( $options ) {
    # come right after the word MAGIC_VARS_DEFINITIONS.  The Perl script parses
    # it and uses it as a Perl variable.
    $keys = array(
-      'Requests' => 'a0',
-      'Bytes_sent' => 'a1',
-      'Idle_workers' => 'a2',
-      'Busy_workers' => 'a3',
-      'CPU_Load' => 'a4',
+      'Requests'               => 'a0',
+      'Bytes_sent'             => 'a1',
+      'Idle_workers'           => 'a2',
+      'Busy_workers'           => 'a3',
+      'CPU_Load'               => 'a4',
       'Waiting_for_connection' => 'a5',
-      'Starting_up' => 'a6',
-      'Reading_request' => 'a7',
-      'Sending_reply' => 'a8',
-      'Keepalive' => 'a9',
-      'DNS_lookup' => 'aa',
-      'Closing_connection' => 'ab',
-      'Logging' => 'ac',
-      'Gracefully_finishing' => 'ad',
-      'Idle_cleanup' => 'ae',
-      'Open_slot' => 'af',
+      'Starting_up'            => 'a6',
+      'Reading_request'        => 'a7',
+      'Sending_reply'          => 'a8',
+      'Keepalive'              => 'a9',
+      'DNS_lookup'             => 'aa',
+      'Closing_connection'     => 'ab',
+      'Logging'                => 'ac',
+      'Gracefully_finishing'   => 'ad',
+      'Idle_cleanup'           => 'ae',
+      'Open_slot'              => 'af',
    );
 
    # Return the output.
@@ -273,11 +273,11 @@ function get_stats_apache ( $cmd ) {
    $str = `$cmd`;
 
    $result = array(
-      'Requests' => 0,
-      'Bytes_sent' => 0,
+      'Requests'     => 0,
+      'Bytes_sent'   => 0,
       'Idle_workers' => 0,
       'Busy_workers' => 0,
-      'CPU_Load' => 0,
+      'CPU_Load'     => 0,
       # More are added from $scoreboard below.
    );
 
