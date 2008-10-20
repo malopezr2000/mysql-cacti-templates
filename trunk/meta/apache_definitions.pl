@@ -70,6 +70,39 @@
             },
          ],
       },
+      {  name       => 'Apache CPU Load',
+         base_value => '1000',
+         hash       => 'hash_00_VER_19dbe918854a4e549e48b172ad8b51b2',
+         dt         => {
+            hash       => 'hash_01_VER_a6ae963635e330621d67f3c1d680efb0',
+            input      => 'Get Apache Stats',
+            CPU_Load => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_4192deafb5ae488a21ae6cf33999fe82'
+            },
+         },
+         items => [
+            {  color  => '700004',
+               item   => 'CPU_Load',
+               task   => 'hash_09_VER_a20147e0e31048d256b063831641b2dc',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_d91eca467ac3b023964efb712d0d823a',
+                  'hash_10_VER_2f6a43e23d7160e0a5b549e43fe0a4e9',
+                  'hash_10_VER_dcd286268735b635bcab92c37704f759',
+                  'hash_10_VER_42fd6384bc247e64271f8a6b3baee61c'
+               ],
+            },
+            {  color  => '000000',
+               item   => 'CPU_Load',
+               task   => 'hash_09_VER_a5ab7839ad06a8b08c10e2eac17f2d46',
+               type   => 'LINE1',
+               hashes => [
+                  'hash_10_VER_ad3dbea90e53675c6a715fa70d80b425',
+               ],
+            },
+         ],
+      },
       {  name       => 'Apache Workers',
          base_value => '1000',
          hash       => 'hash_00_VER_9b65e677a20f742582b9985a208550b6',
@@ -301,6 +334,7 @@
          outputs => {
             Requests               => 'hash_07_VER_cff73d78a6870918b25fec9af9ba55d3',
             Bytes_sent             => 'hash_07_VER_9430882fbafec2abb63390553b47f6d8',
+            CPU_Load               => 'hash_07_VER_254558f5aa21ff73ebe348612cca429e',
             Idle_workers           => 'hash_07_VER_8f45bda7f92b305ce53485bf349c74a2',
             Busy_workers           => 'hash_07_VER_37cae992ca15d54db89e5fbb4d55b5e3',
             Waiting_for_connection => 'hash_07_VER_b3882f9fad342ef4437389afe5a48255',
