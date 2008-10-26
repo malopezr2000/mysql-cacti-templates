@@ -1,5 +1,7 @@
 Changes for templates:
 
+	* UNIX sockets weren't permitted (issue 38).
+
 2008-10-15: version 1.1.1
 
 	* The tarball didn't have make-template.pl mysql_definitions.pl (issue 34)
