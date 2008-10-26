@@ -95,9 +95,9 @@ makes the templates easier to maintain.  It also lets you generate custom
 templates easily if the defaults shipped in the tarball aren't to your liking.
 
 The basic idea is to run the make-template.pl script with the template
-definition file as input:
+definition file and data-fetcher file as input:
 
-   perl make-template.pl mysql_definitions.pl > my_new_template.xml
+   perl make-template.pl mysql_definitions.pl --script ss_get_mysql_stats.php > my_new_template.xml
 
 You can now import this file as usual.  Examine the --help output of the script
 to see what your options are.  You might want to generate templates for a

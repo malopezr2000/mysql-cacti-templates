@@ -582,7 +582,7 @@ my %short_names;
       }
    }
    die "$opts{script} doesn't look like the right kind of file.  It needs to be"
-      . " the Perl script used to fetch the data"
+      . " the PHP script used to fetch the data.\n"
       unless %short_names;
 }
 close $fh;
