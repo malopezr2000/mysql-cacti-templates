@@ -581,6 +581,9 @@ my %short_names;
          last PARA;
       }
    }
+   die "$opts{script} doesn't look like the right kind of file.  It needs to be"
+      . " the Perl script used to fetch the data"
+      unless %short_names;
 }
 close $fh;
 
