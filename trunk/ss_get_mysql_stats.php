@@ -145,6 +145,7 @@ $message
 Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
 
    --host      Hostname to connect to; use host:port syntax to specify a port
+               Use :/path/to/socket if you want to connect via a UNIX socket
    --items     Comma-separated list of the items whose data you want
    --user      MySQL username; defaults to $mysql_user if not given
    --pass      MySQL password; defaults to $mysql_pass if not given
@@ -196,8 +197,7 @@ function parse_cmdline( $args ) {
 
 # ============================================================================
 # This is the main function.  Some parameters are filled in from defaults at the
-# top of this file.  If you want to specify a port, you must include it in the
-# hostname, like "localhost:3306".
+# top of this file.
 # ============================================================================
 function ss_get_mysql_stats( $options ) {
    # Process connection options and connect to MySQL.
@@ -212,7 +212,10 @@ function ss_get_mysql_stats( $options ) {
    if ( !$conn ) {
       die("Can't connect to MySQL: " . mysql_error());
    }
-   $cache_file = "$cache_dir/$options[host]-mysql_cacti_stats.txt";
+
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   $cache_file = "$cache_dir/$sanitized_host-mysql_cacti_stats.txt";
 
    # First, check the cache.
    $fp = null;
