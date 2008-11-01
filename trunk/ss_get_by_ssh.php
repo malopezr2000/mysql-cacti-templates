@@ -34,6 +34,9 @@ $use_ss     = FALSE; # Whether to use the script server or not
 # Parameters for specific graphs
 # ============================================================================
 $status_url = '/server-status';           # Where Apache status lives
+< $http_user         = 'master';
+< $http_pass         = 'THvrGANgQi';
+
 
 # ============================================================================
 # You should not need to change anything below this line.
@@ -277,12 +280,15 @@ function ss_get_by_ssh( $options ) {
 # ============================================================================
 # Gets /server-status from Apache.
 # Options used: url
-# TODO: allow --http-user --http-password
+# TODO: pass --http-user --http-password in $options
 # ============================================================================
 function get_stats_apache ( $cmd, $options ) {
-   global $status_url;
+   global $status_url, $http_user, $http_pass;
    $url = isset($options['url']) ? $options['url'] : $status_url;
-   $cmd = "$cmd wget -U Cacti/1.0 -q -O - -T 5 'http://localhost$url?auto'";
+   $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
+   $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
+   $auth = ($user ? "--http-user=$user" : '') . ' ' . ($pass ? "--http-password=$pass" : '');
+   $cmd = "$cmd wget $auth -U Cacti/1.0 -q -O - -T 5 'http://localhost$url?auto'";
    $str = `$cmd`;
 
    $result = array(
