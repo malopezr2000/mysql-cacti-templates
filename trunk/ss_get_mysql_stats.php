@@ -37,6 +37,8 @@ $chk_options = array (
    'slave'  => true,    # Do you want to check slave status?
    'procs'  => true,    # Do you want to check SHOW PROCESSLIST?
 );
+$use_ss     = FALSE; # Whether to use the script server or not
+
 # ============================================================================
 # You should not need to change anything below this line.
 # ============================================================================
@@ -67,13 +69,15 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 # ============================================================================
 # Set up the stuff we need to be called by the script server.
 # ============================================================================
-if ( file_exists( dirname(__FILE__) . "/../include/global.php") ) {
-   # See issue 5 for the reasoning behind this.
-   include_once(dirname(__FILE__) . "/../include/global.php");
-}
-else {
-   # Some versions don't have global.php.
-   include_once(dirname(__FILE__) . "/../include/config.php");
+if ( $use_ss ) {
+   if ( file_exists( dirname(__FILE__) . "/../include/global.php") ) {
+      # See issue 5 for the reasoning behind this.
+      include_once(dirname(__FILE__) . "/../include/global.php");
+   }
+   else {
+      # Some versions don't have global.php.
+      include_once(dirname(__FILE__) . "/../include/config.php");
+   }
 }
 
 # ============================================================================

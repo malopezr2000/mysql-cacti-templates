@@ -28,6 +28,7 @@ $ssh_port   = 22;                               # SSH port
 $ssh_iden   = '-i /var/www/cacti/.ssh/id_rsa';  # SSH identity
 $cache_dir  = '';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300; # Adjust to match your polling interval.
+$use_ss     = FALSE; # Whether to use the script server or not
 
 # ============================================================================
 # Parameters for specific graphs
@@ -54,13 +55,15 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 # ============================================================================
 # Set up the stuff we need to be called by the script server.
 # ============================================================================
-if ( file_exists( dirname(__FILE__) . "/../include/global.php") ) {
-   # See issue 5 for the reasoning behind this.
-   include_once(dirname(__FILE__) . "/../include/global.php");
-}
-elseif ( file_exists( dirname(__FILE__) . "/../include/config.php" ) ) {
-   # Some versions don't have global.php.
-   include_once(dirname(__FILE__) . "/../include/config.php");
+if ( $use_ss ) {
+   if ( file_exists( dirname(__FILE__) . "/../include/global.php") ) {
+      # See issue 5 for the reasoning behind this.
+      include_once(dirname(__FILE__) . "/../include/global.php");
+   }
+   elseif ( file_exists( dirname(__FILE__) . "/../include/config.php" ) ) {
+      # Some versions don't have global.php.
+      include_once(dirname(__FILE__) . "/../include/config.php");
+   }
 }
 
 # ============================================================================
