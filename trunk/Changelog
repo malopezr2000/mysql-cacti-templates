@@ -1,6 +1,8 @@
 Changes for templates:
 
-	* UNIX sockets weren't permitted (issue 38).
+	* Unknown output is now -1 instead of 0 to prevent spikes in graphs.
+	* If you want to use a script server, you must now explicitly configure it.
+	* UNIX sockets weren't permitted for MySQL (issue 38).
 
 2008-10-15: version 1.1.1
 
