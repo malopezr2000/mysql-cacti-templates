@@ -683,7 +683,9 @@ function ss_get_mysql_stats( $options ) {
    # Return the output.
    $output = array();
    foreach ($keys as $key => $short ) {
-      $val      = isset($status[$key]) ? $status[$key] : 0;
+      # If the value isn't defined, return -1 which is lower than (most graphs')
+      # minimum value of 0, so it'll be regarded as a missing value.
+      $val      = isset($status[$key]) ? $status[$key] : -1;
       $output[] = "$short:$val";
    }
    $result = implode(' ', $output);

@@ -23,16 +23,16 @@
 # ============================================================================
 # Define parameters.
 # ============================================================================
-$ssh_user = 'cacti';                      # SSH username
-$ssh_port = 22;                           # SSH port
-$ssh_iden = '-i /var/www/cacti/.ssh/id_rsa';  # SSH identity
+$ssh_user   = 'cacti';                          # SSH username
+$ssh_port   = 22;                               # SSH port
+$ssh_iden   = '-i /var/www/cacti/.ssh/id_rsa';  # SSH identity
 $cache_dir  = '';  # If set, this uses caching to avoid multiple calls.
-$poll_time  = 300;     # Adjust to match your polling interval.
+$poll_time  = 300; # Adjust to match your polling interval.
 
 # ============================================================================
 # Parameters for specific graphs
 # ============================================================================
-$url        = '/server-status';           # Where Apache status lives
+$status_url = '/server-status';           # Where Apache status lives
 
 # ============================================================================
 # You should not need to change anything below this line.
@@ -105,6 +105,7 @@ if ( !function_exists('array_change_key_case') ) {
 
 # ============================================================================
 # Validate that the command-line options are here and correct
+# TODO: --ident, --type {apache|etc}
 # ============================================================================
 function validate_options($options) {
    $opts = array('host', 'port', 'items', 'url', 'nocache');
@@ -123,6 +124,7 @@ function validate_options($options) {
 
 # ============================================================================
 # Print out a brief usage summary
+# TODO: this is too specific
 # ============================================================================
 function usage($message) {
    $usage = <<<EOF
@@ -223,7 +225,7 @@ function ss_get_by_ssh( $options ) {
    $result = array();
    switch ( $type ) {
    case 'apache':
-      $result = get_stats_apache($cmd);
+      $result = get_stats_apache($cmd, $options);
       break;
    }
 
@@ -253,7 +255,9 @@ function ss_get_by_ssh( $options ) {
    # Return the output.
    $output = array();
    foreach ($keys as $key => $short ) {
-      $val      = isset($result[$key]) ? $result[$key] : 0;
+      # If the value isn't defined, return -1 which is lower than (most graphs')
+      # minimum value of 0, so it'll be regarded as a missing value.
+      $val      = isset($result[$key]) ? $result[$key] : -1;
       $output[] = "$short:$val";
    }
    $result = implode(' ', $output);
@@ -267,9 +271,14 @@ function ss_get_by_ssh( $options ) {
    return $result;
 }
 
-function get_stats_apache ( $cmd ) {
-   $url = '/server-status'; # TODO
-   # TODO: allow --http-user --http-password
+# ============================================================================
+# Gets /server-status from Apache.
+# Options used: url
+# TODO: allow --http-user --http-password
+# ============================================================================
+function get_stats_apache ( $cmd, $options ) {
+   global $status_url;
+   $url = isset($options['url']) ? $options['url'] : $status_url;
    $cmd = "$cmd wget -U Cacti/1.0 -q -O - -T 5 'http://localhost$url?auto'";
    $str = `$cmd`;
 
@@ -311,6 +320,10 @@ function get_stats_apache ( $cmd ) {
 
    foreach ( explode("\n", $str) as $line ) {
       $words = explode(": ", $line);
+      if ( $words[0] == "Total kBytes" ) {
+         $words[1] = big_multiply($words[1], 1024);
+      }
+
       if ( array_key_exists($words[0], $mapping) ) {
          # Check for really small values indistinguishable from 0, but otherwise
          # just copy the value to the output.
@@ -343,6 +356,22 @@ function tonum ( $str ) {
    }
    else {
       return 0;
+   }
+}
+
+# ============================================================================
+# Multiply two big integers together as accurately as possible with reasonable
+# effort.
+# ============================================================================
+function big_multiply ($left, $right) {
+   if ( function_exists("gmp_mul") ) {
+      return gmp_strval( gmp_mul( $left, $right ));
+   }
+   elseif ( function_exists("bcmul") ) {
+      return bcmul( $left, $right );
+   }
+   else {
+      return sprintf('%u', $left * $right);
    }
 }
 
