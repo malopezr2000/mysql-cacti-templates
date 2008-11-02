@@ -292,11 +292,11 @@ function get_stats_apache ( $cmd, $options ) {
    $str = `$cmd`;
 
    $result = array(
-      'Requests'     => 0,
-      'Bytes_sent'   => 0,
-      'Idle_workers' => 0,
-      'Busy_workers' => 0,
-      'CPU_Load'     => 0,
+      'Requests'     => null,
+      'Bytes_sent'   => null,
+      'Idle_workers' => null,
+      'Busy_workers' => null,
+      'CPU_Load'     => null,
       # More are added from $scoreboard below.
    );
 
@@ -315,7 +315,7 @@ function get_stats_apache ( $cmd, $options ) {
       '.' => 'Open_slot',
    );
    foreach ( $scoreboard as $key => $val ) {
-      $result[$val] = 0;
+      $result[$val] = null,
    }
 
    # Mapping from line prefix to data item name
@@ -342,11 +342,23 @@ function get_stats_apache ( $cmd, $options ) {
          $string = $words[1];
          $length = strlen($string);
          for ( $i = 0; $i < $length ; $i++ ) {
-            $result[$scoreboard[$string[$i]]]++;
+            increment($result, $scoreboard[$string[$i]], 1);
          }
 		}
    }
    return $result;
+}
+
+# ============================================================================
+# Safely increments a value that might be null.
+# ============================================================================
+function increment($arr, $key, $howmuch) {
+   if ( array_key_exists($key, $arr) && isset($arr[$key]) ) {
+      $arr[$key] += $howmuch;
+   }
+   else {
+      $arr[$key] = $howmuch;
+   }
 }
 
 # ============================================================================
@@ -364,7 +376,7 @@ function tonum ( $str ) {
       print_r(debug_backtrace());
    }
    else {
-      return 0;
+      return null;
    }
 }
 
