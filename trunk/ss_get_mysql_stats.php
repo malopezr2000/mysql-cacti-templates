@@ -255,32 +255,32 @@ function ss_get_mysql_stats( $options ) {
    # Set up variables.
    $status = array( # Holds the result of SHOW STATUS, SHOW INNODB STATUS, etc
       # Define some indexes so they don't cause errors with += operations.
-      'transactions'          => 0,
-      'relay_log_space'       => 0,
-      'binary_log_space'      => 0,
-      'current_transactions'  => 0,
-      'locked_transactions'   => 0,
-      'active_transactions'   => 0,
-      'innodb_locked_tables'  => 0,
-      'innodb_lock_structs'   => 0,
+      'transactions'          => null,
+      'relay_log_space'       => null,
+      'binary_log_space'      => null,
+      'current_transactions'  => null,
+      'locked_transactions'   => null,
+      'active_transactions'   => null,
+      'innodb_locked_tables'  => null,
+      'innodb_lock_structs'   => null,
       # Values for the 'state' column from SHOW PROCESSLIST (converted to
       # lowercase, with spaces replaced by underscores)
-      'State_closing_tables'       => 0,
-      'State_copying_to_tmp_table' => 0,
-      'State_end'                  => 0,
-      'State_freeing_items'        => 0,
-      'State_init'                 => 0,
-      'State_locked'               => 0,
-      'State_login'                => 0,
-      'State_preparing'            => 0,
-      'State_reading_from_net'     => 0,
-      'State_sending_data'         => 0,
-      'State_sorting_result'       => 0,
-      'State_statistics'           => 0,
-      'State_updating'             => 0,
-      'State_writing_to_net'       => 0,
-      'State_none'                 => 0,
-      'State_other'                => 0, # Everything not listed above
+      'State_closing_tables'       => null,
+      'State_copying_to_tmp_table' => null,
+      'State_end'                  => null,
+      'State_freeing_items'        => null,
+      'State_init'                 => null,
+      'State_locked'               => null,
+      'State_login'                => null,
+      'State_preparing'            => null,
+      'State_reading_from_net'     => null,
+      'State_sending_data'         => null,
+      'State_sorting_result'       => null,
+      'State_statistics'           => null,
+      'State_updating'             => null,
+      'State_writing_to_net'       => null,
+      'State_none'                 => null,
+      'State_other'                => null, # Everything not listed above
    );
 
    # Get SHOW STATUS and convert the name-value array into a simple
@@ -357,10 +357,10 @@ function ss_get_mysql_stats( $options ) {
          }
          $state = str_replace(' ', '_', strtolower($state));
          if ( array_key_exists("State_$state", $status) ) {
-            $status["State_$state"]++;
+            increment($status, "State_$state", 1);
          }
          else {
-            $status["State_other"]++;
+            increment($status, "State_other", 1);
          }
       }
    }
@@ -408,22 +408,22 @@ function ss_get_mysql_stats( $options ) {
             $status['history_list'] = tonum($row[3]);
          }
          elseif ( $innodb_txn && strpos($line, '---TRANSACTION') !== FALSE ) {
-            $status['current_transactions'] += 1;
+            increment($status, 'current_transactions', 1);
             if ( strpos($line, 'ACTIVE') !== FALSE  ) {
-               $status['active_transactions'] += 1;
+               increment($status, 'active_transactions', 1);
             }
          }
          elseif ( $innodb_txn && strpos($line, 'LOCK WAIT') !== FALSE  ) {
-            $status['locked_transactions'] += 1;
+            increment($status, 'locked_transactions', 1);
          }
          elseif ( strpos($line, 'read views open inside') !== FALSE ) {
             $status['read_views'] = tonum($row[0]);
          }
          elseif ( strpos($line, 'mysql tables in use') !== FALSE  ) {
-            $status['innodb_locked_tables'] += tonum($row[6]);
+            increment($status, 'innodb_locked_tables', tonum($row[6]));
          }
          elseif ( strpos($line, 'lock struct(s) !== FALSE ') ) {
-            $status['innodb_lock_structs'] += tonum($row[0]);
+            increment($status, 'innodb_lock_structs', tonum($row[0]));
          }
 
          # FILE I/O
@@ -745,6 +745,18 @@ function run_query($sql, $conn) {
       }
    }
    return $result;
+}
+
+# ============================================================================
+# Safely increments a value that might be null.
+# ============================================================================
+function increment($arr, $key, $howmuch) {
+   if ( array_key_exists($key, $arr) && isset($arr[$key]) ) {
+      $arr[$key] += $howmuch;
+   }
+   else {
+      $arr[$key] = $howmuch;
+   }
 }
 
 ?>
