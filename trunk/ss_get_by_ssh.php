@@ -34,9 +34,8 @@ $use_ss     = FALSE; # Whether to use the script server or not
 # Parameters for specific graphs
 # ============================================================================
 $status_url = '/server-status';           # Where Apache status lives
-< $http_user         = 'master';
-< $http_pass         = 'THvrGANgQi';
-
+$http_user  = '';
+$http_pass  = '';
 
 # ============================================================================
 # You should not need to change anything below this line.
@@ -281,6 +280,8 @@ function ss_get_by_ssh( $options ) {
 # Gets /server-status from Apache.
 # Options used: url
 # TODO: pass --http-user --http-password in $options
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --host 127.0.0.1 --items a0,a1'
 # ============================================================================
 function get_stats_apache ( $cmd, $options ) {
    global $status_url, $http_user, $http_pass;
@@ -315,7 +316,7 @@ function get_stats_apache ( $cmd, $options ) {
       '.' => 'Open_slot',
    );
    foreach ( $scoreboard as $key => $val ) {
-      $result[$val] = null,
+      $result[$val] = null;
    }
 
    # Mapping from line prefix to data item name
