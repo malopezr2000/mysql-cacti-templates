@@ -296,8 +296,7 @@ function ss_get_by_ssh( $options ) {
 # Gets /proc/stat from Linux.
 # Options used: none.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php \
-# --type proc_stat --host 127.0.0.1 --items a0,a1'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type proc_stat --host 127.0.0.1 --items ag,ah'
 # ============================================================================
 function get_stats_proc_stat ( $cmd, $options ) {
    $cmd = "$cmd cat /proc/stat";
@@ -324,20 +323,22 @@ function get_stats_proc_stat ( $cmd, $options ) {
    }
 
    foreach ( explode("\n", $str) as $line ) {
-      preg_match('{(\w+)}', $line, $words); 
-      if ( $words[0] == "cpu" ) {
-         for ( $i = 1; $i < count($words); ++$i ) {
-            $result[$cpu_types[$i - 1]] = $words[$i];
+      if ( preg_match_all('/\w+/', $line, $words) ) {
+         $words = $words[0];
+         if ( $words[0] == "cpu" ) {
+            for ( $i = 1; $i < count($words); ++$i ) {
+               $result[$cpu_types[$i - 1]] = $words[$i];
+            }
          }
-		}
-      elseif ( $words[0] == "intr" ) {
-         $result['STAT_interrupts'] = $words[1];
-      }
-      elseif ( $words[0] == "ctxt" ) {
-         $result['STAT_context_switches'] = $words[1];
-      }
-      elseif ( $words[0] == "processes" ) {
-         $result['STAT_forks'] = $words[1];
+         elseif ( $words[0] == "intr" ) {
+            $result['STAT_interrupts'] = $words[1];
+         }
+         elseif ( $words[0] == "ctxt" ) {
+            $result['STAT_context_switches'] = $words[1];
+         }
+         elseif ( $words[0] == "processes" ) {
+            $result['STAT_forks'] = $words[1];
+         }
       }
    }
    return $result;
@@ -412,7 +413,7 @@ function get_stats_apache ( $cmd, $options ) {
          for ( $i = 0; $i < $length ; $i++ ) {
             increment($result, $scoreboard[$string[$i]], 1);
          }
-		}
+      }
    }
    return $result;
 }
