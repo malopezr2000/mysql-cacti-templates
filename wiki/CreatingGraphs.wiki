@@ -32,7 +32,7 @@ The graph item in the meta/mysql_definitions.pl file has the following propertie
     * hash.
     * Name of the data input.  This is the name of an item in the inputs section at the top level.
     * items to get from the data input.  These are a hash reference.  The key is the name of the value to get from the data input (e.g. pool_size for the InnoDB Buffer Pool graph template).  The hash reference's children are the:
-      * type: 1 GAUGE, 2 => COUNTER, 3 => DERIVE.
+      * type: 1 => GAUGE, 2 => COUNTER (increasing, with overflow checks), 3 => DERIVE (no overflow checks).
       * hash.
   * items -- the array of graph items (lines and such).  Each item is a hash.  There are these properties:
     * color -- a hex color code.
