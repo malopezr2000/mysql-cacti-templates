@@ -113,9 +113,9 @@ if ( !function_exists('array_change_key_case') ) {
 # TODO: --ident, --type {apache|etc}
 # ============================================================================
 function validate_options($options) {
-   $opts = array('host', 'port', 'items', 'url', 'nocache');
+   $opts = array('host', 'port', 'items', 'url', 'nocache', 'type');
    # Required command-line options
-   foreach ( array('host', 'items') as $option ) {
+   foreach ( array('host', 'items', 'type') as $option ) {
       if ( !isset($options[$option]) || !$options[$option] ) {
          usage("Required option --$option is missing");
       }
@@ -139,6 +139,7 @@ Usage: php ss_get_by_ssh.php --host <host> --items <item,...> [OPTION]
    --host      Hostname to connect to
    --port      Port to connect to
    --items     Comma-separated list of the items whose data you want
+   --type      One of apache, proc_stat (more are TODO)
    --url       The url, such as /server-status, where Apache status lives
    --nocache   Do not cache results in a file
 
@@ -192,8 +193,7 @@ function parse_cmdline( $args ) {
 function ss_get_by_ssh( $options ) {
    global $debug, $ssh_user, $ssh_port, $ssh_iden, $url, $cache_dir, $poll_time;
 
-   # TODO: genericize
-   $cache_file = "$cache_dir/$options[host]-apache_cacti_stats.txt";
+   $cache_file = "$cache_dir/$options[host]-$options[type]_cacti_stats.txt";
 
    # First, check the cache.
    $fp = null;
@@ -226,11 +226,13 @@ function ss_get_by_ssh( $options ) {
    $iden = $ssh_iden;
    $cmd = "ssh $user@$options[host] -p $port $iden ";
 
-   $type = 'apache'; # TODO
    $result = array();
-   switch ( $type ) {
+   switch ( $options['type'] ) {
    case 'apache':
       $result = get_stats_apache($cmd, $options);
+      break;
+   case 'proc_stat':
+      $result = get_stats_proc_stat($cmd, $options);
       break;
    }
 
@@ -239,6 +241,7 @@ function ss_get_by_ssh( $options ) {
    # come right after the word MAGIC_VARS_DEFINITIONS.  The Perl script parses
    # it and uses it as a Perl variable.
    $keys = array(
+      # Apache stuff
       'Requests'               => 'a0',
       'Bytes_sent'             => 'a1',
       'Idle_workers'           => 'a2',
@@ -255,6 +258,19 @@ function ss_get_by_ssh( $options ) {
       'Gracefully_finishing'   => 'ad',
       'Idle_cleanup'           => 'ae',
       'Open_slot'              => 'af',
+      # /proc/stat stuff
+      'STAT_CPU_user'          => 'ag',
+      'STAT_CPU_nice'          => 'ah',
+      'STAT_CPU_system'        => 'ai',
+      'STAT_CPU_idle'          => 'aj',
+      'STAT_CPU_iowait'        => 'ak',
+      'STAT_CPU_irq'           => 'al',
+      'STAT_CPU_softirq'       => 'am',
+      'STAT_CPU_steal'         => 'an',
+      'STAT_CPU_guest'         => 'ao',
+      'STAT_interrupts'        => 'ap',
+      'STAT_context_switches'  => 'aq',
+      'STAT_forks'             => 'ar',
    );
 
    # Return the output.
@@ -272,6 +288,57 @@ function ss_get_by_ssh( $options ) {
          # TODO: then truncate file, too
       }
       fclose($fp);
+   }
+   return $result;
+}
+
+# ============================================================================
+# Gets /proc/stat from Linux.
+# Options used: none.
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php \
+# --type proc_stat --host 127.0.0.1 --items a0,a1'
+# ============================================================================
+function get_stats_proc_stat ( $cmd, $options ) {
+   $cmd = "$cmd cat /proc/stat";
+   $str = `$cmd`;
+
+   $result = array(
+      'STAT_interrupts'        => null,
+      'STAT_context_switches'  => null,
+      'STAT_forks'             => null,
+   );
+   $cpu_types = array(
+      'STAT_CPU_user',
+      'STAT_CPU_nice',
+      'STAT_CPU_system',
+      'STAT_CPU_idle',
+      'STAT_CPU_iowait',
+      'STAT_CPU_irq',
+      'STAT_CPU_softirq',
+      'STAT_CPU_steal',
+      'STAT_CPU_guest',
+   );
+   foreach ( $cpu_types as $key ) {
+      $result[$key] = null;
+   }
+
+   foreach ( explode("\n", $str) as $line ) {
+      preg_match('{(\w+)}', $line, $words); 
+      if ( $words[0] == "cpu" ) {
+         for ( $i = 1; $i < count($words); ++$i ) {
+            $result[$cpu_types[$i - 1]] = $words[$i];
+         }
+		}
+      elseif ( $words[0] == "intr" ) {
+         $result['STAT_interrupts'] = $words[1];
+      }
+      elseif ( $words[0] == "ctxt" ) {
+         $result['STAT_context_switches'] = $words[1];
+      }
+      elseif ( $words[0] == "processes" ) {
+         $result['STAT_forks'] = $words[1];
+      }
    }
    return $result;
 }
