@@ -376,7 +376,7 @@ function get_stats_w ( $cmd, $options ) {
                }
                elseif ( $words[$i] == 'average:' ) {
                   # TODO should it choose 5/1 minute avg based on poll interval?
-                  $result['STAT_loadavg'] = tonum($words[$i + 1]);
+                  $result['STAT_loadavg'] = tofloat($words[$i + 1]);
                }
             }
          }
@@ -479,6 +479,23 @@ function increment($arr, $key, $howmuch) {
 function tonum ( $str ) {
    global $debug;
    preg_match('{(\d+)}', $str, $m); 
+   if ( isset($m[1]) ) {
+      return $m[1];
+   }
+   elseif ( $debug ) {
+      print_r(debug_backtrace());
+   }
+   else {
+      return null;
+   }
+}
+
+# ============================================================================
+# Extracts a float from a string.  See tonum().
+# ============================================================================
+function tofloat ( $str ) {
+   global $debug;
+   preg_match('{([0-9.]+)}', $str, $m); 
    if ( isset($m[1]) ) {
       return $m[1];
    }
