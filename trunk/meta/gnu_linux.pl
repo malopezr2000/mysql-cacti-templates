@@ -268,25 +268,25 @@
       },
       {  name       => 'Number of Users',
          base_value => '1000',
-         hash       => 'hash_00_VER_8f65f7434580fedac32c569072e5542a',
+         hash       => 'hash_00_VER_60bfa8002bdb1f5e82007eaf4db83a15',
          dt         => {
-            hash       => 'hash_01_VER_472e14fc7e17ffbdbb20e48e4d7eeef3',
+            hash       => 'hash_01_VER_f5ff0b3d033a134332bb8aa79418d300',
             input      => 'Get W',
             STAT_numusers => {
                data_source_type_id => '1',
-               hash => 'hash_08_VER_3743abc62f57cad148636275d2f6ab4e'
+               hash => 'hash_08_VER_087a8db48b8b7110d7a706bf37a6a9e1'
             },
          },
          items => [
             {  color  => '540202',
                item   => 'STAT_numusers',
-               task   => 'hash_09_VER_503e6e1741c7612155abbcbf10741e68',
+               task   => 'hash_09_VER_0e11a634103ecf9a3a3e09b3bfb65f7b',
                type   => 'AREA',
                hashes => [
-                  'hash_10_VER_911ceb71fc3b9a46d034fcbad90a2161',
-                  'hash_10_VER_8f6960ff594aa50293a905eea5162dcf',
-                  'hash_10_VER_9db59ef55d1df8813687fc83f0c6817b',
-                  'hash_10_VER_44943da7a803c6748655fb18186eea18'
+                  'hash_10_VER_166bd36383f182fe92100a2073c8ddf7',
+                  'hash_10_VER_50ce3e3fb714fea4c28a2cf0c79b57fc',
+                  'hash_10_VER_5fc7e2ff856ed17612ad7be140a13a3b',
+                  'hash_10_VER_88ede38e933d09edae08cf78fd230cc2'
                ],
             },
          ],
@@ -306,22 +306,22 @@
          ],
          outputs => {
             STAT_loadavg          => 'hash_07_VER_114521354ca46482eaed91495ec69870',
-            STAT_numusers         => 'hash_07_VER_114521354ca46482eaed91495ec69870',
+            STAT_numusers         => 'hash_07_VER_1bcb533e7385434351f3e64b982266a8',
          },
       },
       'Get Proc Stats' => {
          type_id      => 1,
-         hash         => 'hash_03_VER_fa2de72657e3da275805db2572271392',
+         hash         => 'hash_03_VER_b8d0468c0737dcd0863f2a181484f878',
          input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
                        . '--host <hostname> --type proc_stat --items <items>',
          inputs => [
             {  allow_nulls => '',
-               hash        => 'hash_07_VER_29fdf20a8b44e7391d852a29747235ba',
+               hash        => 'hash_07_VER_509a24f84c924e9252be9a82c6674a6f',
                name        => 'hostname'
             },
          ],
          outputs => {
-            STAT_interrupts       => 'hash_07_VER_114521354ca46482eaed91495ec69870',
+            STAT_interrupts       => 'hash_07_VER_cf50d22f8b5814fbb9e42d1b46612679',
             STAT_context_switches => 'hash_07_VER_49aa057a3935a96fb25fb511b16a75fa',
             STAT_forks            => 'hash_07_VER_d5e03c6e39717cc6a58e85e5f25608c6',
             STAT_CPU_user         => 'hash_07_VER_edfd4ac62e1e43ec35b3f5dc10ae2510',
