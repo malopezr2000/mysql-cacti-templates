@@ -371,12 +371,12 @@ function get_stats_w ( $cmd, $options ) {
          $words = $words[0];
          if ( $words[1] == "up" ) {
             for ( $i = 0; $i < count($words); ++$i ) {
-               if ( $words[$i] == 'users,' ) {
+               if ( $words[$i] == 'users,' || $words[$i] == 'user,' ) {
                   $result['STAT_numusers'] = $words[$i - 1];
                }
                elseif ( $words[$i] == 'average:' ) {
                   # TODO should it choose 5/1 minute avg based on poll interval?
-                  $result['STAT_loadavg'] = $words[$i + 1];
+                  $result['STAT_loadavg'] = tonum($words[$i + 1]);
                }
             }
          }
