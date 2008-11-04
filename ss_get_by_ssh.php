@@ -110,7 +110,8 @@ if ( !function_exists('array_change_key_case') ) {
 
 # ============================================================================
 # Validate that the command-line options are here and correct
-# TODO: --ident, --type {apache|etc}
+# TODO: --ident
+# TODO: --url seems wrong, and is it even used?
 # ============================================================================
 function validate_options($options) {
    $opts = array('host', 'port', 'items', 'url', 'nocache', 'type');
@@ -139,7 +140,7 @@ Usage: php ss_get_by_ssh.php --host <host> --items <item,...> [OPTION]
    --host      Hostname to connect to
    --port      Port to connect to
    --items     Comma-separated list of the items whose data you want
-   --type      One of apache, proc_stat (more are TODO)
+   --type      One of apache, proc_stat, w (more are TODO)
    --url       The url, such as /server-status, where Apache status lives
    --nocache   Do not cache results in a file
 
@@ -234,6 +235,9 @@ function ss_get_by_ssh( $options ) {
    case 'proc_stat':
       $result = get_stats_proc_stat($cmd, $options);
       break;
+   case 'w':
+      $result = get_stats_w($cmd, $options);
+      break;
    }
 
    # Define the variables to output.  I use shortened variable names so maybe
@@ -271,6 +275,9 @@ function ss_get_by_ssh( $options ) {
       'STAT_interrupts'        => 'ap',
       'STAT_context_switches'  => 'aq',
       'STAT_forks'             => 'ar',
+      # Stuff from 'w'
+      'STAT_loadavg'           => 'as',
+      'STAT_numusers'          => 'at',
    );
 
    # Return the output.
@@ -338,6 +345,40 @@ function get_stats_proc_stat ( $cmd, $options ) {
          }
          elseif ( $words[0] == "processes" ) {
             $result['STAT_forks'] = $words[1];
+         }
+      }
+   }
+   return $result;
+}
+
+# ============================================================================
+# Gets the results of the 'w' command from Linux.
+# Options used: none.
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type w --host 127.0.0.1 --items ag,ah'
+# ============================================================================
+function get_stats_w ( $cmd, $options ) {
+   $cmd = "$cmd w";
+   $str = `$cmd`;
+
+   $result = array(
+      'STAT_loadavg'        => null,
+      'STAT_numusers'       => null,
+   );
+
+   foreach ( explode("\n", $str) as $line ) {
+      if ( preg_match_all('/\S+/', $line, $words) ) {
+         $words = $words[0];
+         if ( $words[1] == "up" ) {
+            for ( $i = 0; $i < count($words); +=$i ) {
+               if ( $words[$i] == 'users,' ) {
+                  $result['STAT_numusers'] = $words[$i - 1];
+               }
+               elseif ( $words[$i] == 'average:' ) {
+                  # TODO should it choose 5/1 minute avg based on poll interval?
+                  $result['STAT_loadavg'] = $words[$i + 1];
+               }
+            }
          }
       }
    }
