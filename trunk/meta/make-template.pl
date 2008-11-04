@@ -725,6 +725,15 @@ sub to_words {
    return join(' ', map { ucfirst } split(/_/, $text));
 }
 
+# Turn A_string_of_words into A String Of Words.  But strip off BLOCKCAPS from
+# the front.
+sub to_words_cleanly {
+   my ( $text ) = @_;
+   $text = to_words($text);
+   $text =~ s/^[A-Z]{4,} //;
+   return $text;
+}
+
 # Removes vowels and compacts repeated letters to shorten text.  In this case,
 # to 19 characters, which is RRDTool's internal limit.  This lets the data
 # source (script) output long variable names, which can then be used as nice
@@ -826,7 +835,7 @@ foreach my $g ( @{ $t->{graphs} } ) {
       # Each bit of data can have several items.
       foreach my $h ( @{ $it->{hashes} } ) {
          my $type = $i ? 'GPRINT' : ($it->{type} || 'LINE1');
-         my $text = $i ? $graph_texts[$i] : to_words($it->{item});
+         my $text = $i ? $graph_texts[$i] : to_words_cleanly($it->{item});
          es($h);
          el('task_item_id', $g->{dt}->{$it->{item}}->{hash});
          el('color_id', $i ? 0 : $color);
