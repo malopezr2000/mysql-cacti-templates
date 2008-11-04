@@ -241,20 +241,45 @@
             },
          ],
       },
-      {  name       => 'Interrupts',
+      {  name       => 'Load Average',
          base_value => '1000',
          hash       => 'hash_00_VER_8f65f7434580fedac32c569072e5542a',
          dt         => {
             hash       => 'hash_01_VER_472e14fc7e17ffbdbb20e48e4d7eeef3',
-            input      => 'Get Proc Stats',
-            STAT_interrupts => {
-               data_source_type_id => '2',
+            input      => 'Get W',
+            STAT_loadavg => {
+               data_source_type_id => '1',
                hash => 'hash_08_VER_3743abc62f57cad148636275d2f6ab4e'
             },
          },
          items => [
-            {  color  => 'BF4E15',
-               item   => 'STAT_interrupts',
+            {  color  => '803405',
+               item   => 'STAT_loadavg',
+               task   => 'hash_09_VER_503e6e1741c7612155abbcbf10741e68',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_911ceb71fc3b9a46d034fcbad90a2161',
+                  'hash_10_VER_8f6960ff594aa50293a905eea5162dcf',
+                  'hash_10_VER_9db59ef55d1df8813687fc83f0c6817b',
+                  'hash_10_VER_44943da7a803c6748655fb18186eea18'
+               ],
+            },
+         ],
+      },
+      {  name       => 'Number of Users',
+         base_value => '1000',
+         hash       => 'hash_00_VER_8f65f7434580fedac32c569072e5542a',
+         dt         => {
+            hash       => 'hash_01_VER_472e14fc7e17ffbdbb20e48e4d7eeef3',
+            input      => 'Get W',
+            STAT_numusers => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_3743abc62f57cad148636275d2f6ab4e'
+            },
+         },
+         items => [
+            {  color  => '540202',
+               item   => 'STAT_numusers',
                task   => 'hash_09_VER_503e6e1741c7612155abbcbf10741e68',
                type   => 'AREA',
                hashes => [
@@ -268,6 +293,22 @@
       },
    ],
    inputs => {
+      'Get W' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_fa2de72657e3da275805db2572271392',
+         input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
+                       . '--host <hostname> --type w --items <items>',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_29fdf20a8b44e7391d852a29747235ba',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            STAT_loadavg          => 'hash_07_VER_114521354ca46482eaed91495ec69870',
+            STAT_numusers         => 'hash_07_VER_114521354ca46482eaed91495ec69870',
+         },
+      },
       'Get Proc Stats' => {
          type_id      => 1,
          hash         => 'hash_03_VER_fa2de72657e3da275805db2572271392',
