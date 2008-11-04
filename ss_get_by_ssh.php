@@ -355,7 +355,7 @@ function get_stats_proc_stat ( $cmd, $options ) {
 # Gets the results of the 'w' command from Linux.
 # Options used: none.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type w --host 127.0.0.1 --items ag,ah'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type w --host 127.0.0.1 --items as,at'
 # ============================================================================
 function get_stats_w ( $cmd, $options ) {
    $cmd = "$cmd w";
@@ -370,7 +370,7 @@ function get_stats_w ( $cmd, $options ) {
       if ( preg_match_all('/\S+/', $line, $words) ) {
          $words = $words[0];
          if ( $words[1] == "up" ) {
-            for ( $i = 0; $i < count($words); +=$i ) {
+            for ( $i = 0; $i < count($words); ++$i ) {
                if ( $words[$i] == 'users,' ) {
                   $result['STAT_numusers'] = $words[$i - 1];
                }
