@@ -318,7 +318,6 @@
             },
          },
          items => [
-            # Colors from http://www.colourlovers.com/palette/566031/cider_press
             {  item   => 'STAT_memused',
                color  => '850707',
                task   => 'hash_09_VER_22ba03e69959acc58cc92dec6e22c177',
@@ -342,7 +341,7 @@
                ],
             },
             {  item   => 'STAT_membuffer',
-               color  => '803405',
+               color  => '25345C',
                task   => 'hash_09_VER_7a5041bc76b4f32c2bf1e25a6660c09a',
                type   => 'STACK',
                hashes => [
@@ -353,7 +352,7 @@
                ],
             },
             {  item   => 'STAT_memshared',
-               color  => 'FFCD59',
+               color  => '88008A',
                task   => 'hash_09_VER_da3d4557815d0686d48fbfe1357188e9',
                type   => 'STACK',
                hashes => [
