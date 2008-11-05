@@ -146,7 +146,7 @@ Usage: php ss_get_by_ssh.php --host <host> --items <item,...> [OPTION]
    --host      Hostname to connect to
    --port      Port to connect to
    --items     Comma-separated list of the items whose data you want
-   --type      One of apache, proc_stat, w (more are TODO)
+   --type      One of apache, proc_stat, w, memory (more are TODO)
    --url       The url, such as /server-status, where Apache status lives
    --nocache   Do not cache results in a file
 
@@ -241,6 +241,9 @@ function ss_get_by_ssh( $options ) {
    case 'proc_stat':
       $result = get_stats_proc_stat($cmd, $options);
       break;
+   case 'memory':
+      $result = get_stats_free($cmd, $options);
+      break;
    case 'w':
       $result = get_stats_w($cmd, $options);
       break;
@@ -284,6 +287,12 @@ function ss_get_by_ssh( $options ) {
       # Stuff from 'w'
       'STAT_loadavg'           => 'as',
       'STAT_numusers'          => 'at',
+      # Stuff from 'free'
+      'STAT_memcached'         => 'au',
+      'STAT_membuffer'         => 'av',
+      'STAT_memshared'         => 'aw',
+      'STAT_memfree'           => 'ax',
+      'STAT_memused'           => 'ay',
    );
 
    # Return the output.
@@ -351,6 +360,40 @@ function get_stats_proc_stat ( $cmd, $options ) {
          }
          elseif ( $words[0] == "processes" ) {
             $result['STAT_forks'] = $words[1];
+         }
+      }
+   }
+   return $result;
+}
+
+# ============================================================================
+# Gets the results of the 'free' command from Linux.
+# Options used: none.
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memory --host 127.0.0.1 --items au,av'
+# ============================================================================
+function get_stats_free ( $cmd, $options ) {
+   $cmd = "$cmd free -ob";
+   $str = `$cmd`;
+
+   $result = array(
+      'STAT_memcached' => null,
+      'STAT_membuffer' => null,
+      'STAT_memshared' => null,
+      'STAT_memfree'   => null,
+      'STAT_memused'   => null,
+   );
+
+   foreach ( explode("\n", $str) as $line ) {
+      if ( preg_match_all('/\S+/', $line, $words) ) {
+         $words = $words[0];
+         if ( $words[0] == "Mem:" ) {
+            $result['STAT_memcached'] = $words[6];
+            $result['STAT_membuffer'] = $words[5];
+            $result['STAT_memshared'] = $words[4];
+            $result['STAT_memfree']   = $words[3];
+            $result['STAT_memused']
+               = sprintf('%u', $words[2] - $words[4] - $words[5] - $words[6]);
          }
       }
    }
