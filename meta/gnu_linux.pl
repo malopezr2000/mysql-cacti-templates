@@ -139,8 +139,7 @@
             },
          },
          items => [
-            # Colors courtesy of http://www.colourlovers.com/palette/594321
-            {  color  => '893A2E',
+            {  color  => '941342',
                item   => 'STAT_CPU_user',
                task   => 'hash_09_VER_bcd1d3627f1722dfc4d34a0101abfb14',
                type   => 'AREA',
@@ -162,7 +161,7 @@
                   'hash_10_VER_a59020353135fd7d50552dcfba519038'
                ],
             },
-            {  color  => '9C7D5C',
+            {  color  => '00CBF6',
                item   => 'STAT_CPU_system',
                task   => 'hash_09_VER_aaf7cd4a13ccbf0df457c3e6dc6c7c36',
                type   => 'STACK',
@@ -184,7 +183,7 @@
                   'hash_10_VER_1aec02484c1357ed12e138669eac1d77'
                ],
             },
-            {  color  => 'ED6826',
+            {  color  => 'C5031A',
                item   => 'STAT_CPU_iowait',
                task   => 'hash_09_VER_4cf48b70e4a5ad7167d75f75ee09c2d6',
                type   => 'STACK',
@@ -195,7 +194,7 @@
                   'hash_10_VER_ff35f7f27d2018eb6de1b9849370e0fb'
                ],
             },
-            {  color  => '9C7D5C',
+            {  color  => 'F39034',
                item   => 'STAT_CPU_irq',
                task   => 'hash_09_VER_807de7fb40f93e68ca95f9e007db2d34',
                type   => 'STACK',
@@ -228,7 +227,7 @@
                   'hash_10_VER_d70e624212e0bf9336ce2e8f72eaee06'
                ],
             },
-            {  color  => 'DECE43',
+            {  color  => '08A000',
                item   => 'STAT_CPU_guest',
                task   => 'hash_09_VER_dc4d6789244897e058b7f81176ce0110',
                type   => 'STACK',
