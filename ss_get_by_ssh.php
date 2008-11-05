@@ -30,9 +30,8 @@ $cache_dir  = '';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300; # Adjust to match your polling interval.
 $use_ss     = FALSE; # Whether to use the script server or not
 
-# ============================================================================
-# Parameters for specific graphs
-# ============================================================================
+# Parameters for specific graphs are possible to specify here, or in the .cnf
+# file.
 $status_url = '/server-status';           # Where Apache status lives
 $http_user  = '';
 $http_pass  = '';
@@ -40,6 +39,13 @@ $http_pass  = '';
 # ============================================================================
 # You should not need to change anything below this line.
 # ============================================================================
+
+# ============================================================================
+# Include settings from an external config file (issue 39).
+# ============================================================================
+if ( file_exists(__FILE__ . '.cnf' ) ) {
+   require(__FILE__ . '.cnf');
+}
 
 # ============================================================================
 # Define whether you want debugging behavior.
