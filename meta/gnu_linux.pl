@@ -420,8 +420,6 @@
             STAT_CPU_guest        => 'hash_07_VER_367fbfbb15a0bbd73fae5366d02e0c9b',
          },
       },
-   },
-   inputs => {
       'Get Memory' => {
          type_id      => 1,
          hash         => 'hash_03_VER_0e7b35f01128b55711233c892f76dd5a',
