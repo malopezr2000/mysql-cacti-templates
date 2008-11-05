@@ -290,6 +290,92 @@
             },
          ],
       },
+      {  name       => 'Memory',
+         base_value => '1024',
+         hash       => 'hash_00_VER_60bfa8002bdb1f5e82007eaf4db83a15',
+         dt         => {
+            hash       => 'hash_01_VER_f5ff0b3d033a134332bb8aa79418d300',
+            input      => 'Get Memory',
+            STAT_memused   => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_087a8db48b8b7110d7a706bf37a6a9e1'
+            },
+            STAT_memcached => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_087a8db48b8b7110d7a706bf37a6a9e1'
+            },
+            STAT_membuffer => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_087a8db48b8b7110d7a706bf37a6a9e1'
+            },
+            STAT_memshared => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_087a8db48b8b7110d7a706bf37a6a9e1'
+            },
+            STAT_memfree   => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_087a8db48b8b7110d7a706bf37a6a9e1'
+            },
+         },
+         items => [
+            # Colors from http://www.colourlovers.com/palette/566031/cider_press
+            {  item   => 'STAT_memused',
+               color  => '850707',
+               task   => 'hash_09_VER_0e11a634103ecf9a3a3e09b3bfb65f7b',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_166bd36383f182fe92100a2073c8ddf7',
+                  'hash_10_VER_50ce3e3fb714fea4c28a2cf0c79b57fc',
+                  'hash_10_VER_5fc7e2ff856ed17612ad7be140a13a3b',
+                  'hash_10_VER_88ede38e933d09edae08cf78fd230cc2'
+               ],
+            },
+            {  item   => 'STAT_memcached',
+               color  => 'FFDB87',
+               task   => 'hash_09_VER_0e11a634103ecf9a3a3e09b3bfb65f7b',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_166bd36383f182fe92100a2073c8ddf7',
+                  'hash_10_VER_50ce3e3fb714fea4c28a2cf0c79b57fc',
+                  'hash_10_VER_5fc7e2ff856ed17612ad7be140a13a3b',
+                  'hash_10_VER_88ede38e933d09edae08cf78fd230cc2'
+               ],
+            },
+            {  item   => 'STAT_membuffer',
+               color  => '803405',
+               task   => 'hash_09_VER_0e11a634103ecf9a3a3e09b3bfb65f7b',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_166bd36383f182fe92100a2073c8ddf7',
+                  'hash_10_VER_50ce3e3fb714fea4c28a2cf0c79b57fc',
+                  'hash_10_VER_5fc7e2ff856ed17612ad7be140a13a3b',
+                  'hash_10_VER_88ede38e933d09edae08cf78fd230cc2'
+               ],
+            },
+            {  item   => 'STAT_memshared',
+               color  => 'FFCD59',
+               task   => 'hash_09_VER_0e11a634103ecf9a3a3e09b3bfb65f7b',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_166bd36383f182fe92100a2073c8ddf7',
+                  'hash_10_VER_50ce3e3fb714fea4c28a2cf0c79b57fc',
+                  'hash_10_VER_5fc7e2ff856ed17612ad7be140a13a3b',
+                  'hash_10_VER_88ede38e933d09edae08cf78fd230cc2'
+               ],
+            },
+            {  item   => 'STAT_memfree',
+               color  => '4F7774',
+               task   => 'hash_09_VER_0e11a634103ecf9a3a3e09b3bfb65f7b',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_166bd36383f182fe92100a2073c8ddf7',
+                  'hash_10_VER_50ce3e3fb714fea4c28a2cf0c79b57fc',
+                  'hash_10_VER_5fc7e2ff856ed17612ad7be140a13a3b',
+                  'hash_10_VER_88ede38e933d09edae08cf78fd230cc2'
+               ],
+            },
+         ],
+      },
    ],
    inputs => {
       'Get W' => {
@@ -332,6 +418,27 @@
             STAT_CPU_softirq      => 'hash_07_VER_b7055f7e8e745ab6c0c7bbd85f7aff03',
             STAT_CPU_steal        => 'hash_07_VER_5686b4b2d255e674f46932ae60da92af',
             STAT_CPU_guest        => 'hash_07_VER_367fbfbb15a0bbd73fae5366d02e0c9b',
+         },
+      },
+   },
+   inputs => {
+      'Get Memory' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_fa2de72657e3da275805db2572271392',
+         input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
+                       . '--host <hostname> --type memory --items <items>',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_29fdf20a8b44e7391d852a29747235ba',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            STAT_memused   => 'hash_07_VER_1bcb533e7385434351f3e64b982266a8',
+            STAT_memcached => 'hash_07_VER_114521354ca46482eaed91495ec69870',
+            STAT_membuffer => 'hash_07_VER_1bcb533e7385434351f3e64b982266a8',
+            STAT_memshared => 'hash_07_VER_1bcb533e7385434351f3e64b982266a8',
+            STAT_memfree   => 'hash_07_VER_1bcb533e7385434351f3e64b982266a8',
          },
       },
    },
