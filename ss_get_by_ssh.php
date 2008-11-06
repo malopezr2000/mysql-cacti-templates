@@ -144,6 +144,10 @@ function usage($message) {
 $message
 Usage: php ss_get_by_ssh.php --host <host> --items <item,...> [OPTION]
 
+Command-line options ALWAYS require a value after them.  If you specify an
+option without a value after it, the option is ignored.  For options such as
+--nocache, you can say "--nocache 1".
+
 General options:
 
    --host      Hostname to connect to
@@ -171,35 +175,14 @@ EOF;
 # ============================================================================
 function parse_cmdline( $args ) {
    $result = array();
-   $cur_arg = '';
-   foreach ($args as $val) {
-      if ( strpos($val, '--') === 0 ) {
-         if ( strpos($val, '--no') === 0 ) {
-            # It's an option without an argument, but it's a --nosomething so
-            # it's OK.
-            $result[substr($val, 2)] = 1;
-            $cur_arg = '';
-         }
-         elseif ( $cur_arg ) { # Maybe the last --arg was an option with no arg
-            if ( $cur_arg == '--port' ) {
-               # Special case because Cacti will pass these without an arg
-               $cur_arg = '';
-            }
-            else {
-               die("Missing argument to $cur_arg\n");
-            }
-         }
-         else {
-            $cur_arg = $val;
+   for ( $i = 0; $i < count($args); ++$i ) {
+      if ( strpos($args[$i], '--') === 0 ) {
+         if ( $i + 1 < count($args) && strpos($args[$i + 1], '--') !== 0 ) {
+            # The next element should be the value for this option.
+            $result[substr($args[$i], 2)] = $args[$i + 1];
+            ++$i;
          }
       }
-      else {
-         $result[substr($cur_arg, 2)] = $val;
-         $cur_arg = '';
-      }
-   }
-   if ( $cur_arg ) {
-      die("Missing argument to $cur_arg\n");
    }
    return $result;
 }
