@@ -120,7 +120,7 @@
                   'hash_10_VER_6a762cf6c56ed9d14a80bf790f8502f4'
                ],
             },
-            {  color  => 'DE0056',
+            {  color  => '850707',
                item   => 'NGINX_writing',
                task   => 'hash_09_VER_9cd249d937d972814d8e38a66d462dc4',
                type   => 'STACK',
