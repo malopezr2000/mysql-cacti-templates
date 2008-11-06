@@ -161,11 +161,30 @@
          type_id      => 1,
          hash         => 'hash_03_VER_686afc01e6df060bab64e885af593ffa',
          input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
-                       . '--host <hostname> --type nginx --items <items>',
+                       . '--host <hostname> --type nginx --items <items> '
+                       . '--server <server> --url <url> --http-user <http-user> '
+                       . '--http-password <password>'
+                       ,
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_66ea73b103e3bb7e6793d22b14cd9bfd',
                name        => 'hostname'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_dd54f81d90b9734d59dcc8bb8af02701',
+               name        => 'server'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_8197c00079b1af4c3430899375c509d3',
+               name        => 'url'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_f9efa99759d943edacf3a2bbbfb61a4e',
+               name        => 'http-user'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_4806787d655ef66379c425d14ce00465',
+               name        => 'http-password'
             },
          ],
          outputs => {
