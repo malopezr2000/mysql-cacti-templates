@@ -120,7 +120,7 @@
                   'hash_10_VER_6a762cf6c56ed9d14a80bf790f8502f4'
                ],
             },
-            {  color  => '487860',
+            {  color  => 'DE0056',
                item   => 'NGINX_writing',
                task   => 'hash_09_VER_9cd249d937d972814d8e38a66d462dc4',
                type   => 'STACK',
@@ -131,7 +131,7 @@
                   'hash_10_VER_39770e6de29f152d6cca56cb4461f78b'
                ],
             },
-            {  color  => 'DE0056',
+            {  color  => '487860',
                item   => 'NGINX_waiting',
                task   => 'hash_09_VER_3000c5bbdda2aeb2117d658672cbb5e1',
                type   => 'STACK',
