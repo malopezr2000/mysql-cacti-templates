@@ -1,7 +1,7 @@
 Changes for templates:
 
 	* Include settings from an external config file (issue 39).
-	* Added Apache and GNU/Linux templates.
+	* Added Apache, Nginx, and GNU/Linux templates.
 	* Unknown output is now -1 instead of 0 to prevent spikes in graphs.
 	* If you want to use a script server, you must now explicitly configure it.
 	* UNIX sockets weren't permitted for MySQL (issue 38).

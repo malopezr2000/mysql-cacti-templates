@@ -32,9 +32,10 @@ $use_ss     = FALSE; # Whether to use the script server or not
 
 # Parameters for specific graphs are possible to specify here, or in the .cnf
 # file.
-$status_url = '/server-status';           # Where Apache status lives
-$http_user  = '';
-$http_pass  = '';
+$status_server = 'localhost';             # Which server to query
+$status_url    = '/server-status';        # Where Apache status lives
+$http_user     = '';
+$http_pass     = '';
 
 # ============================================================================
 # You should not need to change anything below this line.
@@ -117,10 +118,10 @@ if ( !function_exists('array_change_key_case') ) {
 # ============================================================================
 # Validate that the command-line options are here and correct
 # TODO: --ident
-# TODO: --url seems wrong, and is it even used?
 # ============================================================================
 function validate_options($options) {
-   $opts = array('host', 'port', 'items', 'url', 'nocache', 'type');
+   $opts = array('host', 'port', 'items', 'nocache', 'type', 'url', 'http-user',
+                 'http-password', 'server');
    # Required command-line options
    foreach ( array('host', 'items', 'type') as $option ) {
       if ( !isset($options[$option]) || !$options[$option] ) {
@@ -143,12 +144,22 @@ function usage($message) {
 $message
 Usage: php ss_get_by_ssh.php --host <host> --items <item,...> [OPTION]
 
+General options:
+
    --host      Hostname to connect to
    --port      Port to connect to
    --items     Comma-separated list of the items whose data you want
-   --type      One of apache, proc_stat, w, memory (more are TODO)
-   --url       The url, such as /server-status, where Apache status lives
+   --type      One of apache, nginx, proc_stat, w, memory (more are TODO)
    --nocache   Do not cache results in a file
+
+Specific options for HTTP status:
+
+   --url       The url, such as /server-status, where server status lives
+   --http-user The HTTP authentication user
+   --http-password
+               The HTTP authentication password
+   --server    The server (DNS name or IP address) from which to fetch the
+               server status.  Default is 'localhost'.
 
 EOF;
    die($usage);
@@ -238,6 +249,9 @@ function ss_get_by_ssh( $options ) {
    case 'apache':
       $result = get_stats_apache($cmd, $options);
       break;
+   case 'nginx':
+      $result = get_stats_nginx($cmd, $options);
+      break;
    case 'proc_stat':
       $result = get_stats_proc_stat($cmd, $options);
       break;
@@ -293,6 +307,14 @@ function ss_get_by_ssh( $options ) {
       'STAT_memshared'         => 'aw',
       'STAT_memfree'           => 'ax',
       'STAT_memused'           => 'ay',
+      # Stuff from Nginx
+      'NGINX_active_connections' => 'az',
+      'NGINX_server_accepts'     => 'b0',
+      'NGINX_server_handled'     => 'b1',
+      'NGINX_server_requests'    => 'b2',
+      'NGINX_reading'            => 'b3',
+      'NGINX_writing'            => 'b4',
+      'NGINX_waiting'            => 'b5',
    );
 
    # Return the output.
@@ -436,14 +458,13 @@ function get_stats_w ( $cmd, $options ) {
 
 # ============================================================================
 # Gets /server-status from Apache.
-# Options used: url
-# TODO: pass --http-user --http-password in $options
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --host 127.0.0.1 --items a0,a1'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type apache --host 127.0.0.1 --items a0,a1'
 # ============================================================================
 function get_stats_apache ( $cmd, $options ) {
-   global $status_url, $http_user, $http_pass;
-   $url = isset($options['url']) ? $options['url'] : $status_url;
+   global $status_server, $status_url, $http_user, $http_pass;
+   $srv = isset($options['server']) ? $options['server'] : $status_server;
+   $url = isset($options['url'])    ? $options['url']    : $status_url;
    $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
    $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
    $auth = ($user ? "--http-user=$user" : '') . ' ' . ($pass ? "--http-password=$pass" : '');
@@ -502,6 +523,52 @@ function get_stats_apache ( $cmd, $options ) {
          $length = strlen($string);
          for ( $i = 0; $i < $length ; $i++ ) {
             increment($result, $scoreboard[$string[$i]], 1);
+         }
+      }
+   }
+   return $result;
+}
+
+# ============================================================================
+# Gets /server-status from Nginx.
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type nginx --host 127.0.0.1 --items az,b0'
+# ============================================================================
+function get_stats_nginx ( $cmd, $options ) {
+   global $status_server, $status_url, $http_user, $http_pass;
+   $srv = isset($options['server']) ? $options['server'] : $status_server;
+   $url = isset($options['url'])    ? $options['url']    : $status_url;
+   $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
+   $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
+   $auth = ($user ? "--http-user=$user" : '') . ' ' . ($pass ? "--http-password=$pass" : '');
+   $cmd = "$cmd wget $auth -U Cacti/1.0 -q -O - -T 5 'http://$srv$url?auto'";
+   $str = `$cmd`;
+
+   $result = array(
+      'NGINX_active_connections' => null,
+      'NGINX_server_accepts'     => null,
+      'NGINX_server_handled'     => null,
+      'NGINX_server_requests'    => null,
+      'NGINX_reading'            => null,
+      'NGINX_writing'            => null,
+      'NGINX_waiting'            => null,
+   );
+
+   foreach ( explode("\n", $str) as $line ) {
+      if ( preg_match_all('/\S+/', $line, $words) ) {
+         $words = $words[0];
+         if ( $words[0] == 'Active' ) {
+            $result['NGINX_active_connections'] = $words[2];
+         }
+         elseif ( $words[0] == 'Reading:' ) {
+            $result['NGINX_reading'] = $words[1];
+            $result['NGINX_writing'] = $words[3];
+            $result['NGINX_waiting'] = $words[5];
+         }
+         elseif ( preg_match('/^\d+$/', $words[0]) ) {
+            $result['NGINX_server_accepts']  = $words[0];
+            $result['NGINX_server_handled']  = $words[1];
+            $result['NGINX_server_requests'] = $words[2];
          }
       }
    }
