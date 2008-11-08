@@ -36,6 +36,7 @@ $status_server = 'localhost';             # Which server to query
 $status_url    = '/server-status';        # Where Apache status lives
 $http_user     = '';
 $http_pass     = '';
+$memcache_port = 11211;                   # Which port memcached listens on
 
 # ============================================================================
 # You should not need to change anything below this line.
@@ -137,7 +138,7 @@ function validate_options($options) {
 
 # ============================================================================
 # Print out a brief usage summary
-# TODO: this is too specific
+# TODO: add http port, and make user/pass/port/server generic for all types
 # ============================================================================
 function usage($message) {
    $usage = <<<EOF
@@ -150,10 +151,11 @@ option without a value after it, the option is ignored.  For options such as
 
 General options:
 
-   --host      Hostname to connect to
-   --port      Port to connect to
+   --host      Hostname to connect to (via SSH)
+   --port      Port to connect to (via SSH)
    --items     Comma-separated list of the items whose data you want
-   --type      One of apache, nginx, proc_stat, w, memory (more are TODO)
+   --type      One of apache, nginx, proc_stat, w, memory, memcached
+               (more are TODO)
    --nocache   Do not cache results in a file
 
 Specific options for HTTP status:
@@ -194,9 +196,10 @@ function parse_cmdline( $args ) {
 function ss_get_by_ssh( $options ) {
    global $debug, $ssh_user, $ssh_port, $ssh_iden, $url, $cache_dir, $poll_time;
 
+   # TODO: generate filename via a hash.
    $cache_file = "$cache_dir/$options[host]-$options[type]_cacti_stats.txt";
 
-   # First, check the cache.
+   # First, check the cache. TODO: caching is disabled.
    $fp = null;
    if ( !isset($options['nocache']) && $cache_dir ) {
       if ( file_exists($cache_file) && filesize($cache_file) > 0
@@ -244,12 +247,19 @@ function ss_get_by_ssh( $options ) {
    case 'w':
       $result = get_stats_w($cmd, $options);
       break;
+   case 'memcached':
+      $result = get_stats_memcached($cmd, $options);
+      break;
+   default:
+      die("Unknown value for --type: $options[type]");
+      break;
    }
 
    # Define the variables to output.  I use shortened variable names so maybe
    # it'll all fit in 1024 bytes for Cactid and Spine's benefit.  This list must
    # come right after the word MAGIC_VARS_DEFINITIONS.  The Perl script parses
    # it and uses it as a Perl variable.
+   # TODO: give them all a name prefix
    $keys = array(
       # Apache stuff
       'Requests'               => 'a0',
@@ -298,6 +308,21 @@ function ss_get_by_ssh( $options ) {
       'NGINX_reading'            => 'b3',
       'NGINX_writing'            => 'b4',
       'NGINX_waiting'            => 'b5',
+      # Stuff from memcached
+      'MEMC_rusage_user'       => 'b6',
+      'MEMC_rusage_system'     => 'b7',
+      'MEMC_curr_items'        => 'b8',
+      'MEMC_total_items'       => 'b9',
+      'MEMC_bytes'             => 'ba',
+      'MEMC_curr_connections'  => 'bb',
+      'MEMC_total_connections' => 'bc',
+      'MEMC_cmd_get'           => 'bd',
+      'MEMC_cmd_set'           => 'be',
+      'MEMC_get_hits'          => 'bf',
+      'MEMC_get_misses'        => 'bg',
+      'MEMC_evictions'         => 'bh',
+      'MEMC_bytes_read'        => 'bi',
+      'MEMC_bytes_written'     => 'bj',
    );
 
    # Return the output.
@@ -554,6 +579,25 @@ function get_stats_nginx ( $cmd, $options ) {
             $result['NGINX_server_requests'] = $words[2];
          }
       }
+   }
+   return $result;
+}
+
+# ============================================================================
+# Gets getStats() from memcached.  Does NOT use SSH!
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items b6,b7'
+# ============================================================================
+function get_stats_memcached ( $cmd, $options ) {
+   global $memcache_port; # TODO: permit port override via cmdline
+
+   $m = new Memcache();
+   $m->connect($options['server'], $memcache_port)
+      or die("Could not connect to memcached $options[server]:$memcache_port");
+   $result = array();
+   $stat = $m->getStats();
+   foreach ( $stat as $key => $val ) {
+      $result["MEMC_$key"] = $val;
    }
    return $result;
 }
