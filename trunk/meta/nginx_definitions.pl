@@ -32,8 +32,8 @@
             },
          },
          items => [
-            {  color  => '803405',
-               item   => 'NGINX_server_requests',
+            {  item   => 'NGINX_server_requests',
+               color  => '803405',
                task   => 'hash_09_VER_63ad225064673ed776cf6226a9032344',
                type   => 'AREA',
                hashes => [
@@ -109,8 +109,8 @@
             },
          },
          items => [
-            {  color  => 'D1642E',
-               item   => 'NGINX_reading',
+            {  item   => 'NGINX_reading',
+               color  => 'D1642E',
                task   => 'hash_09_VER_c3d771fa9229c2023395dd5551909486',
                type   => 'AREA',
                hashes => [
@@ -120,8 +120,8 @@
                   'hash_10_VER_6a762cf6c56ed9d14a80bf790f8502f4'
                ],
             },
-            {  color  => '850707',
-               item   => 'NGINX_writing',
+            {  item   => 'NGINX_writing',
+               color  => '850707',
                task   => 'hash_09_VER_9cd249d937d972814d8e38a66d462dc4',
                type   => 'STACK',
                hashes => [
@@ -131,8 +131,8 @@
                   'hash_10_VER_39770e6de29f152d6cca56cb4461f78b'
                ],
             },
-            {  color  => '487860',
-               item   => 'NGINX_waiting',
+            {  item   => 'NGINX_waiting',
+               color  => '487860',
                task   => 'hash_09_VER_3000c5bbdda2aeb2117d658672cbb5e1',
                type   => 'STACK',
                hashes => [
@@ -142,8 +142,8 @@
                   'hash_10_VER_89fdfe0cd6a0b2e6d6f5084250e8611e'
                ],
             },
-            {  color  => '000000',
-               item   => 'NGINX_active_connections',
+            {  item   => 'NGINX_active_connections',
+               color  => '000000',
                task   => 'hash_09_VER_9e921f6da9362add3e9b7c5798370163',
                type   => 'LINE1',
                hashes => [
