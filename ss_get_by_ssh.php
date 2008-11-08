@@ -586,6 +586,7 @@ function get_stats_nginx ( $cmd, $options ) {
 # Gets getStats() from memcached.  Does NOT use SSH!
 # You can test it like this, as root:
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items b6,b7'
+# TODO: use sockets to get, instead of requiring the Memcache extension?
 # ============================================================================
 function get_stats_memcached ( $cmd, $options ) {
    global $memcache_port; # TODO: permit port override via cmdline
