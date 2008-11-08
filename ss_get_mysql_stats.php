@@ -750,7 +750,7 @@ function run_query($sql, $conn) {
 # ============================================================================
 # Safely increments a value that might be null.
 # ============================================================================
-function increment($arr, $key, $howmuch) {
+function increment(&$arr, $key, $howmuch) {
    if ( array_key_exists($key, $arr) && isset($arr[$key]) ) {
       $arr[$key] += $howmuch;
    }
