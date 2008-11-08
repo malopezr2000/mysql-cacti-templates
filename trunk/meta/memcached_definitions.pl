@@ -118,9 +118,9 @@
                type   => 'AREA',
                hashes => [
                   'hash_10_VER_2b957916996bb5cb0538e1ad1ed6de06',
-                  'hash_10_VER_2d05a3131122f9743aa1c0fca741e93d',
-                  'hash_10_VER_e09c9795296683aa9788d39185260c95',
-                  'hash_10_VER_c5c34bd102bf1f3de3e71a789448cefb'
+                  'hash_10_VER_0adfb7f1d5fc9877ae3a60c79363ed08',
+                  'hash_10_VER_70bc665ac4abf87ad1f25af8ada5a411',
+                  'hash_10_VER_3bb04a6049aaa9d4dd2ee4325accb099'
                ],
             },
          ],
