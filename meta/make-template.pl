@@ -938,8 +938,8 @@ foreach my $g ( @{ $t->{graphs} } ) {
    # needs.
    my $dt = $g->{dt};
    my $i = $t->{inputs}->{$dt->{input}};
-   my @needed = grep { ref($dt->{$_}) eq 'HASH' } sort keys %$dt;
-   my $needed = join(',', map { $short_names{$_} } @needed);
+   my @needed = grep { ref($dt->{$_}) eq 'HASH' } keys %$dt;
+   my $needed = join(',', sort { $a cmp $b } map { $short_names{$_} } @needed);
 
    # And again, re-generate the hash.
    my $input_hash = mash_hash($i->{hash}, $dt->{hash});
