@@ -27,11 +27,11 @@
             hash       => 'hash_01_VER_07ad123d392f3d06d255271acb37f628',
             input      => 'Get Memcached Stats',
             MEMC_rusage_user => {
-               data_source_type_id => '1',
+               data_source_type_id => '2',
                hash => 'hash_08_VER_ccda4eba57a840570248abdcfc46043f'
             },
             MEMC_rusage_system => {
-               data_source_type_id => '1',
+               data_source_type_id => '2',
                hash => 'hash_08_VER_d51a5c5f1b7194edb50c9c6c2b50776b'
             },
          },
