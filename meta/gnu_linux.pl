@@ -32,8 +32,8 @@
             },
          },
          items => [
-            {  color  => 'BF4E15',
-               item   => 'STAT_interrupts',
+            {  item   => 'STAT_interrupts',
+               color  => 'BF4E15',
                task   => 'hash_09_VER_e2a72b5aa0b06ad05dcd368ae0a131cf',
                type   => 'AREA',
                hashes => [
@@ -57,8 +57,8 @@
             },
          },
          items => [
-            {  color  => '91204D',
-               item   => 'STAT_context_switches',
+            {  item   => 'STAT_context_switches',
+               color  => '91204D',
                task   => 'hash_09_VER_58efa55c5f72514a7eddd86bacb2faf7',
                type   => 'AREA',
                hashes => [
@@ -82,8 +82,8 @@
             },
          },
          items => [
-            {  color  => '9E8655',
-               item   => 'STAT_forks',
+            {  item   => 'STAT_forks',
+               color  => '9E8655',
                task   => 'hash_09_VER_8f535aa13a1d1b80611c0b0db54ac8c2',
                type   => 'AREA',
                hashes => [
@@ -139,8 +139,8 @@
             },
          },
          items => [
-            {  color  => '941342',
-               item   => 'STAT_CPU_user',
+            {  item   => 'STAT_CPU_user',
+               color  => '941342',
                task   => 'hash_09_VER_bcd1d3627f1722dfc4d34a0101abfb14',
                type   => 'AREA',
                hashes => [
@@ -150,8 +150,8 @@
                   'hash_10_VER_d661f25c3097957471bd9665ce4c05d5'
                ],
             },
-            {  color  => '435247',
-               item   => 'STAT_CPU_nice',
+            {  item   => 'STAT_CPU_nice',
+               color  => '435247',
                task   => 'hash_09_VER_fb8ac638fa7dffbed5107e498371aadf',
                type   => 'STACK',
                hashes => [
@@ -161,8 +161,8 @@
                   'hash_10_VER_a59020353135fd7d50552dcfba519038'
                ],
             },
-            {  color  => '00CBF6',
-               item   => 'STAT_CPU_system',
+            {  item   => 'STAT_CPU_system',
+               color  => '00CBF6',
                task   => 'hash_09_VER_aaf7cd4a13ccbf0df457c3e6dc6c7c36',
                type   => 'STACK',
                hashes => [
@@ -172,8 +172,8 @@
                   'hash_10_VER_6e5b9085b24d2ed18414ba70f9580686'
                ],
             },
-            {  color  => 'BFBD82',
-               item   => 'STAT_CPU_idle',
+            {  item   => 'STAT_CPU_idle',
+               color  => 'BFBD82',
                task   => 'hash_09_VER_9839470a495fe4d8fcbe9d0a69687b53',
                type   => 'STACK',
                hashes => [
@@ -183,8 +183,8 @@
                   'hash_10_VER_1aec02484c1357ed12e138669eac1d77'
                ],
             },
-            {  color  => 'C5031A',
-               item   => 'STAT_CPU_iowait',
+            {  item   => 'STAT_CPU_iowait',
+               color  => 'C5031A',
                task   => 'hash_09_VER_4cf48b70e4a5ad7167d75f75ee09c2d6',
                type   => 'STACK',
                hashes => [
@@ -194,8 +194,8 @@
                   'hash_10_VER_ff35f7f27d2018eb6de1b9849370e0fb'
                ],
             },
-            {  color  => 'F39034',
-               item   => 'STAT_CPU_irq',
+            {  item   => 'STAT_CPU_irq',
+               color  => 'F39034',
                task   => 'hash_09_VER_807de7fb40f93e68ca95f9e007db2d34',
                type   => 'STACK',
                hashes => [
@@ -205,8 +205,8 @@
                   'hash_10_VER_73af29c6228bcc09b6c65751d129a4f0'
                ],
             },
-            {  color  => '3D282A',
-               item   => 'STAT_CPU_softirq',
+            {  item   => 'STAT_CPU_softirq',
+               color  => '3D282A',
                task   => 'hash_09_VER_1fafae6e8f08d9d8607771c4cf2f80a3',
                type   => 'STACK',
                hashes => [
@@ -216,8 +216,8 @@
                   'hash_10_VER_cf91867f240163fcb712646f2d1b1512'
                ],
             },
-            {  color  => '33369E',
-               item   => 'STAT_CPU_steal',
+            {  item   => 'STAT_CPU_steal',
+               color  => '33369E',
                task   => 'hash_09_VER_e9a428d265e2ba2aaa8e6392f0a259fd',
                type   => 'STACK',
                hashes => [
@@ -227,8 +227,8 @@
                   'hash_10_VER_d70e624212e0bf9336ce2e8f72eaee06'
                ],
             },
-            {  color  => '08A000',
-               item   => 'STAT_CPU_guest',
+            {  item   => 'STAT_CPU_guest',
+               color  => '08A000',
                task   => 'hash_09_VER_dc4d6789244897e058b7f81176ce0110',
                type   => 'STACK',
                hashes => [
@@ -252,8 +252,8 @@
             },
          },
          items => [
-            {  color  => '803405',
-               item   => 'STAT_loadavg',
+            {  item   => 'STAT_loadavg',
+               color  => '803405',
                task   => 'hash_09_VER_503e6e1741c7612155abbcbf10741e68',
                type   => 'AREA',
                hashes => [
@@ -277,8 +277,8 @@
             },
          },
          items => [
-            {  color  => '540202',
-               item   => 'STAT_numusers',
+            {  item   => 'STAT_numusers',
+               color  => '540202',
                task   => 'hash_09_VER_0e11a634103ecf9a3a3e09b3bfb65f7b',
                type   => 'AREA',
                hashes => [

@@ -32,8 +32,8 @@
             },
          },
          items => [
-            {  color  => '803405',
-               item   => 'Requests',
+            {  item   => 'Requests',
+               color  => '803405',
                task   => 'hash_09_VER_320385532fb7c191c962fdb9a1414479',
                type   => 'AREA',
                hashes => [
@@ -57,8 +57,8 @@
             },
          },
          items => [
-            {  color  => '5D868C',
-               item   => 'Bytes_sent',
+            {  item   => 'Bytes_sent',
+               color  => '5D868C',
                task   => 'hash_09_VER_f21ce020e6fab43d47cecf785340ab30',
                type   => 'AREA',
                hashes => [
@@ -82,8 +82,8 @@
             },
          },
          items => [
-            {  color  => '700004',
-               item   => 'CPU_Load',
+            {  item   => 'CPU_Load',
+               color  => '700004',
                task   => 'hash_09_VER_a20147e0e31048d256b063831641b2dc',
                type   => 'AREA',
                hashes => [
@@ -93,8 +93,8 @@
                   'hash_10_VER_42fd6384bc247e64271f8a6b3baee61c'
                ],
             },
-            {  color  => '000000',
-               item   => 'CPU_Load',
+            {  item   => 'CPU_Load',
+               color  => '000000',
                task   => 'hash_09_VER_a5ab7839ad06a8b08c10e2eac17f2d46',
                type   => 'LINE1',
                hashes => [
@@ -119,8 +119,8 @@
             },
          },
          items => [
-            {  color  => 'EEB78E',
-               item   => 'Idle_workers',
+            {  item   => 'Idle_workers',
+               color  => 'EEB78E',
                task   => 'hash_09_VER_c607a8fc1798542b45d9db03821f5416',
                type   => 'AREA',
                hashes => [
@@ -130,8 +130,8 @@
                   'hash_10_VER_7af8dc449c88a166aae40048350281ff'
                ],
             },
-            {  color  => '47748B',
-               item   => 'Busy_workers',
+            {  item   => 'Busy_workers',
+               color  => '47748B',
                task   => 'hash_09_VER_b41cfa6817023350822546893ce286bb',
                type   => 'STACK',
                hashes => [
@@ -195,8 +195,8 @@
             },
          },
          items => [
-            {  color  => 'DE0056',
-               item   => 'Waiting_for_connection',
+            {  item   => 'Waiting_for_connection',
+               color  => 'DE0056',
                task   => 'hash_09_VER_a80215bf3ff228c0b6c568779f06b85c',
                type   => 'AREA',
                hashes => [
@@ -206,8 +206,8 @@
                   'hash_10_VER_0db1a81e909798e42edd1ed9805c2a30'
                ],
             },
-            {  color  => '784890',
-               item   => 'Starting_up',
+            {  item   => 'Starting_up',
+               color  => '784890',
                task   => 'hash_09_VER_6a181d6121b20efdf004a70a8ef47f1c',
                type   => 'STACK',
                hashes => [
@@ -217,8 +217,8 @@
                   'hash_10_VER_b67fbc3ae53d866e9dca38c3983aba7f'
                ],
             },
-            {  color  => 'D1642E',
-               item   => 'Reading_request',
+            {  item   => 'Reading_request',
+               color  => 'D1642E',
                task   => 'hash_09_VER_838a522638302fbdfca68eb4d8e8e755',
                type   => 'STACK',
                hashes => [
@@ -228,8 +228,8 @@
                   'hash_10_VER_dee2bf79588d24ac22c3960e2a1adfcc'
                ],
             },
-            {  color  => '487860',
-               item   => 'Sending_reply',
+            {  item   => 'Sending_reply',
+               color  => '487860',
                task   => 'hash_09_VER_126a087f7bcae3056b701b0493e0714a',
                type   => 'STACK',
                hashes => [
@@ -239,8 +239,8 @@
                   'hash_10_VER_ecf6b2f8603ae2e75e4a9053d0300f43'
                ],
             },
-            {  color  => '907890',
-               item   => 'Keepalive',
+            {  item   => 'Keepalive',
+               color  => '907890',
                task   => 'hash_09_VER_4a39512d24f2023398eedff0dcd399a7',
                type   => 'STACK',
                hashes => [
@@ -250,8 +250,8 @@
                   'hash_10_VER_51e655f37c25b6015aaf10eafa5749f1'
                ],
             },
-            {  color  => 'DE0056',
-               item   => 'DNS_lookup',
+            {  item   => 'DNS_lookup',
+               color  => 'DE0056',
                task   => 'hash_09_VER_f99da81cd9ba660c901cdcdbdcbb6bba',
                type   => 'STACK',
                hashes => [
@@ -261,8 +261,8 @@
                   'hash_10_VER_41b645619a517cc7ba9b8cd8f7edace1'
                ],
             },
-            {  color  => '1693A7',
-               item   => 'Closing_connection',
+            {  item   => 'Closing_connection',
+               color  => '1693A7',
                task   => 'hash_09_VER_cf8485ee4bb76ed6c8538c77abd7b310',
                type   => 'STACK',
                hashes => [
@@ -272,8 +272,8 @@
                   'hash_10_VER_5a44212b067eb73c8170ff88b1b1c829'
                ],
             },
-            {  color  => 'FF7D00',
-               item   => 'Logging',
+            {  item   => 'Logging',
+               color  => 'FF7D00',
                task   => 'hash_09_VER_aac162da0dc535a0ea28291194658b85',
                type   => 'STACK',
                hashes => [
@@ -283,8 +283,8 @@
                   'hash_10_VER_14616b47b80629a31cf649885a7523a0'
                ],
             },
-            {  color  => 'B83A04',
-               item   => 'Gracefully_finishing',
+            {  item   => 'Gracefully_finishing',
+               color  => 'B83A04',
                task   => 'hash_09_VER_6626c31745e227ee7799add9014e86a1',
                type   => 'STACK',
                hashes => [
@@ -294,8 +294,8 @@
                   'hash_10_VER_594b24cc59ab5381ad72007df314e4ef'
                ],
             },
-            {  color  => '540202',
-               item   => 'Idle_cleanup',
+            {  item   => 'Idle_cleanup',
+               color  => '540202',
                task   => 'hash_09_VER_fc03d4316c43ccbd3d9ecf0a7279a850',
                type   => 'STACK',
                hashes => [
@@ -305,8 +305,8 @@
                   'hash_10_VER_e31c7864d29b10c35d3c0c7640797caf'
                ],
             },
-            {  color  => '6E645A',
-               item   => 'Open_slot',
+            {  item   => 'Open_slot',
+               color  => '6E645A',
                task   => 'hash_09_VER_1555fa38c0124d776cc8e4810db0f3ec',
                type   => 'STACK',
                hashes => [
