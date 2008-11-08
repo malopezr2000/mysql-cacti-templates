@@ -318,11 +318,10 @@ function ss_get_by_ssh( $options ) {
       'MEMC_total_connections' => 'bc',
       'MEMC_cmd_get'           => 'bd',
       'MEMC_cmd_set'           => 'be',
-      'MEMC_get_hits'          => 'bf',
-      'MEMC_get_misses'        => 'bg',
-      'MEMC_evictions'         => 'bh',
-      'MEMC_bytes_read'        => 'bi',
-      'MEMC_bytes_written'     => 'bj',
+      'MEMC_get_misses'        => 'bf',
+      'MEMC_evictions'         => 'bg',
+      'MEMC_bytes_read'        => 'bh',
+      'MEMC_bytes_written'     => 'bi',
    );
 
    # Return the output.
