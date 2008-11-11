@@ -108,3 +108,8 @@ They don't use anything pre-defined in Cacti.  That means you can import them
 without fear of overwriting your customized settings.  It also means they may
 create things that look duplicated to you, such as their own RRA settings.  At
 least you know they're separate from your existing installation, though.
+
+If you want to fill an input to a script with a custom value, you can force
+Cacti to ask you for that value for each graph before it creates the graph.  Use
+the --mpds option to make-template.pl for this.  Then that option will become
+non-optional and you'll have to fill it in.
