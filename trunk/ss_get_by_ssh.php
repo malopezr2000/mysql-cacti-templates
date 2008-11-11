@@ -600,7 +600,7 @@ function get_stats_memcached ( $cmd, $options ) {
    $result = array();
    foreach ( explode("\n", $str) as $line ) {
       $words = explode(' ', $line);
-      if ( count($words) && $words[0] == "STAT" ) {
+      if ( count($words) && $words[0] === "STAT" ) {
          $result["MEMC_$words[1]"] = $words[2];
       }
    }
