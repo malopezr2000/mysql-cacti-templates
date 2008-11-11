@@ -942,10 +942,9 @@ foreach my $g ( @{ $t->{graphs} } ) {
       # result should be the same value as the one above that does the same
       # thing (in the previous loop, printing out DTs).
       el('data_input_field_id', mash_hash($input->{hash}, $d->{hash}));
-      el('t_value',
-         # If --mpds <foo> was given, --foo is not optional to the script.  But
-         # this one is OPPOSITE the one below, the dirty rascals.
-         (!$input->{allow_nulls} || $opts{mpds}->{$input->{name}}) ? 'on' : '');
+      # If --mpds <foo> was given, --foo is not optional to the script.  But
+      # this one is OPPOSITE the one below, the dirty rascals.
+      el('t_value', ($opts{mpds}->{$input->{name}}) ? 'on' : '');
       el('value', '');
       ee(sprintf('item_%03d', $cnt));
       $cnt++;
