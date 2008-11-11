@@ -504,7 +504,8 @@ function get_stats_apache ( $cmd, $options ) {
       '.' => 'Open_slot',
    );
    foreach ( $scoreboard as $key => $val ) {
-      $result[$val] = null;
+      # These are not null, they are zero, when they aren't in the output.
+      $result[$val] = 0;
    }
 
    # Mapping from line prefix to data item name
