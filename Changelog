@@ -1,5 +1,6 @@
 Changes for templates:
 
+   * Some graphs were partially hidden without --lower-limit (issue 43).
    * Flipped some elements across the Y axis (issue 42).
 	* Include settings from an external config file (issue 39).
 	* Added Apache, Nginx, and GNU/Linux templates.

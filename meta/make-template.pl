@@ -673,6 +673,8 @@ my %graph_props = (
    auto_padding    => 'on',
    export          => 'on',
    base_value      => 1000,
+   lower_limit     => 0,
+   upper_limit     => 0,
 );
 
 # The properties of a data source item.
@@ -839,7 +841,7 @@ foreach my $g ( @{ $t->{graphs} } ) {
    es('graph');
    foreach my $p ( @graph_props ) {
       el("t_$p", ''); # No idea what this is for, it's always empty.
-      el($p, $g->{$p} || $graph_props{$p} || '');
+      el($p, $g->{$p} || (defined $graph_props{$p} ? $graph_props{$p} : ''));
    }
    ee('graph');
 
