@@ -602,7 +602,14 @@ function get_stats_memcached ( $cmd, $options ) {
    foreach ( explode("\n", $str) as $line ) {
       $words = explode(' ', $line);
       if ( count($words) && $words[0] === "STAT" ) {
-         $result["MEMC_$words[1]"] = $words[2];
+         # rusage are in microseconds, but COUNTER does not accept fractions
+         if ( $words[1] === 'rusage_user' || $words[1] === 'rusage_system' ) {
+            $result["MEMC_$words[1]"]
+               = sprintf('%u', 1000000 * trim($words[2]));
+         }
+         else {
+            $result["MEMC_$words[1]"] = trim($words[2]);
+         }
       }
    }
    return $result;
