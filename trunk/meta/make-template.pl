@@ -556,6 +556,25 @@ $t->{rras} ||= [
          x_files_factor => '0.5'
       }
    ];
+$t->{cdefs} ||= {
+   Negate => {
+      hash  => 'hash_05_VER_4281cf63dfde6f44b46a59f022cf82b2',
+      items => [
+         {  type  => 4,
+            value => 'CURRENT_DATA_SOURCE',
+            hash  => 'hash_14_VER_39d460ccabbb1f19bfebf71e84b15070',
+         },
+         {  type  => 6,
+            value => '-1',
+            hash  => 'hash_14_VER_390f3e01ab124c1e22ed522de3221183',
+         },
+         {  type  => 2,
+            value => '3',
+            hash  => 'hash_14_VER_fe6ddc8f638831cd799b3b19f964a3f8',
+         },
+      ],
+   },
+};
 $t->{gprints} ||= {
       Normal => {
          gprint_text => '%6.1lf%s',
@@ -836,12 +855,13 @@ foreach my $g ( @{ $t->{graphs} } ) {
       foreach my $h ( @{ $it->{hashes} } ) {
          my $type = $i ? 'GPRINT' : ($it->{type} || 'LINE1');
          my $text = $i ? $graph_texts[$i] : to_words_cleanly($it->{item});
+         my $cdef = !$i && $it->{cdef} ? $t->{cdefs}->{$it->{cdef}}->{hash} : '0';
          es($h);
          el('task_item_id', $g->{dt}->{$it->{item}}->{hash});
          el('color_id', $i ? 0 : $color);
          el('graph_type_id', $graph_types{$type});
          el('consolidation_function_id', $consolidations[$i]);
-         el('cdef_id', 0);
+         el('cdef_id', $cdef);
          el('value', '');
          el('gprint_id',
             $t->{gprints}->{ $it->{gprint_id} || 'Normal' }->{hash});
@@ -997,7 +1017,23 @@ foreach my $k ( keys %{ $t->{gprints} } ) {
    ee($t->{gprints}->{$k}->{hash});
 }
 
-# TODO: CDEF definitions.
+# CDEF definitions.
+foreach my $c ( keys %{$t->{cdefs}} ) {
+   my $h = $t->{cdefs}->{$c};
+   es($h->{hash});
+   el('name', "$name_prefix$c CDEF");
+   es('items');
+   my $i = 0;
+   foreach my $it ( @{$h->{items}} ) {
+      es($it->{hash});
+      el('sequence', ++$i);
+      el('type', $it->{type});
+      el('value', $it->{value});
+      ee($it->{hash});
+   }
+   ee('items');
+   ee($h->{hash});
+}
 
 # RRA (Round-Robin Archive) definitions
 foreach my $r ( @{$t->{rras}} ) {
