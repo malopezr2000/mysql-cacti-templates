@@ -18,10 +18,13 @@
 # You should have received a copy of the GNU General Public License along with
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA.
+#
+# $Revision$
 # ============================================================================
 
 # ============================================================================
-# Define parameters.
+# Define parameters.  Instead of defining parameters here, you can define them
+# in another file named the same as this file, with a .cnf extension.
 # ============================================================================
 $ssh_user   = 'cacti';                          # SSH username
 $ssh_port   = 22;                               # SSH port
@@ -122,7 +125,7 @@ if ( !function_exists('array_change_key_case') ) {
 # ============================================================================
 function validate_options($options) {
    $opts = array('host', 'port', 'items', 'nocache', 'type', 'url', 'http-user',
-                 'http-password', 'server');
+                 'http-password', 'server', 'port2');
    # Required command-line options
    foreach ( array('host', 'items', 'type') as $option ) {
       if ( !isset($options[$option]) || !$options[$option] ) {
@@ -152,20 +155,19 @@ option without a value after it, the option is ignored.  For options such as
 General options:
 
    --host      Hostname to connect to (via SSH)
-   --port      Port to connect to (via SSH)
    --items     Comma-separated list of the items whose data you want
+   --nocache   Do not cache results in a file
+   --port      Port to connect to (via SSH)
+   --port2     Port to connect to after SSHing, such as memcached port
+   --server    The server (DNS name or IP address) from which to fetch the
+               desired data after SSHing.  Default is 'localhost' for HTTP stats
+               and --host for memcached stats.
    --type      One of apache, nginx, proc_stat, w, memory, memcached
                (more are TODO)
-   --nocache   Do not cache results in a file
-
-Specific options for HTTP status:
-
    --url       The url, such as /server-status, where server status lives
    --http-user The HTTP authentication user
    --http-password
                The HTTP authentication password
-   --server    The server (DNS name or IP address) from which to fetch the
-               server status.  Default is 'localhost'.
 
 EOF;
    die($usage);
@@ -583,21 +585,24 @@ function get_stats_nginx ( $cmd, $options ) {
 }
 
 # ============================================================================
-# Gets getStats() from memcached.  Does NOT use SSH!
+# Gets stats from memcached, using nc (netcat).
 # You can test it like this, as root:
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items b6,b7'
-# TODO: use sockets to get, instead of requiring the Memcache extension?
 # ============================================================================
 function get_stats_memcached ( $cmd, $options ) {
-   global $memcache_port; # TODO: permit port override via cmdline
+   global $memcache_port;
 
-   $m = new Memcache();
-   $m->connect($options['server'], $memcache_port)
-      or die("Could not connect to memcached $options[server]:$memcache_port");
+   $srv = isset($options['server']) ? $options['server'] : $options['host'];
+   $prt = isset($options['port2'])  ? $options['port2']  : $memcache_port;
+   $cmd = "$cmd 'echo stats | nc $srv $prt'";
+   $str = `$cmd`;
+
    $result = array();
-   $stat = $m->getStats();
-   foreach ( $stat as $key => $val ) {
-      $result["MEMC_$key"] = $val;
+   foreach ( explode("\n", $str) as $line ) {
+      $words = explode(' ', $line);
+      if ( count($words) && $words[0] == "STAT" ) {
+         $result["MEMC_$words[1]"] = $words[2];
+      }
    }
    return $result;
 }
