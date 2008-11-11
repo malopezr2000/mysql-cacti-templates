@@ -64,7 +64,7 @@
                task => 'hash_09_VER_cf20ffcf42c91bb6f8e6d4cadc6b74a5',
                type => 'LINE1'
             },
-            {  color  => 'F51D30',
+            {  color  => '862F2F',
                hashes => [
                   'hash_10_VER_c8ddc4e379739fa6860644b9ec73fd67',
                   'hash_10_VER_eee6bf6b5627650df8625d88f333299f',
@@ -73,9 +73,10 @@
                ],
                item => 'Key_write_requests',
                task => 'hash_09_VER_1d370e9a5914bc84d71e779814f357cb',
-               type => 'LINE1'
+               type => 'AREA'
+               cdef => 'Negate',
             },
-            {  color  => '862F2F',
+            {  color  => 'F51D30',
                hashes => [
                   'hash_10_VER_b05a1a789491c12bed93e2c610e72fa0',
                   'hash_10_VER_c5621ec923c0e47f0603638f9fbb5815',
@@ -85,6 +86,7 @@
                item => 'Key_writes',
                task => 'hash_09_VER_b06844c326fac7ec50d9819b47b3430a',
                type => 'LINE1'
+               cdef => 'Negate',
             }
          ],
          name => 'MyISAM Indexes'
@@ -1192,19 +1194,30 @@
          # Palette: http://www.colourlovers.com/palette/90901/le_pain_quotidien
          name => 'MySQL Network Traffic',
          dt         => {
-            Bytes_received => {
-               data_source_type_id => '2',
-               hash => 'hash_08_VER_0dc4474ee42f80143630b1c03f5292c6'
-            },
             Bytes_sent => {
                data_source_type_id => '2',
                hash => 'hash_08_VER_7fb4bf9ceb329586e4b503c1e1923ca8'
+            },
+            Bytes_received => {
+               data_source_type_id => '2',
+               hash => 'hash_08_VER_0dc4474ee42f80143630b1c03f5292c6'
             },
             hash  => 'hash_01_VER_86055944cd5a58072ab8b2db2488a1ef',
             input => 'Get MySQL Stats'
          },
          hash  => 'hash_00_VER_0461c811ce958cecfb41bdbb16b2f72b',
          items => [
+            {  color  => '4B2744',
+               hashes => [
+                  'hash_10_VER_f9276bc645b301cb7ed35be16bfbf863',
+                  'hash_10_VER_cc9fe030f9b3acf9ca42f030097b8d59',
+                  'hash_10_VER_061261483ac3a8baebd9e3f3e270002e',
+                  'hash_10_VER_5421724540377f8b0c11deb852325fdb'
+               ],
+               item => 'Bytes_sent',
+               task => 'hash_09_VER_d8d287ac8a465386f8697bec412a2916',
+               type => 'AREA'
+            }
             {  color  => 'E4C576',
                hashes => [
                   'hash_10_VER_2c3bc6cf1e7b659f900870349739fee2',
@@ -1215,18 +1228,8 @@
                item => 'Bytes_received',
                task => 'hash_09_VER_10e148a3f5d6bb38c7b10cacc68c5e15',
                type => 'AREA'
+               cdef => 'Negate',
             },
-            {  color  => '4B2744',
-               hashes => [
-                  'hash_10_VER_f9276bc645b301cb7ed35be16bfbf863',
-                  'hash_10_VER_cc9fe030f9b3acf9ca42f030097b8d59',
-                  'hash_10_VER_061261483ac3a8baebd9e3f3e270002e',
-                  'hash_10_VER_5421724540377f8b0c11deb852325fdb'
-               ],
-               item => 'Bytes_sent',
-               task => 'hash_09_VER_d8d287ac8a465386f8697bec412a2916',
-               type => 'STACK'
-            }
          ],
       },
       {  base_value => '1024',
@@ -1281,7 +1284,7 @@
                ],
                item => 'pages_written',
                task => 'hash_09_VER_bbd21b7341904b7f4e162dcdf7fe4bb0',
-               type => 'STACK'
+               type => 'AREA'
             }
          ],
       },

@@ -1,5 +1,6 @@
 Changes for templates:
 
+   * Flipped some elements across the Y axis (issue 42).
 	* Include settings from an external config file (issue 39).
 	* Added Apache, Nginx, and GNU/Linux templates.
 	* Unknown output is now -1 instead of 0 to prevent spikes in graphs.

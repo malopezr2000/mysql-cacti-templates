@@ -116,6 +116,7 @@
                color  => 'A03333',
                task   => 'hash_09_VER_13591371f8ad724c4d5ba3e3d4a97271',
                type   => 'AREA',
+               cdef   => 'Negate',
                hashes => [
                   'hash_10_VER_2b957916996bb5cb0538e1ad1ed6de06',
                   'hash_10_VER_0adfb7f1d5fc9877ae3a60c79363ed08',
@@ -221,26 +222,27 @@
                   'hash_10_VER_8c243805b0f9c7a4e5ff9a26e745e9c1'
                ],
             },
-            {  item   => 'MEMC_cmd_set',
-               color  => '3C5E53',
-               task   => 'hash_09_VER_7b98b2396030f4e25305b9fb1611a39c',
-               type   => 'STACK',
-               hashes => [
-                  'hash_10_VER_68393007ae8e77fd7dfcce1e2a074cd9',
-                  'hash_10_VER_35452e8a4832c5d773b7769a85fd610d',
-                  'hash_10_VER_e1d3f750b8bf39ec14b9f5cf56151496',
-                  'hash_10_VER_23e22e3512ab2b6ffb4dd34aa743c815'
-               ],
-            },
             {  item   => 'MEMC_get_misses',
                color  => 'CC1306',
                task   => 'hash_09_VER_873cf87d8be3f2bcda1bbe990f0a4b93',
-               type   => 'AREA',
+               type   => 'LINE2',
                hashes => [
                   'hash_10_VER_4c28a431ad229ea022798eae37867a98',
                   'hash_10_VER_31ef32b5f20cbea42fd446e495d6421a',
                   'hash_10_VER_01f7a79bd64b63430d0b3461f85f7ebd',
                   'hash_10_VER_d5f9222bad8f4d2af195426062736bb8'
+               ],
+            },
+            {  item   => 'MEMC_cmd_set',
+               color  => '3C5E53',
+               task   => 'hash_09_VER_7b98b2396030f4e25305b9fb1611a39c',
+               type   => 'STACK',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_68393007ae8e77fd7dfcce1e2a074cd9',
+                  'hash_10_VER_35452e8a4832c5d773b7769a85fd610d',
+                  'hash_10_VER_e1d3f750b8bf39ec14b9f5cf56151496',
+                  'hash_10_VER_23e22e3512ab2b6ffb4dd34aa743c815'
                ],
             },
          ],
@@ -262,7 +264,7 @@
          },
          items => [
             {  item   => 'MEMC_bytes_read',
-               color  => 'DBC95B',
+               color  => 'A38A64',
                task   => 'hash_09_VER_59d42abe2881685b6420e27b1c98c062',
                type   => 'AREA',
                hashes => [
@@ -273,9 +275,10 @@
                ],
             },
             {  item   => 'MEMC_bytes_written',
-               color  => '2F6F8A',
+               color  => '183030',
                task   => 'hash_09_VER_6f55bb88d6f5c3ddc9face8ed725ddf7',
                type   => 'AREA',
+               cdef   => 'Negate',
                hashes => [
                   'hash_10_VER_30b60e02c3530f47900e9e3280a68732',
                   'hash_10_VER_5a6f5e69283fb75417ebb8483d92f2a8',
