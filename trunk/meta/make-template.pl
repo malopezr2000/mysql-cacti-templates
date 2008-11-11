@@ -482,8 +482,10 @@ my @opt_spec = (
    { s => 'cactiver=s',     d => 'Create templates for this Cacti version' },
    { s => 'graph_height=i', d => 'Height of generated graphs (default 120)' },
    { s => 'graph_width=i',  d => 'Width of generated graphs (default 500)' },
-   { s => 'poll_interval=i',d => 'Polling interval (default 300)' },
+   { s => 'mpds=H',         d => 'Comma-separated list of input method options'
+                              .  ' to make per-data-source' },
    { s => 'name_prefix=s',  d => 'Template name prefix (default X)' },
+   { s => 'poll_interval=i',d => 'Polling interval (default 300)' },
    { s => 'smallint',       d => 'Create templates for 32-bit MySQL' },
    { s => 'script=s',       d => 'Command-line script to use (required)' },
 );
@@ -940,7 +942,10 @@ foreach my $g ( @{ $t->{graphs} } ) {
       # result should be the same value as the one above that does the same
       # thing (in the previous loop, printing out DTs).
       el('data_input_field_id', mash_hash($input->{hash}, $d->{hash}));
-      el('t_value', '');
+      el('t_value',
+         # If --mpds <foo> was given, --foo is not optional to the script.  But
+         # this one is OPPOSITE the one below, the dirty rascals.
+         (!$input->{allow_nulls} || $opts{mpds}->{$input->{name}}) ? 'on' : '');
       el('value', '');
       ee(sprintf('item_%03d', $cnt));
       $cnt++;
@@ -966,7 +971,7 @@ foreach my $g ( @{ $t->{graphs} } ) {
    # And again, re-generate the hash.
    my $input_hash = mash_hash($i->{hash}, $dt->{hash});
    es($input_hash);
-   el('name', "$name_prefix$dt->{input}/$g->{name}");
+   el('name', "$name_prefix$dt->{input}/$g->{name} IM");
    el('type_id', $i->{type_id});
 
    # Fix up the --items argument.
@@ -983,7 +988,9 @@ foreach my $g ( @{ $t->{graphs} } ) {
       el('name', to_words($it->{name}));
       el('update_rra', '');
       el('regexp_match', '');
-      el('allow_nulls', $it->{allow_nulls});
+      el('allow_nulls',
+         # If --mpds <foo> was given, --foo is not optional to the script.
+         (!$it->{allow_nulls} || $opts{mpds}->{$it->{name}}) ? '' : 'on');
       el('type_code', ($it->{name} =~ m/$is_magic/ ? $it->{name} : ''));
       el('input_output', 'in');
       el('data_name', $it->{name});
