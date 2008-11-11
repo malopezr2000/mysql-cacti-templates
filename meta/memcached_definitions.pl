@@ -236,7 +236,7 @@
             {  item   => 'MEMC_cmd_set',
                color  => '3C5E53',
                task   => 'hash_09_VER_7b98b2396030f4e25305b9fb1611a39c',
-               type   => 'STACK',
+               type   => 'AREA',
                cdef   => 'Negate',
                hashes => [
                   'hash_10_VER_68393007ae8e77fd7dfcce1e2a074cd9',
