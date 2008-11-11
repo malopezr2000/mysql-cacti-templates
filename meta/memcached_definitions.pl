@@ -291,11 +291,20 @@
          type_id      => 1,
          hash         => 'hash_03_VER_de0c6857fe68c9cde6caaf3413594c28',
          input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
-                       . '--host <hostname> --type memcached --items <items>',
+                       . '--host <hostname> --type memcached --items <items> '
+                       . '--server <server>',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_8a62eca31127304468b3c39d54cd544f',
                name        => 'hostname'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_8a62eca31127394468b3c39d54cd544f',
+               name        => 'server'
+            },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_8a62eca31127395468b3c39d54cd544f',
+               name        => 'port2'
             },
          ],
          outputs => {
