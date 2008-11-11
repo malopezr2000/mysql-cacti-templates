@@ -29,7 +29,6 @@ The graph item in the meta/mysql_definitions.pl file has the following propertie
   * base_value -- either 1024 or 1000 depending on whether the unit is an amount of data or not.  (Rule: don't mix things with different units on a single graph.  If you do, you get meaningless crap most of the time.)
   * name -- the name of the graph.  Keep it short.
   * hash -- the Cacti hash.  See CactiHashes.
-  * cdef -- the optional name of a CDEF.  'Negate' is going to be the most frequent one you'll see.  This flips something across the Y axis.
   * dt -- the data template.
     * hash.
     * Name of the data input.  This is the name of an item in the inputs section at the top level.
@@ -42,3 +41,4 @@ The graph item in the meta/mysql_definitions.pl file has the following propertie
     * type -- the RRD type, such as LINE1 or AREA or STACK.  Text items will automatically be added for each thing that is drawn on the graph.
     * task -- a hash.
     * hashes -- an array of hashes.  These are used for the items.  Depending on how many hashes are in the array, the graph will get varying bits of text below the picture.  The texts are Cur: Avg: Max: and you'll get them in that order, as many as you specify.  So if you only specify one hash, you'll just get Cur: on the graph.
+    * cdef -- the optional name of a CDEF.  'Negate' is going to be the most frequent one you'll see.  This flips something across the Y axis.
