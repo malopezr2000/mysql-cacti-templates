@@ -540,7 +540,7 @@ function ss_get_mysql_stats( $options ) {
          = max($status['unflushed_log'], $status['innodb_log_buffer_size']);
    }
    if (count($binlogs)) {
-	$status['binary_log_space'] = array_sum($binlogs);
+      $status['binary_log_space'] = sprintf('%u', array_sum($binlogs));
    }
 
    # Define the variables to output.  I use shortened variable names so maybe
