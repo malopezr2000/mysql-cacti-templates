@@ -1,5 +1,6 @@
 Changes for templates:
 
+   * binary log space is now calculated without a MySQL query (issue 48).
    * There was no easy way to force inputs to be filled (issue 45).
    * Some graphs were partially hidden without --lower-limit (issue 43).
    * Flipped some elements across the Y axis (issue 42).
