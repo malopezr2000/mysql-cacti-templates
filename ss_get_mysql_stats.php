@@ -540,15 +540,7 @@ function ss_get_mysql_stats( $options ) {
          = max($status['unflushed_log'], $status['innodb_log_buffer_size']);
    }
    if (count($binlogs)) {
-      $sql = "SELECT "
-           . "CONCAT('', " . implode('+', $binlogs) . ") AS binary_log_space ";
-      # echo("$sql\n");
-      $result = run_query($sql, $conn);
-      while ( $row = @mysql_fetch_assoc($result) ) {
-         foreach ( $row as $key => $val ) {
-            $status[$key] = $val;
-         }
-      }
+	$status['binary_log_space'] = array_sum($binlogs);
    }
 
    # Define the variables to output.  I use shortened variable names so maybe
