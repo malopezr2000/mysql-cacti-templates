@@ -13,3 +13,7 @@ A. This is a Cacti bug (see Issue 2).  Use cmd.php for now.
 Q. Running poller.php or ss_get_mysql_stats.php shows the correct output, but I see nothing in the graphs for MySQL in Cacti.  Why?
 
 A. If you ran either of those commands before Cacti had a chance to, the cache_file ss_get_mysql_stats.php uses may have the wrong ownership, check the Cacti owner has access to $cache_dir/$host-mysql_cacti_stats.txt (/tmp/$host-mysql_cacti_stats.txt).
+
+Q. I get a blank page when I try to import the templates.  Why?
+
+A. Check your webserver log.  PHP might have run out of memory.  If you see something like "Allowed memory size of 8388608 bytes exhausted (tried to allocate 10 bytes)" then you should increase memory_limit in your php.ini file and restart the webserver.
