@@ -1,0 +1,7 @@
+  * [Documentation]
+  * CreatingGraphs
+  * CactiHashes
+  * [http://code.google.com/p/mysql-cacti-templates/w/list List & Search Wiki Pages]
+  * [http://code.google.com/p/mysql-cacti-templates/w/edit New Wiki Page]
+
+Comments on the wiki?  Bring them up on the mailing list.
