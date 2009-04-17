@@ -1,0 +1,204 @@
+{
+   name   => 'Aumega Friends',
+   hash   => 'hash_02_VER_f74237cf7fb53fc002b0215117856be3',
+   graphs => [
+      {  name       => 'Users and Networks',
+         base_value => '1000',
+         hash       => 'hash_00_VER_7dd582146162f1d9c61bc52bec83d2f8',
+         dt         => {
+            hash       => 'hash_01_VER_b126c9d16618d1cd99dc2d4eb27703c3',
+            input      => 'Get Users and Networks',
+            bebo => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_9ab18f7a0cdc99e5a704af15dd0908cc'
+            },
+            facebook => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_5e74fd79cfaf16c0835c73f04f839b3d'
+            },
+            friendster => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_a053b4cc24c19387b80e80d7c29a65fc'
+            },
+            gtalk => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_fa6b4aad3b2410b3d81c4c11d5139c51'
+            },
+            hi5 => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_ddf693945cb6e7ae81586efc34bd1585'
+            },
+            linkedin => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_7960bd34e2273571f2716f6184176bc5'
+            },
+            mobile => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_284805ce32d2ea015bbcccf3945b0613'
+            },
+            myspace => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_96ec5986e277e70c06e56433ff65991a'
+            },
+            orkut => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_334aabb9b1db14647cb3426072bf2a66'
+            },
+            yahoo => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_47d3738a5927d22e320684a2d16059ba'
+            },
+         },
+         items => [
+            {  item   => 'bebo',
+               color  => '850707',
+               task   => 'hash_09_VER_320385532fb7c191c962fdb9a1414479',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_c98bdbb53284805a8938d434041b9781',
+                  'hash_10_VER_eb7b204a8beeae2f41193d4eecdbc54c',
+                  'hash_10_VER_58d5ab7cbd19f1650bb08815a2d752ae',
+                  'hash_10_VER_268eea107e7cb8c3b936a21bb0ce9236'
+               ],
+            },
+            {  item   => 'facebook',
+               color  => 'FFDB87',
+               task   => 'hash_09_VER_4fdbc6f85e29c4bec367fd2d6b3e2d48',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_afc03fabc71996b40157a6c601f6a569',
+                  'hash_10_VER_b362b039aeed7421bbc3a1ea45cddb6d',
+                  'hash_10_VER_5c68f8f167df6b8f675d31ae0fd7ba83',
+                  'hash_10_VER_b31383e00f3af5f1d20a70a303a11582'
+               ],
+            },
+            {  item   => 'friendster',
+               color  => '7ACCC2',
+               task   => 'hash_09_VER_1efb9e3300b85727b884714d017f126e',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_7994f57aa205690693091ecb11d7ba4c',
+                  'hash_10_VER_cabc328345e38655ccc7275046a691f4',
+                  'hash_10_VER_e629f8b7c19b84faddd14e7e24ded8f6',
+                  'hash_10_VER_411dd4d5bc71f8e54d3849512576d686'
+               ],
+            },
+            {  item   => 'gtalk',
+               color  => 'FF4DA9',
+               task   => 'hash_09_VER_255fb2258dba2d32f83e0bae0a777f76',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_b4b2889f34fb1741517cf77a3ddfdc1f',
+                  'hash_10_VER_a5e32b8ac530d44da5ade6edee85a23e',
+                  'hash_10_VER_b9254573b202feeeda4d1b8e9a785f7d',
+                  'hash_10_VER_cf57335582e3dd7689a27d32ac93f496'
+               ],
+            },
+            {  item   => 'hi5',
+               color  => 'A0CA56',
+               task   => 'hash_09_VER_354f5fed3bba24a2d9300235a7dc022d',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_4f9cb6995d4e3169945cd15f3f5df908',
+                  'hash_10_VER_3278424d3fb4dfc080989e345ea256e5',
+                  'hash_10_VER_a1ef9fcfae351cbed471d8db2ec9964d',
+                  'hash_10_VER_0048a98219246651dcca8758e353efdd'
+               ],
+            },
+            {  item   => 'linkedin',
+               color  => '1D1E21',
+               task   => 'hash_09_VER_220bb2751c51cdbde4082f1222e204fd',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_821faa2eff141535fafc622955518b53',
+                  'hash_10_VER_2ff93e1a2f12f47e8818e62dc7ed9aed',
+                  'hash_10_VER_6295e0bd03e12ddc1542fbe49dded3eb',
+                  'hash_10_VER_40e6b5b6802d23d58256ec0d86e280bc'
+               ],
+            },
+            {  item   => 'mobile',
+               color  => 'D111B4',
+               task   => 'hash_09_VER_2ec87ec059dbd4358092640cee586a65',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_17ebecc5c1be2097e19e74ebda752475',
+                  'hash_10_VER_6b14cddf514e8293585c8c66fdd24916',
+                  'hash_10_VER_0460bd1fdad2a3e989964b4644c99e31',
+                  'hash_10_VER_f84500bdb6477815420a829f9d65e3f2'
+               ],
+            },
+            {  item   => 'myspace',
+               color  => 'D3944D',
+               task   => 'hash_09_VER_543bcd0e86a138f218311f0725ae4753',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_fdb140e9307e24fed5586665a11adb30',
+                  'hash_10_VER_04600ace647b9a41b680726e8c9d7b5f',
+                  'hash_10_VER_1b1ba092426979c5d872bcd43ac032eb',
+                  'hash_10_VER_ebd0e7cd0d00fcf48cef39024ef558dd'
+               ],
+            },
+            {  item   => 'orkut',
+               color  => '50DDEE',
+               task   => 'hash_09_VER_827d7f9c4ccf0b3398b57d9784a3f59f',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_d749a0c499c763f27b163b1e93e282e8',
+                  'hash_10_VER_c5c46c4c8f51c4c8f8584390ee7127d3',
+                  'hash_10_VER_1075e65820387624373a38954ce810dd',
+                  'hash_10_VER_83202350a988f976611ab9612e733d68'
+               ],
+            },
+            {  item   => 'yahoo',
+               color  => '566166',
+               task   => 'hash_09_VER_2db2030d655001a7756c8645c21a72b9',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_77052fa0d847c9171e30638f838b92a8',
+                  'hash_10_VER_2c5a09e3d765588e61068aa412ac5c3f',
+                  'hash_10_VER_ddd2fdba122155da2be71246c2a81720',
+                  'hash_10_VER_fb22b8007c8b9c626244c299e494abf0'
+               ],
+            },
+         ],
+      },
+   ],
+   inputs => {
+      'Get Users and Networks' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_6d2a648161b8c79a67821046280dde43',
+         input_string => '/bin/sh <path_cacti>/scripts/get_networks.sh',
+         inputs => [
+         ],
+         outputs => {
+            bebo       => 'hash_07_VER_ae55e6043b1e658090c3992b429ab772',
+            facebook   => 'hash_07_VER_cff73d78a6870918b25fec9af9ba55d3',
+            friendster => 'hash_07_VER_b3882f9fad342ef4437389afe5a48255',
+            gtalk      => 'hash_07_VER_9430882fbafec2abb63390553b47f6d8',
+            hi5        => 'hash_07_VER_8f45bda7f92b305ce53485bf349c74a2',
+            linkedin   => 'hash_07_VER_f55a3ab774898f05be545865ab08dc3d',
+            mobile     => 'hash_07_VER_95432bea896bfe38ae8b02bfda3345ae',
+            myspace    => 'hash_07_VER_37cae992ca15d54db89e5fbb4d55b5e3',
+            orkut      => 'hash_07_VER_254558f5aa21ff73ebe348612cca429e',
+            yahoo      => 'hash_07_VER_bca2a7f9e02eb1e0119b9901620213e0',
+         },
+      },
+   },
+};
+
+__DATA__
+
+# MAGIC_VARS_DEFINITIONS
+$vars = array(
+   bebo => 'bebo',
+   facebook => 'facebook',
+   friendster => 'friendster',
+   gtalk => 'gtalk',
+   hi5 => 'hi5',
+   linkedin => 'linkedin',
+   mobile => 'mobile',
+   myspace => 'myspace',
+   orkut => 'orkut',
+   yahoo => 'yahoo',
+);
+
