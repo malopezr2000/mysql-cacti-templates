@@ -23,7 +23,9 @@
 # ============================================================================
 # Define MySQL connection constants in config.php.  Arguments explicitly passed
 # in from Cacti will override these.  However, if you leave them blank in Cacti
-# and set them here, you can make life easier.
+# and set them here, you can make life easier.  Instead of defining parameters
+# here, you can define them in another file named the same as this file, with a
+# .cnf extension.
 # ============================================================================
 $mysql_user = 'cactiuser';
 $mysql_pass = 'cactiuser';
@@ -42,6 +44,13 @@ $use_ss     = FALSE; # Whether to use the script server or not
 # ============================================================================
 # You should not need to change anything below this line.
 # ============================================================================
+
+# ============================================================================
+# Include settings from an external config file (issue 39).
+# ============================================================================
+if ( file_exists(__FILE__ . '.cnf' ) ) {
+   require(__FILE__ . '.cnf');
+}
 
 # ============================================================================
 # TODO items, if anyone wants to improve this script:
@@ -74,7 +83,7 @@ if ( $use_ss ) {
       # See issue 5 for the reasoning behind this.
       include_once(dirname(__FILE__) . "/../include/global.php");
    }
-   else {
+   elseif ( file_exists( dirname(__FILE__) . "/../include/config.php" ) ) {
       # Some versions don't have global.php.
       include_once(dirname(__FILE__) . "/../include/config.php");
    }
