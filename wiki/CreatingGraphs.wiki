@@ -47,7 +47,7 @@ The graph item in the meta/mysql_definitions.pl file has the following propertie
 
 The basic steps I use when developing templates are as follows.
 
-  * Pick some new things to graph.  For example, let's say I want to graph Handler_ statistics.
+  * Pick some new things to graph.  For example, let's say I want to graph Handler statistics.
   * Open ss_get_mysql_stats.php and add the new variables.  See r171 for an example of what to change.
   * Open meta/mysql_definitions.pl and copy/paste a graph's definition; add it to the end of the existing ones.
   * Go through and edit the names, colors, data types, etc in the copy/pasted graph.
