@@ -436,6 +436,7 @@ function get_stats_free ( $cmd, $options ) {
 # Options used: none.
 # You can test it like this, as root:
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type w --host 127.0.0.1 --items as,at'
+# TODO: use `uptime` instead of `w`
 # ============================================================================
 function get_stats_w ( $cmd, $options ) {
    $cmd = "$cmd w";
