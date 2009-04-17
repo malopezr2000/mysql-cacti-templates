@@ -1,9 +1,10 @@
 Changes for templates:
 
-   * binary log space is now calculated without a MySQL query (issue 48).
-   * There was no easy way to force inputs to be filled (issue 45).
-   * Some graphs were partially hidden without --lower-limit (issue 43).
-   * Flipped some elements across the Y axis (issue 42).
+	* Config files can be used instead of editing the .php file (issue 39)
+	* binary log space is now calculated without a MySQL query (issue 48).
+	* There was no easy way to force inputs to be filled (issue 45).
+	* Some graphs were partially hidden without --lower-limit (issue 43).
+	* Flipped some elements across the Y axis (issue 42).
 	* Include settings from an external config file (issue 39).
 	* Added Apache, Nginx, and GNU/Linux templates.
 	* Unknown output is now -1 instead of 0 to prevent spikes in graphs.
