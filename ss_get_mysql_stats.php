@@ -683,6 +683,21 @@ function ss_get_mysql_stats( $options ) {
        'State_writing_to_net'       => 'df',
        'State_none'                 => 'dg',
        'State_other'                => 'dh',
+       'Handler_commit'             => 'di',
+       'Handler_delete'             => 'dj',
+       'Handler_discover'           => 'dk',
+       'Handler_prepare'            => 'dl',
+       'Handler_read_first'         => 'dm',
+       'Handler_read_key'           => 'dn',
+       'Handler_read_next'          => 'do',
+       'Handler_read_prev'          => 'dp',
+       'Handler_read_rnd'           => 'dq',
+       'Handler_read_rnd_next'      => 'dr',
+       'Handler_rollback'           => 'ds',
+       'Handler_savepoint'          => 'dt',
+       'Handler_savepoint_rollback' => 'du',
+       'Handler_update'             => 'dv',
+       'Handler_write'              => 'dw',
    );
 
    # Return the output.
