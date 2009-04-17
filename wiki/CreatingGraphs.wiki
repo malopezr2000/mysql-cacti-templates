@@ -42,3 +42,18 @@ The graph item in the meta/mysql_definitions.pl file has the following propertie
     * task -- a hash.
     * hashes -- an array of hashes.  These are used for the items.  Depending on how many hashes are in the array, the graph will get varying bits of text below the picture.  The texts are Cur: Avg: Max: and you'll get them in that order, as many as you specify.  So if you only specify one hash, you'll just get Cur: on the graph.
     * cdef -- the optional name of a CDEF.  'Negate' is going to be the most frequent one you'll see.  This flips something across the Y axis.
+
+= The Basic Process =
+
+The basic steps I use when developing templates are as follows.
+
+  * Pick some new things to graph.  For example, let's say I want to graph Handler_ statistics.
+  * Open ss_get_mysql_stats.php and add the new variables.  See r171 for an example of what to change.
+  * Open meta/mysql_definitions.pl and copy/paste a graph's definition; add it to the end of the existing ones.
+  * Go through and edit the names, colors, data types, etc in the copy/pasted graph.
+  * Run meta/unique-hashes.pl meta/mysql_definitions.pl and save the output over the existing mysql_definitions.pl to make sure all the hashes are unique.
+  * Open a terminal and go to /var/www/cacti/scripts.  'cat' the edited ss_get_mysql_stats.php file over the top of the existing one.
+  * Run meta/make-template.pl --script ss_get_mysql_stats.php meta/mysql_definitions.pl and save the output in ~/mysql-definitions.xml
+  * Run "mysql cacti < ~/cacti.sql" to initialize the database.
+  * Open the web browser, import the templates into Cacti, edit the Localhost device to be an "X MySQL Server", and add/create graphs.  Wait for data to be gathered.
+  * Go to /var/www/cacti/scripts and run, for example, `php ss_get_mysql_stats.php --host localhost --items dn,ds,dw` and make sure you get some data.
