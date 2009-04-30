@@ -5,8 +5,9 @@
     * NginxTemplates
     * MemcachedTemplates
     * GnuLinuxTemplates
-  * CreatingGraphs
-  * CactiHashes
+  * Developer Documentation
+    * CreatingGraphs
+    * CactiHashes
   * [http://code.google.com/p/mysql-cacti-templates/w/list List & Search Wiki Pages]
   * [http://code.google.com/p/mysql-cacti-templates/w/edit New Wiki Page]
 
