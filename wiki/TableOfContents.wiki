@@ -1,4 +1,4 @@
-  * [Documentation]
+  * [FAQ]
   * Templates
     * [MySQLTemplates]
     * ApacheTemplates
