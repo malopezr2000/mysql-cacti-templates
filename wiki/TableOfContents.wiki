@@ -1,4 +1,10 @@
   * [Documentation]
+  * Templates
+    * [MySQLTemplates]
+    * ApacheTemplates
+    * NginxTemplates
+    * MemcachedTemplates
+    * GnuLinuxTemplates
   * CreatingGraphs
   * CactiHashes
   * [http://code.google.com/p/mysql-cacti-templates/w/list List & Search Wiki Pages]
