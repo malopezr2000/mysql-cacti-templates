@@ -19,3 +19,7 @@ Q. I get a blank page when I try to import the templates.  Why?
 Q. I see an error on some huge SQL like SELECT CONCAT(0+104857683+104857795+104857873.....
 
   # A. You must have a lot of binary log files!  Set expire_logs_days or purge old binlogs with PURGE MASTER LOGS.
+
+Q. After I import the templates, the angle brackets around hostname, etc are gone.  What's wrong?
+
+  # A. See http://code.google.com/p/mysql-cacti-templates/issues/detail?id=49#c20
