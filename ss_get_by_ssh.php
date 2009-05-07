@@ -478,7 +478,7 @@ function get_stats_apache ( $cmd, $options ) {
    $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
    $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
    $auth = ($user ? "--http-user=$user" : '') . ' ' . ($pass ? "--http-password=$pass" : '');
-   $cmd = "$cmd wget $auth -U Cacti/1.0 -q -O - -T 5 'http://localhost$url?auto'";
+   $cmd = "$cmd wget $auth -U Cacti/1.0 -q -O - -T 5 'http://$srv$url?auto'";
    $str = `$cmd`;
 
    $result = array(
