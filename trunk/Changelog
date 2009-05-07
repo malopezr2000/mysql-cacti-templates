@@ -1,5 +1,6 @@
 Changes for templates:
 
+	* The servername was hardcoded in ss_get_by_ssh.php (issue 57).
 	* Added Handler_ graphs (issue 47).
 	* Config files can be used instead of editing the .php file (issue 39).
 	* binary log space is now calculated without a MySQL query (issue 48).
