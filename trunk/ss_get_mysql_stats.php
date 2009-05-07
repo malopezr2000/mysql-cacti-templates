@@ -384,6 +384,7 @@ function ss_get_mysql_stats( $options ) {
       $flushed_to    = false;
       $innodb_lsn    = false;
       $innodb_prg    = false;
+      $is_plugin     = false;
       $spin_waits    = array();
       $spin_rounds   = array();
       $os_waits      = array();
@@ -407,11 +408,11 @@ function ss_get_mysql_stats( $options ) {
          elseif ( strpos($line, 'Trx id counter') !== FALSE ) {
             # The beginning of the TRANSACTIONS section: start counting
             # transactions
-            $innodb_txn = array($row[3], $row[4]);
+            $innodb_txn = isset($row[4]) ? array($row[3], $row[4]) : tonum($row[3]);
          }
          elseif (strpos($line, 'Purge done for trx') !== FALSE ) {
             # PHP can't do big math, so I send it to MySQL.
-            $innodb_prg = array($row[6], $row[7]);
+            $innodb_prg = $row[7]=='undo' ? tonum($row[6]) : array($row[6], $row[7]);
          }
          elseif (strpos($line, 'History list length') !== FALSE ) {
             $status['history_list'] = tonum($row[3]);
@@ -471,17 +472,22 @@ function ss_get_mysql_stats( $options ) {
             $status['pending_chkp_writes'] = tonum($row[4]);
          }
          elseif (strpos($line, "Log sequence number") !== FALSE ) {
-            $innodb_lsn = array($row[3], $row[4]);
+            # 5.1 plugin displays differently (issue 52)
+            $innodb_lsn = isset($row[4]) ? array($row[3], $row[4]) : tonum($row[3]);
          }
          elseif (strpos($line, "Log flushed up to") !== FALSE ) {
             # Since PHP can't handle 64-bit numbers, we'll ask MySQL to do it for
             # us instead.  And we get it to cast them to strings, too.
-            $flushed_to = array($row[6], $row[7]);
+            $flushed_to = isset($row[7]) ? array($row[6], $row[7]) : tonum($row[6]);
          }
 
          # BUFFER POOL AND MEMORY
-         elseif (strpos($line, "Buffer pool size") !== FALSE ) {
-             $status['pool_size'] = tonum($row[5]);
+         elseif (strpos($line, "Buffer pool size ") !== FALSE ) {
+            # 5.1 plugin displays differently (issue 52)
+            $status['pool_size'] = isset($row[10]) ? tonum($row[10]) : tonum($row[5]);
+         }
+         elseif (strpos($line, "Buffer pool size, bytes") !== FALSE ) {
+            $is_plugin = true;
          }
          elseif (strpos($line, "Free buffers") !== FALSE ) {
              $status['free_pages'] = tonum($row[8]);
@@ -523,10 +529,18 @@ function ss_get_mysql_stats( $options ) {
    # PHP sucks at bigint math, so we use MySQL to calculate things that are
    # too big for it.
    if ( $innodb_txn ) {
-      $txn = make_bigint_sql($innodb_txn[0], $innodb_txn[1]);
-      $lsn = make_bigint_sql($innodb_lsn[0], $innodb_lsn[1]);
-      $flu = make_bigint_sql($flushed_to[0], $flushed_to[1]);
-      $prg = make_bigint_sql($innodb_prg[0], $innodb_prg[1]);
+      if (!$is_plugin) {
+         $txn = make_bigint_sql($innodb_txn[0], $innodb_txn[1]);
+         $lsn = make_bigint_sql($innodb_lsn[0], $innodb_lsn[1]);
+         $flu = make_bigint_sql($flushed_to[0], $flushed_to[1]);
+         $prg = make_bigint_sql($innodb_prg[0], $innodb_prg[1]);
+      }
+      else {
+         $txn = make_decimal_sql($innodb_txn);
+         $lsn = make_decimal_sql($innodb_lsn);
+         $flu = make_decimal_sql($flushed_to);
+         $prg = make_decimal_sql($innodb_prg);
+      }
       $sql = "SELECT CONCAT('', $txn) AS innodb_transactions, "
            . "CONCAT('', ($txn - $prg)) AS unpurged_txns, "
            . "CONCAT('', $lsn) AS log_bytes_written, "
@@ -726,6 +740,13 @@ function make_bigint_sql ($hi, $lo) {
    $hi = $hi ? $hi : '0'; # Handle empty-string or whatnot
    $lo = $lo ? $lo : '0';
    return "(($hi << 32) + $lo)";
+}
+
+# ============================================================================
+# Baseconvert from hexidecimal to decimal
+# ============================================================================
+function make_decimal_sql($str) {
+   return "conv('$str', 16, 10)";
 }
 
 # ============================================================================
