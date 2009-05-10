@@ -1,0 +1,36 @@
+<query>
+	<name>Get Disk Usage Statistics</name>
+	<description>Gets disk usage statistics from 'df'.</description>
+	<script_path>php -q |path_cacti|/scripts/ss_get_by_ssh.php</script_path>
+	<arg_index>--type df --query index</arg_index>
+	<arg_query>--type df --query query</arg_query>
+	<arg_get>--type df --query get</arg_get>
+	<arg_num_indexes>num_indexes</arg_num_indexes>
+	<output_delimeter>:</output_delimeter>
+	<index_order>device</index_order>
+	<index_order_type>alphabetic</index_order_type>
+	<index_title_format>|chosen_order_field|</index_title_format>
+
+	<fields>
+		<device>
+			<name>Device Name</name>
+			<direction>input</direction>
+			<query_name>device</query_name>
+		</device>
+		<mount_point>
+			<name>Mount Point</name>
+			<direction>input</direction>
+			<query_name>mount</query_name>
+		</mount_point>
+		<total_space>
+			<name>Total Bytes</name>
+			<direction>output</direction>
+			<query_name>total</query_name>
+		</total_space>
+		<used_space>
+			<name>Used Bytes</name>
+			<direction>output</direction>
+			<query_name>used</query_name>
+		</used_space>
+	</fields>
+</query>
