@@ -100,3 +100,9 @@ The first element is the data query itself:
 }}}
 
 The data_input_id matches the Get Script Data (Indexed) hash, by the way.
+
+= Data Hierarchy =
+
+The hierarchy for data queries is different from that of a normal graph template.  The hierarchy I've chosen for work until this point is that a host is a collection of graphs, each of which is associated with a data template, which draws from a data input method.
+
+For data queries, it looks like a data query is associated with a host, and graph templates are associated with the data query, but there are no data input methods or data templates in the picture.  And the graph templates are children of the data query, not the host template.
