@@ -48,7 +48,7 @@ perl query_unix_partitions.pl get percent /dev/hda1
 25
 }}}
 
-As far as I can see, there's no real requirement that the data query and the means of fetching the data have to be the same, but it's simpler to do that way.
+As far as I can see, there's no real requirement that the data query and the means of fetching the data have to be the same script file, but it's simpler to do that way.  I also don't think the 'query' method needs to be implemented, because I can't see what it is used for.
 
 = Improvements =
 
