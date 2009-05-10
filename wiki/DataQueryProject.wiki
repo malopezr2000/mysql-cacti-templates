@@ -48,9 +48,21 @@ perl query_unix_partitions.pl get percent /dev/hda1
 25
 }}}
 
+As far as I can see, there's no real requirement that the data query and the means of fetching the data have to be the same, but it's simpler to do that way.
+
 = Improvements =
 
 We can make a number of improvements to this system.  We don't have much flexibility to change how the scripts are queried and so on, but we can see already that to query various properties of a single disk, we'll have to make multiple calls to the resource.  This is an inefficient way to do things.  Similarly, caching can help here too.  What we should probably do when 'get' is called, is build a cache file from 'index' and then each 'get' call can read from the cache file.
+
+The script will recognize 'magic_dq_key' as the magically named primary key for data queries.  So if we have
+
+{{{
+ss_get_by_ssh --query query --items a0,a1,a2 --query_key /dev/hda1 ....
+}}}
+
+It will return only the line for the item whose magic_dq_key=/dev/hda1.
+
+The XML file should also allow us to pass index|query|get as an argument to an option, instead of a word by itself, so we can say "--query=index" or something like that.
 
 = Template =
 
