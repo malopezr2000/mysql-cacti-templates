@@ -1,0 +1,21 @@
+#summary Examples and documentation for the Apache templates
+
+= apache_bytes.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/apache_bytes.png
+
+= apache_cpu_load.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/apache_cpu_load.png
+
+= apache_requests.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/apache_requests.png
+
+= apache_scoreboard.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/apache_scoreboard.png
+
+= apache_workers.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/apache_workers.png
