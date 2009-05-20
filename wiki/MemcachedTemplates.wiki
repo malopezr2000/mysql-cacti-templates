@@ -1,0 +1,29 @@
+#summary Examples and documentation for the Apache templates
+
+= memcached_additions_and_evictions.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/memcached_additions_and_evictions.png
+
+= memcached_connections.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/memcached_connections.png
+
+= memcached_current_items.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/memcached_current_items.png
+
+= memcached_memory.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/memcached_memory.png
+
+= memcached_requests.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/memcached_requests.png
+
+= memcached_rusage.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/memcached_rusage.png
+
+= memcached_traffic.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/memcached_traffic.png
