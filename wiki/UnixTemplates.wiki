@@ -1,5 +1,7 @@
 #summary Examples and documentation for the Unix templates
 
+<wiki:toc max_depth="1" />
+
 = unix_context_switches.png =
 
 http://sites.google.com/site/bettercactitemplates/Home/unix_context_switches.png
