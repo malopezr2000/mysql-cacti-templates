@@ -2,6 +2,7 @@
 
 This page shows examples of graphs in the MySQL template collection, and shows what they do.
 
+<wiki:toc max_depth="1" />
 
 = graph_image_002.png =
 
@@ -47,9 +48,18 @@ http://sites.google.com/site/bettercactitemplates/Home/graph_image_013.png
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_014.png
 
-= graph_image_015.png =
+= Replication Status =
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_015.png
+
+This graph displays the status of the replication thread.  There are two ways to measure the replication delay:
+
+  # By looking at SHOW SLAVE STATUS's Seconds_behind_master column, which is shown as Secs Behind Master
+  # By looking at a heartbeat table such as those supported by [http://www.maatkit.org/doc/mk-heartbeat.html mk-heartbeat].  You must configure the ss_get_mysql_stats.php file to do this.  Examine the comments in the header of the file (TODO: get that documentation online.)
+
+When replication is running, there is an AREA of the same size as the replication delay, colored green.  When it's stopped, there's an AREA of the same size as the replication delay, colored red.  What this means is that you'll see a graph of replication delay, colored in with the appropriate color (green or red) to indicate whether replication was stopped at that moment.  If replication isn't delayed, you won't see any green or red.  If you're using Seconds_behind_master instead of mk-heartbeat to measure delay, it's impossible to measure delay when the slave is stopped, so you won't see any red.  This is one of the many reasons Seconds_behind_master from SHOW SLAVE STATUS is not terribly useful.
+
+The graph also shows open temporary tables and retried transactions.
 
 = graph_image_016.png =
 
