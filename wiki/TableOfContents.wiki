@@ -1,3 +1,5 @@
+Welcome!
+
   * [FAQ] (Frequently Asked Questions)
   * Templates
     * [MySQLTemplates]
