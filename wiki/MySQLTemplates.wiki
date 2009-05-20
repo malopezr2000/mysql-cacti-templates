@@ -1,0 +1,92 @@
+#summary Documentation on the MySQL graphs
+
+This page shows examples of graphs in the MySQL template collection, and shows what they do.
+
+
+= graph_image_002.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_002.png
+
+= graph_image_003.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_003.png
+
+= graph_image_004.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_004.png
+
+= graph_image_005.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_005.png
+
+= graph_image_006.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_006.png
+
+= graph_image_007.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_007.png
+
+= graph_image_010.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_010.png
+
+= graph_image_011.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_011.png
+
+= graph_image_012.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_012.png
+
+= graph_image_013.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_013.png
+
+= graph_image_014.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_014.png
+
+= graph_image_015.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_015.png
+
+= graph_image_016.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_016.png
+
+= graph_image_017.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_017.png
+
+= graph_image_019.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_019.png
+
+= graph_image_020.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_020.png
+
+= graph_image_021.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_021.png
+
+= graph_image_022.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_022.png
+
+= graph_image_023.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_023.png
+
+= graph_image_024.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_024.png
+
+= graph_image_025.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_025.png
+
+= graph_image_026.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_026.png
