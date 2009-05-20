@@ -1,5 +1,7 @@
 #summary Examples and documentation for the Apache templates
 
+<wiki:toc max_depth="1" />
+
 = apache_bytes.png =
 
 http://sites.google.com/site/bettercactitemplates/Home/apache_bytes.png
