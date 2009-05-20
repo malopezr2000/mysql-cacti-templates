@@ -1,5 +1,7 @@
 #summary Examples and documentation for the Nginx templates
 
+<wiki:toc max_depth="1" />
+
 = nginx_accepts_handled.png =
 
 http://sites.google.com/site/bettercactitemplates/Home/nginx_accepts_handled.png
