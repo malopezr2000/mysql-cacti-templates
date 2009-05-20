@@ -1,0 +1,29 @@
+#summary Examples and documentation for the Unix templates
+
+= unix_context_switches.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/unix_context_switches.png
+
+= unix_cpu_usage.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/unix_cpu_usage.png
+
+= unix_forks.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/unix_forks.png
+
+= unix_interrupts.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/unix_interrupts.png
+
+= unix_load_average.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/unix_load_average.png
+
+= unix_memory.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/unix_memory.png
+
+= unix_number_of_users.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/unix_number_of_users.png
