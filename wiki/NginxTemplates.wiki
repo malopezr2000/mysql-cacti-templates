@@ -1,0 +1,13 @@
+#summary Examples and documentation for the Nginx templates
+
+= nginx_accepts_handled.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/nginx_accepts_handled.png
+
+= nginx_requests.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/nginx_requests.png
+
+= nginx_scoreboard.png =
+
+http://sites.google.com/site/bettercactitemplates/Home/nginx_scoreboard.png
