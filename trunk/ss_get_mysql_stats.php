@@ -29,6 +29,7 @@
 # ============================================================================
 $mysql_user = 'cactiuser';
 $mysql_pass = 'cactiuser';
+$mysql_port = 3306;
 
 $heartbeat  = '';      # db.tbl in case you use mk-heartbeat from Maatkit.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
@@ -133,7 +134,7 @@ if ( !function_exists('array_change_key_case') ) {
 # Validate that the command-line options are here and correct
 # ============================================================================
 function validate_options($options) {
-   $opts = array('host', 'items', 'user', 'pass', 'heartbeat', 'nocache');
+   $opts = array('host', 'items', 'user', 'pass', 'heartbeat', 'nocache', 'port');
    # Required command-line options
    foreach ( array('host', 'items') as $option ) {
       if ( !isset($options[$option]) || !$options[$option] ) {
@@ -151,7 +152,7 @@ function validate_options($options) {
 # Print out a brief usage summary
 # ============================================================================
 function usage($message) {
-   global $mysql_user, $mysql_pass, $heartbeat;
+   global $mysql_user, $mysql_pass, $mysql_port, $heartbeat;
 
    $usage = <<<EOF
 $message
@@ -164,6 +165,7 @@ Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
    --pass      MySQL password; defaults to $mysql_pass if not given
    --heartbeat MySQL heartbeat table; defaults to '$heartbeat' (see mk-heartbeat)
    --nocache   Do not cache results in a file
+   --port      MySQL port; defaults to $mysql_port if not given
 
 EOF;
    die($usage);
@@ -215,13 +217,16 @@ function parse_cmdline( $args ) {
 function ss_get_mysql_stats( $options ) {
    # Process connection options and connect to MySQL.
    global $debug, $mysql_user, $mysql_pass, $heartbeat, $cache_dir, $poll_time,
-          $chk_options;
+          $chk_options, $mysql_port;
 
    # Connect to MySQL.
    $user = isset($options['user']) ? $options['user'] : $mysql_user;
    $pass = isset($options['pass']) ? $options['pass'] : $mysql_pass;
+   $port = isset($options['port']) ? $options['port'] : $mysql_port;
    $heartbeat = isset($options['heartbeat']) ? $options['heartbeat'] : $heartbeat;
-   $conn = @mysql_connect($options['host'], $user, $pass);
+   $host_str  = $options['host']
+              . (isset($options['port']) ? ':' . $options['port'] : '');
+   $conn = @mysql_connect($host_str, $user, $pass);
    if ( !$conn ) {
       die("Can't connect to MySQL: " . mysql_error());
    }
