@@ -2220,11 +2220,16 @@
          hash         => 'hash_03_VER_a7b8dc9089ba40cbb293524024e51129',
          input_string =>
             '<path_php_binary> -q <path_cacti>/scripts/ss_get_mysql_stats.php '
-            . '--host <hostname> --items <items> --user <username> --pass <password>',
+            . '--host <hostname> --items <items> --user <username> --pass <password> '
+            . '--port <port>',
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_c89cbc8b1c987e050a310ee5414b2a02',
                name        => 'hostname',
+            },
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_161780da82a325e725612ea3285a5af5',
+               name        => 'port',
             },
             {  allow_nulls => 'on',
                hash        => 'hash_07_VER_181ee907dbb2bbfbfb3c6611f44e5625',
