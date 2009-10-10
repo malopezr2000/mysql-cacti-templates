@@ -224,8 +224,10 @@ function ss_get_mysql_stats( $options ) {
    $pass = isset($options['pass']) ? $options['pass'] : $mysql_pass;
    $port = isset($options['port']) ? $options['port'] : $mysql_port;
    $heartbeat = isset($options['heartbeat']) ? $options['heartbeat'] : $heartbeat;
+   # If there is a port, or if it's a non-standard port, we add ":$port" to the
+   # hostname.
    $host_str  = $options['host']
-              . (isset($options['port']) ? ':' . $options['port'] : '');
+              . (isset($options['port']) || $port != 3306 ? ":$port" : '');
    $conn = @mysql_connect($host_str, $user, $pass);
    if ( !$conn ) {
       die("MySQL: " . mysql_error());
