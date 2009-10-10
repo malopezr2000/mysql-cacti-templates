@@ -192,7 +192,7 @@ function parse_cmdline( $args ) {
                $cur_arg = '';
             }
             else {
-               die("Missing argument to $cur_arg\n");
+               die("No arg: $cur_arg\n");
             }
          }
          else {
@@ -205,7 +205,7 @@ function parse_cmdline( $args ) {
       }
    }
    if ( $cur_arg && ($cur_arg != '--user' && $cur_arg != '--pass') ) {
-      die("Missing argument to $cur_arg\n");
+      die("No arg: $cur_arg\n");
    }
    return $result;
 }
@@ -228,7 +228,7 @@ function ss_get_mysql_stats( $options ) {
               . (isset($options['port']) ? ':' . $options['port'] : '');
    $conn = @mysql_connect($host_str, $user, $pass);
    if ( !$conn ) {
-      die("Can't connect to MySQL: " . mysql_error());
+      die("MySQL: " . mysql_error());
    }
 
    $sanitized_host
@@ -262,7 +262,7 @@ function ss_get_mysql_stats( $options ) {
          }
       }
       if ( !$fp = fopen($cache_file, 'w+') ) {
-         die("Cannot open file '$cache_file'");
+         die("Can't open '$cache_file'");
       }
    }
 
@@ -730,7 +730,7 @@ function ss_get_mysql_stats( $options ) {
    $result = implode(' ', $output);
    if ( $fp ) {
       if ( fwrite($fp, $result) === FALSE ) {
-         die("Cannot write to '$cache_file'");
+         die("Can't write '$cache_file'");
       }
       fclose($fp);
       run_query("SELECT RELEASE_LOCK('cacti_monitoring')", $conn);
@@ -783,7 +783,7 @@ function run_query($sql, $conn) {
    if ( $debug ) {
       $error = @mysql_error($conn);
       if ( $error ) {
-         die("Error executing '$sql': $error");
+         die("SQL Error $error in $sql");
       }
    }
    return $result;
