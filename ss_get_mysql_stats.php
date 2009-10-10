@@ -204,7 +204,7 @@ function parse_cmdline( $args ) {
          $cur_arg = '';
       }
    }
-   if ( $cur_arg && ($cur_arg != '--user' && $cur_arg != '--pass') ) {
+   if ( $cur_arg && ($cur_arg != '--user' && $cur_arg != '--pass' && $cur_arg != '--port') ) {
       die("No arg: $cur_arg\n");
    }
    return $result;
