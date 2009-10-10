@@ -16,7 +16,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA.
 
 {
-   name   => 'DB Server',
+   name   => 'MySQL Server',
    hash   => 'hash_02_VER_3df221ff7893faad48ecc15026687215',
    graphs => [
       {  base_value => '1000',
