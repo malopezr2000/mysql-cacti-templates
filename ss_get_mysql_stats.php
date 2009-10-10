@@ -187,8 +187,8 @@ function parse_cmdline( $args ) {
             $cur_arg = '';
          }
          elseif ( $cur_arg ) { # Maybe the last --arg was an option with no arg
-            if ( $cur_arg == '--user' || $cur_arg == '--pass' ) {
-               # Special case because Cacti will pass --user without an arg
+            if ( $cur_arg == '--user' || $cur_arg == '--pass' || $cur_arg == '--port' ) {
+               # Special case because Cacti will pass these without an arg
                $cur_arg = '';
             }
             else {
