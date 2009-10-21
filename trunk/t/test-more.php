@@ -134,6 +134,19 @@ function is($this, $that, $test_name = '')
     return $pass;
 }
 
+function is_deeply($this, $that, $test_name = '')
+{
+   $diff1 = array_diff_assoc($this, $that);
+   $diff2 = array_diff_assoc($that, $this);
+   $pass = count($diff1) == 0;
+   ok($pass, $test_name);
+   if ( !$pass ) {
+      diag("         got: " . var_export($diff1, true));
+      diag("    expected: " . var_export($diff2, true));
+   }
+   return $pass;
+}
+
 function isnt($this, $that, $test_name = '')
 {
     $pass = ($this != $that);

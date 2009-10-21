@@ -27,8 +27,8 @@
 # here, you can define them in another file named the same as this file, with a
 # .cnf extension.
 # ============================================================================
-$mysql_user = 'cactiuser';
-$mysql_pass = 'cactiuser';
+$mysql_user = 'cacti';
+$mysql_pass = 'cacti';
 $mysql_port = 3306;
 
 $heartbeat  = '';      # db.tbl in case you use mk-heartbeat from Maatkit.
