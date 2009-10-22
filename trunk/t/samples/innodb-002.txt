@@ -16,9 +16,9 @@ I/O thread 0 state: waiting for i/o request (insert buffer thread)
 I/O thread 1 state: waiting for i/o request (log thread)
 I/O thread 2 state: waiting for i/o request (read thread)
 I/O thread 3 state: waiting for i/o request (write thread)
-Pending normal aio reads: 0, aio writes: 0,
- ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
-Pending flushes (fsync) log: 0; buffer pool: 0
+Pending normal aio reads: 1, aio writes: 2,
+ ibuf aio reads: 1, log i/o's: 2, sync i/o's: 3
+Pending flushes (fsync) log: 1; buffer pool: 2
 8782182 OS file reads, 15635445 OS file writes, 947800 OS fsyncs
 28.41 reads/s, 25569 avg bytes/read, 23.00 writes/s, 2.26 fsyncs/s
 -------------------------------------
@@ -37,7 +37,7 @@ Last checkpoint at  13093217877062
 Max checkpoint age  847455806
 Modified age        731618794
 Checkpoint age      731618794
-0 pending log writes, 0 pending chkp writes
+1 pending log writes, 2 pending chkp writes
 3430041 log i/o's done, 17.44 log i/o's/second
 ----------------------
 BUFFER POOL AND MEMORY
@@ -54,7 +54,7 @@ Internal hash tables (constant factor + variable factor)
 Dictionary memory allocated 1561416
 Buffer pool size        1769471
 Buffer pool size, bytes 28991012864
-Free buffers            0
+Free buffers            1
 Database pages          1696503
 Modified db pages       160602
 Pending reads 0
@@ -67,7 +67,7 @@ I/O sum[2417]:cur[4], unzip sum[0]:cur[0]
 --------------
 ROW OPERATIONS
 --------------
-0 queries inside InnoDB, 0 queries in queue
+1 queries inside InnoDB, 2 queries in queue
 1 read views open inside InnoDB
 Main thread process no. 13510, id 1169914176, state: sleeping
 Number of rows inserted 50678311, updated 66425915, deleted 20605903, read 454561562
@@ -75,7 +75,7 @@ Number of rows inserted 50678311, updated 66425915, deleted 20605903, read 45456
 ------------
 TRANSACTIONS
 ------------
-Trx id counter 861B144C
+Trx id counter EF861B144C
 Purge done for trx's n:o < 861B135D undo n:o < 0
 History list length 132
 LIST OF TRANSACTIONS FOR EACH SESSION:

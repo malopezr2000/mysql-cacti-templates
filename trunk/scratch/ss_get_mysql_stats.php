@@ -609,6 +609,7 @@ function get_innodb_array($text) {
    );
    $txn_seen = FALSE;
    foreach ( explode("\n", $text) as $line ) {
+      $line = trim($line);
       $row = preg_split('/ +/', $line);
 
       # SEMAPHORES
@@ -639,9 +640,7 @@ function get_innodb_array($text) {
       elseif ( strpos($line, 'Purge done for trx') !== FALSE ) {
          # Purge done for trx's n:o < 0 1170663853 undo n:o < 0 0
          # Purge done for trx's n:o < 861B135D undo n:o < 0
-         $purged_to = $row[7]=='undo'
-                    ? to_int($row[6])
-                    : make_bigint($row[6], $row[7]);
+         $purged_to = make_bigint($row[6], $row[7] == 'undo' ? null : $row[7]);
          $results['unpurged_txns']
             = big_sub($results['innodb_transactions'], $purged_to);
       }
@@ -676,9 +675,9 @@ function get_innodb_array($text) {
       # FILE I/O
       elseif (strpos($line, 'OS file reads') !== FALSE ) {
          # 8782182 OS file reads, 15635445 OS file writes, 947800 OS fsyncs
-         $results['file_reads']  = to_int($row[0]);
-         $results['file_writes'] = to_int($row[4]);
-         $results['file_fsyncs'] = to_int($row[8]);
+         $results['file_reads']  = $row[0];
+         $results['file_writes'] = $row[4];
+         $results['file_fsyncs'] = $row[8];
       }
       elseif (strpos($line, 'Pending normal aio') !== FALSE ) {
          # Pending normal aio reads: 0, aio writes: 0,
@@ -687,9 +686,9 @@ function get_innodb_array($text) {
       }
       elseif (strpos($line, 'ibuf aio reads') !== FALSE ) {
          # ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
-         $results['pending_ibuf_aio_reads'] = to_int($row[4]);
-         $results['pending_aio_log_ios']    = to_int($row[7]);
-         $results['pending_aio_sync_ios']   = to_int($row[10]);
+         $results['pending_ibuf_aio_reads'] = to_int($row[3]);
+         $results['pending_aio_log_ios']    = to_int($row[6]);
+         $results['pending_aio_sync_ios']   = to_int($row[9]);
       }
       elseif ( strpos($line, 'Pending flushes (fsync)') !== FALSE ) {
          # Pending flushes (fsync) log: 0; buffer pool: 0
@@ -700,9 +699,9 @@ function get_innodb_array($text) {
       # INSERT BUFFER AND ADAPTIVE HASH INDEX
       elseif (strpos($line, 'merged recs') !== FALSE ) {
          # 19817685 inserts, 19817684 merged recs, 3552620 merges
-         $results['ibuf_inserts'] = to_int($row[0]);
-         $results['ibuf_merged']  = to_int($row[2]);
-         $results['ibuf_merges']  = to_int($row[5]);
+         $results['ibuf_inserts'] = $row[0];
+         $results['ibuf_merged']  = $row[2];
+         $results['ibuf_merges']  = $row[5];
       }
 
       # LOG
@@ -710,24 +709,30 @@ function get_innodb_array($text) {
          # 3430041 log i/o's done, 17.44 log i/o's/second
          # 520835887 log i/o's done, 17.28 log i/o's/second, 518724686 syncs, 2980893 checkpoints
          # TODO: graph syncs and checkpoints
-         $results['log_writes'] = to_int($row[0]);
+         $results['log_writes'] = $row[0];
       }
       elseif (strpos($line, "pending log writes") !== FALSE ) {
          # 0 pending log writes, 0 pending chkp writes
-         $results['pending_log_writes']  = to_int($row[0]);
-         $results['pending_chkp_writes'] = to_int($row[4]);
+         $results['pending_log_writes']  = $row[0];
+         $results['pending_chkp_writes'] = $row[4];
       }
       elseif (strpos($line, "Log sequence number") !== FALSE ) {
-         # Log sequence number 13093949495856
-         # Log sequence number 125 3934414864
+         # This number is NOT printed in hex in InnoDB plugin.
+         # Log sequence number 13093949495856 //plugin
+         # Log sequence number 125 3934414864 //normal
          $results['innodb_lsn']
-            = isset($row[4]) ? make_bigint($row[3], $row[4])
-            : to_int($row[3]);
+            = isset($row[4])
+            ? make_bigint($row[3], $row[4])
+            : $row[3];
       }
       elseif (strpos($line, "Log flushed up to") !== FALSE ) {
+         # This number is NOT printed in hex in InnoDB plugin.
          # Log flushed up to   13093948219327
          # Log flushed up to   125 3934414864
-         $results['flushed_to'] = make_bigint($row[4], $row[5]);
+         $results['flushed_to']
+            = isset($row[5])
+            ? make_bigint($row[4], $row[5])
+            : $row[4];
       }
 
       # BUFFER POOL AND MEMORY
