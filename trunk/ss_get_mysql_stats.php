@@ -280,7 +280,9 @@ function ss_get_mysql_stats( $options ) {
       'locked_transactions'   => null,
       'active_transactions'   => null,
       'innodb_locked_tables'  => null,
+      'innodb_tables_in_use'  => null,
       'innodb_lock_structs'   => null,
+      'innodb_lock_wait_secs' => null,
       # Values for the 'state' column from SHOW PROCESSLIST (converted to
       # lowercase, with spaces replaced by underscores)
       'State_closing_tables'       => null,
@@ -583,6 +585,13 @@ function ss_get_mysql_stats( $options ) {
        'Handler_savepoint_rollback' => 'du',
        'Handler_update'             => 'dv',
        'Handler_write'              => 'dw',
+       # Some InnoDB stats added later...
+       'innodb_tables_in_use'       => 'dx',
+       'innodb_lock_wait_secs'      => 'dy',
+       'hash_index_cells_total'     => 'dz',
+       'hash_index_cells_used'      => 'e0',
+       'total_mem_alloc'            => 'e1',
+       'additional_pool_alloc'      => 'e2',
    );
 
    # Return the output.
@@ -663,6 +672,10 @@ function get_innodb_array($text) {
             increment($results, 'active_transactions', 1);
          }
       }
+      elseif ( $txn_seen && strpos($line, '------- TRX HAS BEEN') === 0 ) {
+         # ------- TRX HAS BEEN WAITING 32 SEC FOR THIS LOCK TO BE GRANTED:
+         increment($results, 'innodb_lock_wait_secs', to_int($row[5]));
+      }
       elseif ( $txn_seen && strpos($line, 'LOCK WAIT') === 0 ) {
          # LOCK WAIT 2 lock struct(s), heap size 368
          increment($results, 'locked_transactions', 1);
@@ -673,6 +686,7 @@ function get_innodb_array($text) {
       }
       elseif ( strpos($line, 'mysql tables in use') === 0 ) {
          # mysql tables in use 2, locked 2
+         increment($results, 'innodb_tables_in_use', to_int($row[4]));
          increment($results, 'innodb_locked_tables', to_int($row[6]));
       }
       elseif ( strpos($line, 'lock struct(s)') > 0 ) {
@@ -712,6 +726,13 @@ function get_innodb_array($text) {
          $results['ibuf_merged']  = to_int($row[2]);
          $results['ibuf_merges']  = to_int($row[5]);
       }
+      elseif (strpos($line, 'Hash table size ') === 0 ) {
+         # In some versions of InnoDB, the used cells is omitted.
+         # Hash table size 4425293, used cells 4229064, ....
+         # Hash table size 57374437, node heap has 72964 buffer(s) <-- no used cells
+         $results['hash_index_cells_total'] = to_int($row[3]);
+         $results['hash_index_cells_used']  = to_int($row[6]);
+      }
 
       # LOG
       elseif (strpos($line, " log i/o's done, ") > 0 ) {
@@ -745,6 +766,11 @@ function get_innodb_array($text) {
       }
 
       # BUFFER POOL AND MEMORY
+      elseif (strpos($line, "Total memory allocated") === 0 ) {
+         # Total memory allocated 29642194944; in additional pool allocated 0
+         $results['total_mem_alloc']       = to_int($row[3]);
+         $results['additional_pool_alloc'] = to_int($row[8]);
+      }
       elseif (strpos($line, "Buffer pool size ") === 0 ) {
          # The " " after size is necessary to avoid matching the wrong line:
          # Buffer pool size        1769471

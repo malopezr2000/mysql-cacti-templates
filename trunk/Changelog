@@ -1,5 +1,9 @@
 Changes for templates:
 
+	* Added innodb_lock_wait_secs (issue 32).
+	* Added hash_index_cells_total and hash_index_cells_used (issue 32).
+	* Added total_mem_alloc and additional_pool_alloc (issue 32).
+
 2009-10-24: version 1.1.3
 
 	* This is a bug-fix release only, and contains no template changes.
