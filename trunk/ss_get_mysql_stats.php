@@ -659,11 +659,11 @@ function get_innodb_array($text) {
       elseif ( $txn_seen && strpos($line, '---TRANSACTION') === 0 ) {
          # ---TRANSACTION 0, not started, process no 13510, OS thread id 1170446656
          increment($results, 'current_transactions', 1);
-         if ( strpos($line, 'ACTIVE') !== FALSE  ) {
+         if ( strpos($line, 'ACTIVE') > 0 ) {
             increment($results, 'active_transactions', 1);
          }
       }
-      elseif ( $txn_seen && strpos($line, 'LOCK WAIT') !== FALSE  ) {
+      elseif ( $txn_seen && strpos($line, 'LOCK WAIT') === 0 ) {
          # LOCK WAIT 2 lock struct(s), heap size 368
          increment($results, 'locked_transactions', 1);
       }
