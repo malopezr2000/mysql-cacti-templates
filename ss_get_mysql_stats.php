@@ -21,14 +21,21 @@
 # ============================================================================
 
 # ============================================================================
+# To make this code testable, we need to prevent code from running when it is
+# included from the test script.  The test script and this file have different
+# filenames, so we can compare them.
+# ============================================================================
+if ( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) ) {
+
+# ============================================================================
 # Define MySQL connection constants in config.php.  Arguments explicitly passed
 # in from Cacti will override these.  However, if you leave them blank in Cacti
 # and set them here, you can make life easier.  Instead of defining parameters
 # here, you can define them in another file named the same as this file, with a
 # .cnf extension.
 # ============================================================================
-$mysql_user = 'cacti';
-$mysql_pass = 'cacti';
+$mysql_user = 'cactiuser';
+$mysql_pass = 'cactiuser';
 $mysql_port = 3306;
 
 $heartbeat  = '';      # db.tbl in case you use mk-heartbeat from Maatkit.
@@ -45,6 +52,7 @@ $use_ss     = FALSE; # Whether to use the script server or not
 # ============================================================================
 # You should not need to change anything below this line.
 # ============================================================================
+$version = "1.1.3";
 
 # ============================================================================
 # Include settings from an external config file (issue 39).
@@ -52,16 +60,6 @@ $use_ss     = FALSE; # Whether to use the script server or not
 if ( file_exists(__FILE__ . '.cnf' ) ) {
    require(__FILE__ . '.cnf');
 }
-
-# ============================================================================
-# TODO items, if anyone wants to improve this script:
-# * Make sure that this can be called by the script server.
-# * Calculate query cache fragmentation as a percentage, something like
-#   $status['Qcache_frag_bytes']
-#     = $status['Qcache_free_blocks'] / $status['Qcache_total_blocks']
-#        * $status['query_cache_size'];
-# * Calculate relay log position lag
-# ============================================================================
 
 # ============================================================================
 # Define whether you want debugging behavior.
@@ -85,7 +83,7 @@ if ( $use_ss ) {
       include_once(dirname(__FILE__) . "/../include/global.php");
    }
    elseif ( file_exists( dirname(__FILE__) . "/../include/config.php" ) ) {
-      # Some versions don't have global.php.
+      # Some Cacti installations don't have global.php.
       include_once(dirname(__FILE__) . "/../include/config.php");
    }
 }
@@ -115,6 +113,11 @@ if (!isset($called_by_script_server)) {
       }
    }
    print(implode(' ', $output));
+}
+
+# ============================================================================
+# End "if file was not included" section.
+# ============================================================================
 }
 
 # ============================================================================
@@ -271,7 +274,6 @@ function ss_get_mysql_stats( $options ) {
    # Set up variables.
    $status = array( # Holds the result of SHOW STATUS, SHOW INNODB STATUS, etc
       # Define some indexes so they don't cause errors with += operations.
-      'transactions'          => null,
       'relay_log_space'       => null,
       'binary_log_space'      => null,
       'current_transactions'  => null,
@@ -306,18 +308,17 @@ function ss_get_mysql_stats( $options ) {
       $status[$row[0]] = $row[1];
    }
 
-   # Get SHOW VARIABLES and convert the name-value array into a simple
-   # associative array.
+   # Get SHOW VARIABLES and do the same thing, adding it to the $status array.
    $result = run_query("SHOW VARIABLES", $conn);
    while ($row = @mysql_fetch_row($result)) {
       $status[$row[0]] = $row[1];
    }
 
-   # Get SHOW SLAVE STATUS.
+   # Get SHOW SLAVE STATUS, and add it to the $status array.
    if ( $chk_options['slave'] ) {
       $result = run_query("SHOW SLAVE STATUS", $conn);
       while ($row = @mysql_fetch_assoc($result)) {
-         # Must lowercase keys because different versions have different
+         # Must lowercase keys because different MySQL versions have different
          # lettercase.
          $row = array_change_key_case($row, CASE_LOWER);
          $status['relay_log_space']  = $row['relay_log_space'];
@@ -340,27 +341,26 @@ function ss_get_mysql_stats( $options ) {
       }
    }
 
-   # Get info on master logs. TODO: is there a way to do this without querying
-   # mysql again?
-   $binlogs = array(0);
+   # Get SHOW MASTER STATUS, and add it to the $status array.
    if ( $chk_options['master'] && $status['log_bin'] == 'ON' ) { # See issue #8
+      $binlogs = array(0);
       $result = run_query("SHOW MASTER LOGS", $conn);
       while ($row = @mysql_fetch_assoc($result)) {
          $row = array_change_key_case($row, CASE_LOWER);
          # Older versions of MySQL may not have the File_size column in the
          # results of the command.  Zero-size files indicate the user is
-         # deleting binlogs manually from disk (bad user! bad!) but we should
-         # not croak with a thread-stack error just because of the bad user.
+         # deleting binlogs manually from disk (bad user! bad!).
          if ( array_key_exists('file_size', $row) && $row['file_size'] > 0 ) {
             $binlogs[] = $row['file_size'];
          }
-         else {
-            break;
-         }
+      }
+      if (count($binlogs)) {
+         $status['binary_log_space'] = to_int(array_sum($binlogs));
       }
    }
 
-   # Get SHOW PROCESSLIST and aggregate it.
+   # Get SHOW PROCESSLIST and aggregate it by state, then add it to the array
+   # too.
    if ( $chk_options['procs'] ) {
       $result = run_query('SHOW PROCESSLIST', $conn);
       while ($row = @mysql_fetch_assoc($result)) {
@@ -381,196 +381,55 @@ function ss_get_mysql_stats( $options ) {
       }
    }
 
-   # Get SHOW INNODB STATUS and extract the desired metrics from it. See issue
-   # #8.
-   $innodb_txn      = false;
-   $innodb_complete = false;
+   # Get SHOW INNODB STATUS and extract the desired metrics from it, then add
+   # those to the array too.
    if ( $chk_options['innodb'] && $status['have_innodb'] == 'YES' ) {
       $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
       $innodb_array  = @mysql_fetch_assoc($result);
-      $flushed_to    = false;
-      $innodb_lsn    = false;
-      $innodb_prg    = false;
-      $is_plugin     = false;
-      $spin_waits    = array();
-      $spin_rounds   = array();
-      $os_waits      = array();
-      foreach ( explode("\n", $innodb_array['Status']) as $line ) {
-         $row = explode(' ', $line);
+      $istatus_text = $innodb_array['Status'];
+      $istatus_vals = get_innodb_array($istatus_text);
 
-         # SEMAPHORES
-         if (strpos($line, 'Mutex spin waits') !== FALSE ) {
-            $spin_waits[]  = tonum($row[3]);
-            $spin_rounds[] = tonum($row[5]);
-            $os_waits[]    = tonum($row[8]);
-         }
-         elseif (strpos($line, 'RW-shared spins') !== FALSE ) {
-            $spin_waits[] = tonum($row[2]);
-            $spin_waits[] = tonum($row[8]);
-            $os_waits[]   = tonum($row[5]);
-            $os_waits[]   = tonum($row[11]);
-         }
+      # Override values from InnoDB parsing with values from SHOW STATUS,
+      # because InnoDB status might not have everything and the SHOW STATUS is
+      # to be preferred where possible.
+      $overrides = array(
+         'Innodb_buffer_pool_pages_data'  => 'database_pages',
+         'Innodb_buffer_pool_pages_dirty' => 'modified_pages',
+         'Innodb_buffer_pool_pages_free'  => 'free_pages',
+         'Innodb_buffer_pool_pages_total' => 'pool_size',
+         'Innodb_buffer_pool_reads'       => 'pages_read',
+         'Innodb_data_fsyncs'             => 'file_fsyncs',
+         'Innodb_data_pending_reads'      => 'pending_normal_aio_reads',
+         'Innodb_data_pending_writes'     => 'pending_normal_aio_writes',
+         'Innodb_os_log_pending_fsyncs'   => 'pending_log_flushes',
+         'Innodb_pages_created'           => 'pages_created',
+         'Innodb_pages_read'              => 'pages_read',
+         'Innodb_pages_written'           => 'pages_written',
+         'Innodb_rows_deleted'            => 'rows_deleted',
+         'Innodb_rows_inserted'           => 'rows_inserted',
+         'Innodb_rows_read'               => 'rows_read',
+         'Innodb_rows_updated'            => 'rows_updated',
+      );
 
-         # TRANSACTIONS
-         elseif ( strpos($line, 'Trx id counter') !== FALSE ) {
-            # The beginning of the TRANSACTIONS section: start counting
-            # transactions
-            $innodb_txn = isset($row[4]) ? array($row[3], $row[4]) : tonum($row[3]);
-         }
-         elseif (strpos($line, 'Purge done for trx') !== FALSE ) {
-            # PHP can't do big math, so I send it to MySQL.
-            $innodb_prg = $row[7]=='undo' ? tonum($row[6]) : array($row[6], $row[7]);
-         }
-         elseif (strpos($line, 'History list length') !== FALSE ) {
-            $status['history_list'] = tonum($row[3]);
-         }
-         elseif ( $innodb_txn && strpos($line, '---TRANSACTION') !== FALSE ) {
-            increment($status, 'current_transactions', 1);
-            if ( strpos($line, 'ACTIVE') !== FALSE  ) {
-               increment($status, 'active_transactions', 1);
-            }
-         }
-         elseif ( $innodb_txn && strpos($line, 'LOCK WAIT') !== FALSE  ) {
-            increment($status, 'locked_transactions', 1);
-         }
-         elseif ( strpos($line, 'read views open inside') !== FALSE ) {
-            $status['read_views'] = tonum($row[0]);
-         }
-         elseif ( strpos($line, 'mysql tables in use') !== FALSE  ) {
-            increment($status, 'innodb_locked_tables', tonum($row[6]));
-         }
-         elseif ( strpos($line, 'lock struct(s) !== FALSE ') ) {
-            increment($status, 'innodb_lock_structs', tonum($row[0]));
-         }
-
-         # FILE I/O
-         elseif (strpos($line, 'OS file reads') !== FALSE ) {
-            $status['file_reads']  = tonum($row[0]);
-            $status['file_writes'] = tonum($row[4]);
-            $status['file_fsyncs'] = tonum($row[8]);
-         }
-         elseif (strpos($line, 'Pending normal aio') !== FALSE ) {
-            $status['pending_normal_aio_reads']  = tonum($row[4]);
-            $status['pending_normal_aio_writes'] = tonum($row[7]);
-         }
-         elseif (strpos($line, 'ibuf aio reads') !== FALSE ) {
-            $status['pending_ibuf_aio_reads'] = tonum($row[4]);
-            $status['pending_aio_log_ios']    = tonum($row[7]);
-            $status['pending_aio_sync_ios']   = tonum($row[10]);
-         }
-         elseif (strpos($line, 'Pending flushes (fsync) !== FALSE ')) {
-            $status['pending_log_flushes']      = tonum($row[4]);
-            $status['pending_buf_pool_flushes'] = tonum($row[7]);
-         }
-
-         # INSERT BUFFER AND ADAPTIVE HASH INDEX
-         elseif (strpos($line, 'merged recs') !== FALSE ) {
-            $status['ibuf_inserts'] = tonum($row[0]);
-            $status['ibuf_merged']  = tonum($row[2]);
-            $status['ibuf_merges']  = tonum($row[5]);
-         }
-
-         # LOG
-         elseif (strpos($line, "log i/o's done") !== FALSE ) {
-            $status['log_writes'] = tonum($row[0]);
-         }
-         elseif (strpos($line, "pending log writes") !== FALSE ) {
-            $status['pending_log_writes']  = tonum($row[0]);
-            $status['pending_chkp_writes'] = tonum($row[4]);
-         }
-         elseif (strpos($line, "Log sequence number") !== FALSE ) {
-            # 5.1 plugin displays differently (issue 52)
-            $innodb_lsn = isset($row[4]) ? array($row[3], $row[4]) : tonum($row[3]);
-         }
-         elseif (strpos($line, "Log flushed up to") !== FALSE ) {
-            # Since PHP can't handle 64-bit numbers, we'll ask MySQL to do it for
-            # us instead.  And we get it to cast them to strings, too.
-            $flushed_to = isset($row[7]) ? array($row[6], $row[7]) : tonum($row[6]);
-         }
-
-         # BUFFER POOL AND MEMORY
-         elseif (strpos($line, "Buffer pool size ") !== FALSE ) {
-            # 5.1 plugin displays differently (issue 52)
-            $status['pool_size'] = isset($row[10]) ? tonum($row[10]) : tonum($row[5]);
-         }
-         elseif (strpos($line, "Buffer pool size, bytes") !== FALSE ) {
-            $is_plugin = true;
-         }
-         elseif (strpos($line, "Free buffers") !== FALSE ) {
-             $status['free_pages'] = tonum($row[8]);
-         }
-         elseif (strpos($line, "Database pages") !== FALSE ) {
-             $status['database_pages'] = tonum($row[6]);
-         }
-         elseif (strpos($line, "Modified db pages") !== FALSE ) {
-             $status['modified_pages'] = tonum($row[4]);
-         }
-         elseif (strpos($line, "Pages read") !== FALSE  ) {
-             $status['pages_read']    = tonum($row[2]);
-             $status['pages_created'] = tonum($row[4]);
-             $status['pages_written'] = tonum($row[6]);
-         }
-
-         # ROW OPERATIONS
-         elseif (strpos($line, 'Number of rows inserted') !== FALSE ) {
-            $status['rows_inserted'] = tonum($row[4]);
-            $status['rows_updated']  = tonum($row[6]);
-            $status['rows_deleted']  = tonum($row[8]);
-            $status['rows_read']     = tonum($row[10]);
-         }
-         elseif (strpos($line, "queries inside InnoDB") !== FALSE ) {
-             $status['queries_inside'] = tonum($row[0]);
-             $status['queries_queued']  = tonum($row[4]);
+      # If the SHOW STATUS value exists, override...
+      foreach ( $overrides as $key => $val ) {
+         if ( array_key_exists($key, $status) ) {
+            $istatus_vals[$val] = $status[$key];
          }
       }
-      $innodb_complete
-         = strpos($innodb_array['Status'], 'END OF INNODB MONITOR OUTPUT');
+
+      # Now copy the values into $status.
+      foreach ( $istatus_vals as $key => $val ) {
+         $status[$key] = $istatus_vals[$key];
+      }
    }
 
-   if ( !$innodb_complete ) {
-      # TODO: Fill in some values with stuff from SHOW STATUS.
-   }
-
-   # Derive some values from other values.
-
-   # PHP sucks at bigint math, so we use MySQL to calculate things that are
-   # too big for it.
-   if ( $innodb_txn ) {
-      if (!$is_plugin) {
-         $txn = make_bigint_sql($innodb_txn[0], $innodb_txn[1]);
-         $lsn = make_bigint_sql($innodb_lsn[0], $innodb_lsn[1]);
-         $flu = make_bigint_sql($flushed_to[0], $flushed_to[1]);
-         $prg = make_bigint_sql($innodb_prg[0], $innodb_prg[1]);
-      }
-      else {
-         $txn = make_decimal_sql($innodb_txn);
-         $lsn = make_decimal_sql($innodb_lsn);
-         $flu = make_decimal_sql($flushed_to);
-         $prg = make_decimal_sql($innodb_prg);
-      }
-      $sql = "SELECT CONCAT('', $txn) AS innodb_transactions, "
-           . "CONCAT('', ($txn - $prg)) AS unpurged_txns, "
-           . "CONCAT('', $lsn) AS log_bytes_written, "
-           . "CONCAT('', $flu) AS log_bytes_flushed, "
-           . "CONCAT('', ($lsn - $flu)) AS unflushed_log, "
-           . "CONCAT('', " . implode('+', $spin_waits) . ") AS spin_waits, "
-           . "CONCAT('', " . implode('+', $spin_rounds) . ") AS spin_rounds, "
-           . "CONCAT('', " . implode('+', $os_waits) . ") AS os_waits";
-      # echo("$sql\n");
-      $result = run_query($sql, $conn);
-      while ( $row = @mysql_fetch_assoc($result) ) {
-         foreach ( $row as $key => $val ) {
-            $status[$key] = $val;
-         }
-      }
+   if ( $status['unflushed_log'] ) {
       # TODO: I'm not sure what the deal is here; need to debug this.  But the
       # unflushed log bytes spikes a lot sometimes and it's impossible for it to
       # be more than the log buffer.
       $status['unflushed_log']
          = max($status['unflushed_log'], $status['innodb_log_buffer_size']);
-   }
-   if (count($binlogs)) {
-      $status['binary_log_space'] = sprintf('%u', array_sum($binlogs));
    }
 
    # Define the variables to output.  I use shortened variable names so maybe
@@ -741,28 +600,217 @@ function ss_get_mysql_stats( $options ) {
 }
 
 # ============================================================================
-# Returns SQL to create a bigint from two ulint
+# Given INNODB STATUS text, returns a key-value array of the parsed text.  Each
+# line shows a sample of the input for both standard InnoDB as you would find in
+# MySQL 5.0, and XtraDB or enhanced InnoDB from Percona if applicable.
 # ============================================================================
-function make_bigint_sql ($hi, $lo) {
-   $hi = $hi ? $hi : '0'; # Handle empty-string or whatnot
-   $lo = $lo ? $lo : '0';
-   return "(($hi << 32) + $lo)";
+function get_innodb_array($text) {
+   $results  = array(
+      'spin_waits'  => array(),
+      'spin_rounds' => array(),
+      'os_waits'    => array(),
+   );
+   $txn_seen = FALSE;
+   foreach ( explode("\n", $text) as $line ) {
+      $line = trim($line);
+      $row = preg_split('/ +/', $line);
+
+      # SEMAPHORES
+      if (strpos($line, 'Mutex spin waits') === 0 ) {
+         # Mutex spin waits 79626940, rounds 157459864, OS waits 698719
+         # Mutex spin waits 0, rounds 247280272495, OS waits 316513438
+         $results['spin_waits'][]  = to_int($row[3]);
+         $results['spin_rounds'][] = to_int($row[5]);
+         $results['os_waits'][]    = to_int($row[8]);
+      }
+      elseif (strpos($line, 'RW-shared spins') === 0 ) {
+         # RW-shared spins 3859028, OS waits 2100750; RW-excl spins 4641946, OS waits 1530310
+         $results['spin_waits'][] = to_int($row[2]);
+         $results['spin_waits'][] = to_int($row[8]);
+         $results['os_waits'][]   = to_int($row[5]);
+         $results['os_waits'][]   = to_int($row[11]);
+      }
+
+      # TRANSACTIONS
+      elseif ( strpos($line, 'Trx id counter') === 0 ) {
+         # The beginning of the TRANSACTIONS section: start counting
+         # transactions
+         # Trx id counter 0 1170664159
+         # Trx id counter 861B144C
+         $results['innodb_transactions'] = make_bigint($row[3], $row[4]);
+         $txn_seen = TRUE;
+      }
+      elseif ( strpos($line, 'Purge done for trx') === 0 ) {
+         # Purge done for trx's n:o < 0 1170663853 undo n:o < 0 0
+         # Purge done for trx's n:o < 861B135D undo n:o < 0
+         $purged_to = make_bigint($row[6], $row[7] == 'undo' ? null : $row[7]);
+         $results['unpurged_txns']
+            = big_sub($results['innodb_transactions'], $purged_to);
+      }
+      elseif (strpos($line, 'History list length') === 0 ) {
+         # History list length 132
+         $results['history_list'] = to_int($row[3]);
+      }
+      elseif ( $txn_seen && strpos($line, '---TRANSACTION') === 0 ) {
+         # ---TRANSACTION 0, not started, process no 13510, OS thread id 1170446656
+         increment($results, 'current_transactions', 1);
+         if ( strpos($line, 'ACTIVE') !== FALSE  ) {
+            increment($results, 'active_transactions', 1);
+         }
+      }
+      elseif ( $txn_seen && strpos($line, 'LOCK WAIT') !== FALSE  ) {
+         # LOCK WAIT 2 lock struct(s), heap size 368
+         increment($results, 'locked_transactions', 1);
+      }
+      elseif ( strpos($line, 'read views open inside InnoDB') > 0 ) {
+         # 1 read views open inside InnoDB
+         $results['read_views'] = to_int($row[0]);
+      }
+      elseif ( strpos($line, 'mysql tables in use') === 0 ) {
+         # mysql tables in use 2, locked 2
+         increment($results, 'innodb_locked_tables', to_int($row[6]));
+      }
+      elseif ( strpos($line, 'lock struct(s)') > 0 ) {
+         # 23 lock struct(s), heap size 3024, undo log entries 27
+         increment($results, 'innodb_lock_structs', to_int($row[0]));
+      }
+
+      # FILE I/O
+      elseif (strpos($line, ' OS file reads, ') > 0 ) {
+         # 8782182 OS file reads, 15635445 OS file writes, 947800 OS fsyncs
+         $results['file_reads']  = to_int($row[0]);
+         $results['file_writes'] = to_int($row[4]);
+         $results['file_fsyncs'] = to_int($row[8]);
+      }
+      elseif (strpos($line, 'Pending normal aio reads:') === 0 ) {
+         # Pending normal aio reads: 0, aio writes: 0,
+         $results['pending_normal_aio_reads']  = to_int($row[4]);
+         $results['pending_normal_aio_writes'] = to_int($row[7]);
+      }
+      elseif (strpos($line, ' ibuf aio reads') === 0 ) {
+         # Note the extra leading space
+         #  ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
+         $results['pending_ibuf_aio_reads'] = to_int($row[3]);
+         $results['pending_aio_log_ios']    = to_int($row[6]);
+         $results['pending_aio_sync_ios']   = to_int($row[9]);
+      }
+      elseif ( strpos($line, 'Pending flushes (fsync)') === 0 ) {
+         # Pending flushes (fsync) log: 0; buffer pool: 0
+         $results['pending_log_flushes']      = to_int($row[4]);
+         $results['pending_buf_pool_flushes'] = to_int($row[7]);
+      }
+
+      # INSERT BUFFER AND ADAPTIVE HASH INDEX
+      elseif (strpos($line, ' merged recs, ') > 0 ) {
+         # 19817685 inserts, 19817684 merged recs, 3552620 merges
+         $results['ibuf_inserts'] = to_int($row[0]);
+         $results['ibuf_merged']  = to_int($row[2]);
+         $results['ibuf_merges']  = to_int($row[5]);
+      }
+
+      # LOG
+      elseif (strpos($line, " log i/o's done, ") > 0 ) {
+         # 3430041 log i/o's done, 17.44 log i/o's/second
+         # 520835887 log i/o's done, 17.28 log i/o's/second, 518724686 syncs, 2980893 checkpoints
+         # TODO: graph syncs and checkpoints
+         $results['log_writes'] = to_int($row[0]);
+      }
+      elseif (strpos($line, " pending log writes, ") > 0 ) {
+         # 0 pending log writes, 0 pending chkp writes
+         $results['pending_log_writes']  = to_int($row[0]);
+         $results['pending_chkp_writes'] = to_int($row[4]);
+      }
+      elseif (strpos($line, "Log sequence number") === 0 ) {
+         # This number is NOT printed in hex in InnoDB plugin.
+         # Log sequence number 13093949495856 //plugin
+         # Log sequence number 125 3934414864 //normal
+         $results['innodb_lsn']
+            = isset($row[4])
+            ? make_bigint($row[3], $row[4])
+            : to_int($row[3]);
+      }
+      elseif (strpos($line, "Log flushed up to") === 0 ) {
+         # This number is NOT printed in hex in InnoDB plugin.
+         # Log flushed up to   13093948219327
+         # Log flushed up to   125 3934414864
+         $results['flushed_to']
+            = isset($row[5])
+            ? make_bigint($row[4], $row[5])
+            : to_int($row[4]);
+      }
+
+      # BUFFER POOL AND MEMORY
+      elseif (strpos($line, "Buffer pool size ") === 0 ) {
+         # The " " after size is necessary to avoid matching the wrong line:
+         # Buffer pool size        1769471
+         # Buffer pool size, bytes 28991012864
+         $results['pool_size'] = to_int($row[3]);
+      }
+      elseif (strpos($line, "Free buffers") === 0 ) {
+         # Free buffers            0
+         $results['free_pages'] = to_int($row[2]);
+      }
+      elseif (strpos($line, "Database pages") === 0 ) {
+         # Database pages          1696503
+         $results['database_pages'] = to_int($row[2]);
+      }
+      elseif (strpos($line, "Modified db pages") === 0 ) {
+         # Modified db pages       160602
+         $results['modified_pages'] = to_int($row[3]);
+      }
+      elseif (strpos($line, "Pages read") === 0  ) {
+         # Pages read 15240822, created 1770238, written 21705836
+         $results['pages_read']    = to_int($row[2]);
+         $results['pages_created'] = to_int($row[4]);
+         $results['pages_written'] = to_int($row[6]);
+      }
+
+      # ROW OPERATIONS
+      elseif (strpos($line, 'Number of rows inserted') === 0 ) {
+         # Number of rows inserted 50678311, updated 66425915, deleted 20605903, read 454561562
+         $results['rows_inserted'] = to_int($row[4]);
+         $results['rows_updated']  = to_int($row[6]);
+         $results['rows_deleted']  = to_int($row[8]);
+         $results['rows_read']     = to_int($row[10]);
+      }
+      elseif (strpos($line, " queries inside InnoDB, ") > 0 ) {
+         # 0 queries inside InnoDB, 0 queries in queue
+         $results['queries_inside'] = to_int($row[0]);
+         $results['queries_queued'] = to_int($row[4]);
+      }
+   }
+
+   foreach ( array('spin_waits', 'spin_rounds', 'os_waits') as $key ) {
+      $results[$key] = to_int(array_sum($results[$key]));
+   }
+   return $results;
 }
 
+
 # ============================================================================
-# Baseconvert from hexidecimal to decimal
+# Returns a bigint from two ulint or a single hex number.
 # ============================================================================
-function make_decimal_sql($str) {
-   return "conv('$str', 16, 10)";
+function make_bigint ($hi, $lo = null) {
+   if ( is_null($lo) ) {
+      # Assume it is a hex string representation.
+      return base_convert($hi, 16, 10);
+   }
+   else {
+      $hi = $hi ? $hi : '0'; # Handle empty-string or whatnot
+      $lo = $lo ? $lo : '0';
+      return big_add(big_multiply($hi, 4294967296), $lo);
+   }
 }
 
 # ============================================================================
 # Extracts the numbers from a string.  You can't reliably do this by casting to
 # an int, because numbers that are bigger than PHP's int (varies by platform)
-# will be truncated.  So this just handles them as a string instead.  Note that
-# all bigint math is done by sending values in a query to MySQL!  :-)
+# will be truncated.  And you can't use sprintf(%u) either, because the maximum
+# value that will return on some platforms is 4022289582.  So this just handles
+# them as a string instead.  It extracts digits until it finds a non-digit and
+# quits.
 # ============================================================================
-function tonum ( $str ) {
+function to_int ( $str ) {
    global $debug;
    preg_match('{(\d+)}', $str, $m); 
    if ( isset($m[1]) ) {
@@ -785,7 +833,7 @@ function run_query($sql, $conn) {
    if ( $debug ) {
       $error = @mysql_error($conn);
       if ( $error ) {
-         die("SQL Error $error in $sql");
+         die("SQLERR $error in $sql");
       }
    }
    return $result;
@@ -796,10 +844,61 @@ function run_query($sql, $conn) {
 # ============================================================================
 function increment(&$arr, $key, $howmuch) {
    if ( array_key_exists($key, $arr) && isset($arr[$key]) ) {
-      $arr[$key] += $howmuch;
+      $arr[$key] = big_add($arr[$key], $howmuch);
    }
    else {
       $arr[$key] = $howmuch;
+   }
+}
+
+# ============================================================================
+# Multiply two big integers together as accurately as possible with reasonable
+# effort.
+# ============================================================================
+function big_multiply ($left, $right) {
+   if ( function_exists("gmp_mul") ) {
+      return gmp_strval( gmp_mul( $left, $right ));
+   }
+   elseif ( function_exists("bcmul") ) {
+      return bcmul( $left, $right );
+   }
+   else {
+      return sprintf(".0f", $left * $right);
+   }
+}
+
+# ============================================================================
+# Subtract two big integers as accurately as possible with reasonable effort.
+# ============================================================================
+function big_sub ($left, $right) {
+   if ( is_null($left)  ) { $left = 0; }
+   if ( is_null($right) ) { $right = 0; }
+   if ( function_exists("gmp_sub") ) {
+      return gmp_strval( gmp_sub( $left, $right ));
+   }
+   elseif ( function_exists("bcsub") ) {
+      return bcsub( $left, $right );
+   }
+   else {
+      return to_int($left - $right);
+   }
+}
+
+# ============================================================================
+# Add two big integers together as accurately as possible with reasonable
+# effort.
+# ============================================================================
+function big_add ($left, $right) {
+   if ( is_null($left)  ) { $left = 0; }
+   if ( is_null($right) ) { $right = 0; }
+   if ( function_exists("gmp_add") ) {
+      return gmp_strval( gmp_add( $left, $right ));
+   }
+   elseif ( function_exists("bcadd") ) {
+      return bcadd( $left, $right );
+   }
+   else {
+      return to_int($left + $right);
    }
 }
 
