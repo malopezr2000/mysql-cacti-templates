@@ -1,8 +1,6 @@
 <?php
 require('test-more.php');
-require('../scratch/ss_get_mysql_stats.php');
-
-plan(4);
+require('../ss_get_mysql_stats.php');
 
 is(
    make_bigint('0', '1170663853'),
@@ -26,6 +24,12 @@ is(
    big_sub('74900191315', '1170664159'),
    '73729527156',
    'big_sub 1170664159 74900191315'
+);
+
+is(
+   big_multiply('74900191315', '1170664159'),
+   '87682969474713583616',
+   'big_multiply 74900191315 and 1170664159'
 );
 
 is_deeply(
