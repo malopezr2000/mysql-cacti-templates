@@ -1,5 +1,21 @@
 Changes for templates:
 
+2009-10-24: version 1.1.3
+
+	* Added a version number to the script (partial fix for issue 79).
+	* Added a test suite (issue 76, issue 59).
+	* Math operations were done in MySQL instead of PHP (issue 25).
+	* SHOW STATUS values didn't override SHOW INNODB STATUS parsing (issue 24).
+	* Long error messages were not appearing in the Cacti log.
+	* SHOW INNODB STATUS parsing for unpurged_txns was broken.
+	* SHOW INNODB STATUS parsing for innodb_lock_structs was broken.
+	* SHOW INNODB STATUS parsing for pending_log_flushes was broken (issue 62).
+	* SHOW INNODB STATUS parsing for pending_buf_pool_flushes was broken.
+	* SHOW INNODB STATUS parsing for pending_ibuf_aio_reads was broken.
+	* SHOW INNODB STATUS parsing for pending_aio_log_ios was broken.
+	* SHOW INNODB STATUS parsing for pending_aio_sync_ios was broken.
+	* Made SHOW INNODB STATUS parsing less sensitive to false positive matches.
+
 2009-05-07: version 1.1.2
 
 	* The parsing code did not handle InnoDB plugin / XtraDB (issue 52).
