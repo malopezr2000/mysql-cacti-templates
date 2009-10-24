@@ -1,8 +1,11 @@
 Changes for templates:
 
-	* Added innodb_lock_wait_secs (issue 32).
-	* Added hash_index_cells_total and hash_index_cells_used (issue 32).
-	* Added total_mem_alloc and additional_pool_alloc (issue 32).
+	* Added active and locked transactions to the InnoDB Transactions graph.
+	* Added the InnoDB Memory Allocation graph.
+	* Added the InnoDB Adaptive Hash Index graph.
+	* Added the InnoDB Tables In Use graph.
+	* Added the InnoDB Current Lock Waits graph.
+	* Added the InnoDB Lock Structures graph.
 
 2009-10-24: version 1.1.3
 
