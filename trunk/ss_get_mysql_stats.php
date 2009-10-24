@@ -314,6 +314,11 @@ function ss_get_mysql_stats( $options ) {
       $status[$row[0]] = $row[1];
    }
 
+   # Make table_open_cache backwards-compatible (issue 63).
+   if ( array_key_exists('table_open_cache', $status) ) {
+      $status['table_cache'] = $status['table_open_cache'];
+   }
+
    # Get SHOW SLAVE STATUS, and add it to the $status array.
    if ( $chk_options['slave'] ) {
       $result = run_query("SHOW SLAVE STATUS", $conn);
