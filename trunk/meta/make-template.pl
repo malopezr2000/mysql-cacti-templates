@@ -814,13 +814,23 @@ foreach my $g ( @{ $t->{graphs} } ) {
       }
    }
 }
-if ( @key_not_used_in_graph || @key_not_in_dt || @key_not_in_script ) {
+
+# Check for items defined in the PHP file but not used by the template
+my %used_php_keys;
+foreach my $i ( keys %{$t->{inputs}} ) {
+   foreach my $key ( keys %{$t->{inputs}->{$i}->{outputs}} ) {
+      $used_php_keys{$key}++;
+   }
+}
+my @unused_php_keys = grep { !$used_php_keys{$_} } keys %short_names;
+
+if ( @unused_php_keys || @key_not_used_in_graph || @key_not_in_dt || @key_not_in_script ) {
+   print STDERR "Keys in PHP not used: " . join(',', @unused_php_keys), "\n";
    print STDERR "Keys in GT not in DT: " . join(',', @key_not_in_dt), "\n";
    print STDERR "Keys in DT not in DS: " . join(',', @key_not_in_script), "\n";
    print STDERR "Keys in DT not in GT: " . join(',', @key_not_used_in_graph), "\n";
    exit;
 }
-
 
 es('cacti');
 
