@@ -116,6 +116,17 @@ This method still has the disadvantage that it works only if you use the same gl
 
 TODO
 
-==Testing==
-
 ==Creating Graphs==
+
+Creating graphs is the easiest step of the process.
+
+  # In Cacti's Console tab, browse to the "Devices" link in the sidebar and click on the device you'd like to graph.
+  # The third item from the top of the screen should say *Host Template*.  Change this to the name of the template you imported, such as "X MySQL Server HT."
+  # Scroll to the bottom of the page and click the Save button.
+  # After the page loads, click on the "Create Graphs for this Host" link at the top of the page.
+  # Tick the checkbox at the top right of the list of graph templates.  This should select every graph template that applies to this host but doesn't exist yet.
+  # Scroll to the bottom of the page and click the Create button.
+
+If you're upgrading from an earlier version of the template, you might need to change the Host Template to None, submit the change, and then change it back to the desired template after the page reloads.
+
+After you create the graphs, wait until the poller runs once, and then check to make sure your new graphs render as images.
