@@ -814,6 +814,8 @@ function get_innodb_array($text) {
    foreach ( array('spin_waits', 'spin_rounds', 'os_waits') as $key ) {
       $results[$key] = to_int(array_sum($results[$key]));
    }
+   $results['unflushed_log']
+      = big_sub($results['innodb_lsn'], $results['flushed_to']);
    return $results;
 }
 
