@@ -28,6 +28,8 @@
 if ( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) ) {
 
 # ============================================================================
+# CONFIGURATION
+# ============================================================================
 # Define MySQL connection constants in config.php.  Arguments explicitly passed
 # in from Cacti will override these.  However, if you leave them blank in Cacti
 # and set them here, you can make life easier.  Instead of defining parameters
