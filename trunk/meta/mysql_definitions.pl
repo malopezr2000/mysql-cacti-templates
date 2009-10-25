@@ -1643,10 +1643,10 @@
       },
       {  name => 'InnoDB Active/Locked Transactions',
          base_value => '1000',
-         hash  => 'hash_00_VER_51903a7fa74d34dbbb9ab47203b7362b',
+         hash  => 'hash_00_VER_83cf2f5e78ba74636b9f120df2654063',
          dt         => {
             input   => 'Get MySQL Stats',
-            hash    => 'hash_01_VER_fbbf7f38a0a20613dc79003f0c702084',
+            hash    => 'hash_01_VER_3a6e3e24135e70a33bea0f25f5ea2059',
             active_transactions => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_70851dc8e5505d68d94785481b2423d0',
