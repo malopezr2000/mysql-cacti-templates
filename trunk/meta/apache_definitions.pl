@@ -19,6 +19,10 @@
 {
    name   => 'Apache Server',
    hash   => 'hash_02_VER_f74237cf7fb53fc002b0215117856be3',
+   version => {
+      version => '1.1.4',
+      hash    => 'hash_06_VER_ac10705723a27cae224aa85dc7e38cd0',
+   },
    graphs => [
       {  name       => 'Apache Requests',
          base_value => '1000',

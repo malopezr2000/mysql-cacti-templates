@@ -19,6 +19,10 @@
 {
    name   => 'Nginx Server',
    hash   => 'hash_02_VER_be7718e794244e2cf363bbb64c0cb705',
+   version => {
+      version => '1.1.4',
+      hash    => 'hash_06_VER_ac10705723a27cae224aa85dc7e38cdd',
+   },
    graphs => [
       {  name       => 'Nginx Requests',
          base_value => '1000',
