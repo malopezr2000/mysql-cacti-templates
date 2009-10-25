@@ -37,7 +37,7 @@ Copy the PHP scripts into your Cacti installation's scripts directory, on the se
 root@cactiserver# cp ss_get_mysql_stats.php /usr/share/cacti/site/scripts
 }}}
 
-Now import the template files through your web browser.  In the Cacti web interface's Console tab, click on the *Import Templates* link in the left sidebar.  Browse to the directory containing the unpacked templates, and select the XML file for the templates you're installing, and submit the form.  In our example, the file will be named something like `cacti_host_template_x_mysql_server_ht_0.8.6i.xml`.
+Now import the template files through your web browser.  In the Cacti web interface's Console tab, click on the *Import Templates* link in the left sidebar.  Browse to the directory containing the unpacked templates, select the XML file for the templates you're installing, and submit the form.  In our example, the file will be named something like `cacti_host_template_x_mysql_server_ht_0.8.6i.xml`.
 
 Inspect the page that results.  You should see something like the following:
 
