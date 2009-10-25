@@ -1,0 +1,13 @@
+#summary How to install templates downloaded from this project
+
+This page explains how to install and use the pre-built templates that ship with this project.  If the templates are not exactly what you need, see CustomizingTemplates.
+
+==Downloading==
+
+==Installing==
+
+==Configuring==
+
+==Testing==
+
+==Creating Graphs==
