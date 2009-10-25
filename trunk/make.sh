@@ -16,7 +16,7 @@ mkdir $DISTDIR
 cp -a $DISTFILES $DISTDIR
 
 # Build the template.xml files...
-perl meta/make-template.pl --script ss_get_mysql_stats.php meta/mysql_definitions.pl > ${DISTDIR}/cacti_host_template_x_db_server_ht_0.8.6i-sver${VERSION}.xml
+perl meta/make-template.pl --script ss_get_mysql_stats.php meta/mysql_definitions.pl > ${DISTDIR}/cacti_host_template_x_mysql_server_ht_0.8.6i-sver${VERSION}.xml
 for thing in apache gnu_linux memcached nginx; do
    perl meta/make-template.pl --script ss_get_by_ssh.php meta/${thing}_definitions.pl > ${DISTDIR}/cacti_host_template_x_${thing}_server_ht_0.8.6i-sver${VERSION}.xml
 done
