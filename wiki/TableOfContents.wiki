@@ -1,10 +1,12 @@
   * [FAQ] (Frequently Asked Questions)
-  * Templates
+  * Using the Ready-Made Templates
+    * InstallingTemplates
     * [MySQLTemplates]
     * ApacheTemplates
     * NginxTemplates
     * MemcachedTemplates
     * UnixTemplates
+  * Creating Your Own Templates
   * Developer Documentation
     * CreatingGraphs
     * CactiHashes
@@ -13,4 +15,4 @@
   * [http://code.google.com/p/mysql-cacti-templates/w/list List & Search Wiki Pages]
   * [http://code.google.com/p/mysql-cacti-templates/w/edit New Wiki Page]
 
-Comments on the wiki?  Bring them up on the mailing list.
+Comments on the wiki?  Please use the mailing list.
