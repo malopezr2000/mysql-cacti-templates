@@ -622,6 +622,7 @@ function ss_get_mysql_stats( $options ) {
        'hash_index_cells_used'      => 'e0',
        'total_mem_alloc'            => 'e1',
        'additional_pool_alloc'      => 'e2',
+       'uncheckpointed_bytes'       => 'e3',
    );
 
    # Return the output.
@@ -793,6 +794,13 @@ function get_innodb_array($text) {
             ? make_bigint($row[4], $row[5])
             : to_int($row[4]);
       }
+      elseif (strpos($line, "Last checkpoint at") === 0 ) {
+         # Last checkpoint at  125 3934293461
+         $results['last_checkpoint']
+            = isset($row[4])
+            ? make_bigint($row[3], $row[4])
+            : to_int($row[3]);
+      }
 
       # BUFFER POOL AND MEMORY
       elseif (strpos($line, "Total memory allocated") === 0 ) {
@@ -845,6 +853,9 @@ function get_innodb_array($text) {
    }
    $results['unflushed_log']
       = big_sub($results['innodb_lsn'], $results['flushed_to']);
+   $results['uncheckpointed_bytes']
+      = big_sub($results['innodb_lsn'], $results['last_checkpoint']);
+
    return $results;
 }
 
