@@ -2668,6 +2668,7 @@
             innodb_lock_wait_secs      => 'hash_07_VER_07983e1bca35cb5041e24c5cedbbe827',
             innodb_tables_in_use       => 'hash_07_VER_3d13178a274f969a7540fb31e1af0fba',
             innodb_locked_tables       => 'hash_07_VER_26358a240479440b75db2d9e3338736a',
+            uncheckpointed_bytes       => 'hash_07_VER_26358a240479440b75db2d9e3338736a',
          },
          type_id => 1
       },
