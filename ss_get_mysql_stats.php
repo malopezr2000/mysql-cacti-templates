@@ -65,6 +65,8 @@ if ( file_exists(__FILE__ . '.cnf' ) ) {
 # Define whether you want debugging behavior.
 # ============================================================================
 $debug = TRUE;
+# If $debug_log is a filename, debugging info will be logged to it.
+$debug_log = FALSE;
 error_reporting($debug ? E_ALL : E_ERROR);
 
 # Make this a happy little script even when there are errors.
@@ -73,6 +75,7 @@ ini_set('implicit_flush', false); # No output, ever.
 ob_start(); # Catch all output such as notices of undefined array indexes.
 function error_handler($errno, $errstr, $errfile, $errline) {
    print("$errstr at $errfile line $errline\n");
+   debug("$errstr at $errfile line $errline");
 }
 # ============================================================================
 # Set up the stuff we need to be called by the script server.
@@ -80,10 +83,12 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 if ( $use_ss ) {
    if ( file_exists( dirname(__FILE__) . "/../include/global.php") ) {
       # See issue 5 for the reasoning behind this.
+      debug("including " . dirname(__FILE__) . "/../include/global.php");
       include_once(dirname(__FILE__) . "/../include/global.php");
    }
    elseif ( file_exists( dirname(__FILE__) . "/../include/config.php" ) ) {
       # Some Cacti installations don't have global.php.
+      debug("including " . dirname(__FILE__) . "/../include/config.php");
       include_once(dirname(__FILE__) . "/../include/config.php");
    }
 }
@@ -92,10 +97,12 @@ if ( $use_ss ) {
 # Make sure we can also be called as a script.
 # ============================================================================
 if (!isset($called_by_script_server)) {
+   debug($_SERVER["argv"]);
    array_shift($_SERVER["argv"]); # Strip off ss_get_mysql_stats.php
    $options = parse_cmdline($_SERVER["argv"]);
    validate_options($options);
    $result = ss_get_mysql_stats($options);
+   debug($result);
    if ( !$debug ) {
       # Throw away the buffer, which ought to contain only errors.
       ob_end_clean();
@@ -112,6 +119,7 @@ if (!isset($called_by_script_server)) {
          $output[] = $item;
       }
    }
+   debug(array("Final result", $output));
    print(implode(' ', $output));
 }
 
@@ -137,6 +145,7 @@ if ( !function_exists('array_change_key_case') ) {
 # Validate that the command-line options are here and correct
 # ============================================================================
 function validate_options($options) {
+   debug($options);
    $opts = array('host', 'items', 'user', 'pass', 'heartbeat', 'nocache', 'port');
    # Required command-line options
    foreach ( array('host', 'items') as $option ) {
@@ -210,6 +219,7 @@ function parse_cmdline( $args ) {
    if ( $cur_arg && ($cur_arg != '--user' && $cur_arg != '--pass' && $cur_arg != '--port') ) {
       die("No arg: $cur_arg\n");
    }
+   debug($result);
    return $result;
 }
 
@@ -231,6 +241,7 @@ function ss_get_mysql_stats( $options ) {
    # hostname.
    $host_str  = $options['host']
               . (isset($options['port']) || $port != 3306 ? ":$port" : '');
+   debug(array('connecting to', $host_str, $user, $pass));
    $conn = @mysql_connect($host_str, $user, $pass);
    if ( !$conn ) {
       die("MySQL: " . mysql_error());
@@ -239,6 +250,7 @@ function ss_get_mysql_stats( $options ) {
    $sanitized_host
        = str_replace(array(":", "/"), array("", "_"), $options['host']);
    $cache_file = "$cache_dir/$sanitized_host-mysql_cacti_stats.txt";
+   debug("Cache file is $cache_file");
 
    # First, check the cache.
    $fp = null;
@@ -246,11 +258,12 @@ function ss_get_mysql_stats( $options ) {
       # This will block if someone else is accessing the file.
       $result = run_query(
          "SELECT GET_LOCK('cacti_monitoring', $poll_time) AS ok", $conn);
-      $row = @mysql_fetch_assoc($result);
+      $row = $result[0];
       if ( $row['ok'] ) { # Nobody else had the file locked.
          if ( file_exists($cache_file) && filesize($cache_file) > 0
             && filectime($cache_file) + ($poll_time/2) > time() )
          {
+            debug("Using the cache file");
             # The file is fresh enough to use.
             $arr = file($cache_file);
             # The file ought to have some contents in it!  But just in case it
@@ -266,6 +279,7 @@ function ss_get_mysql_stats( $options ) {
             }
          }
       }
+      debug("Not using the cache file");
       if ( !$fp = fopen($cache_file, 'w+') ) {
          die("Can't open '$cache_file'");
       }
@@ -306,13 +320,13 @@ function ss_get_mysql_stats( $options ) {
    # Get SHOW STATUS and convert the name-value array into a simple
    # associative array.
    $result = run_query("SHOW /*!50002 GLOBAL */ STATUS", $conn);
-   while ($row = @mysql_fetch_row($result)) {
+   foreach ( $result as $row ) {
       $status[$row[0]] = $row[1];
    }
 
    # Get SHOW VARIABLES and do the same thing, adding it to the $status array.
    $result = run_query("SHOW VARIABLES", $conn);
-   while ($row = @mysql_fetch_row($result)) {
+   foreach ( $result as $row ) {
       $status[$row[0]] = $row[1];
    }
 
@@ -324,7 +338,7 @@ function ss_get_mysql_stats( $options ) {
    # Get SHOW SLAVE STATUS, and add it to the $status array.
    if ( $chk_options['slave'] ) {
       $result = run_query("SHOW SLAVE STATUS", $conn);
-      while ($row = @mysql_fetch_assoc($result)) {
+      foreach ( $result as $row ) {
          # Must lowercase keys because different MySQL versions have different
          # lettercase.
          $row = array_change_key_case($row, CASE_LOWER);
@@ -333,11 +347,10 @@ function ss_get_mysql_stats( $options ) {
 
          # Check replication heartbeat, if present.
          if ( $heartbeat ) {
-            $result = run_query(
+            $result2 = run_query(
                "SELECT GREATEST(0, UNIX_TIMESTAMP() - UNIX_TIMESTAMP(ts) - 1)"
                . "FROM $heartbeat WHERE id = 1", $conn);
-            $row2 = @mysql_fetch_row($result);
-            $status['slave_lag'] = $row2[0];
+            $status['slave_lag'] = $result2[0][0];
          }
 
          # Scale slave_running and slave_stopped relative to the slave lag.
@@ -349,10 +362,13 @@ function ss_get_mysql_stats( $options ) {
    }
 
    # Get SHOW MASTER STATUS, and add it to the $status array.
-   if ( $chk_options['master'] && $status['log_bin'] == 'ON' ) { # See issue #8
+   if ( $chk_options['master']
+         && array_key_exists('log_bin', $status)
+         && $status['log_bin'] == 'ON'
+   ) { # See issue #8
       $binlogs = array(0);
       $result = run_query("SHOW MASTER LOGS", $conn);
-      while ($row = @mysql_fetch_assoc($result)) {
+      foreach ( $result as $row ) {
          $row = array_change_key_case($row, CASE_LOWER);
          # Older versions of MySQL may not have the File_size column in the
          # results of the command.  Zero-size files indicate the user is
@@ -370,7 +386,7 @@ function ss_get_mysql_stats( $options ) {
    # too.
    if ( $chk_options['procs'] ) {
       $result = run_query('SHOW PROCESSLIST', $conn);
-      while ($row = @mysql_fetch_assoc($result)) {
+      foreach ( $result as $row ) {
          $state = $row['State'];
          if ( is_null($state) ) {
             $state = 'NULL';
@@ -390,10 +406,12 @@ function ss_get_mysql_stats( $options ) {
 
    # Get SHOW INNODB STATUS and extract the desired metrics from it, then add
    # those to the array too.
-   if ( $chk_options['innodb'] && $status['have_innodb'] == 'YES' ) {
+   if ( $chk_options['innodb']
+         && array_key_exists('have_innodb', $status)
+         && $status['have_innodb'] == 'YES'
+   ) {
       $result        = run_query("SHOW /*!50000 ENGINE*/ INNODB STATUS", $conn);
-      $innodb_array  = @mysql_fetch_assoc($result);
-      $istatus_text = $innodb_array['Status'];
+      $istatus_text = $result[0]['Status'];
       $istatus_vals = get_innodb_array($istatus_text);
 
       # Override values from InnoDB parsing with values from SHOW STATUS,
@@ -421,6 +439,7 @@ function ss_get_mysql_stats( $options ) {
       # If the SHOW STATUS value exists, override...
       foreach ( $overrides as $key => $val ) {
          if ( array_key_exists($key, $status) ) {
+            debug("Override $key");
             $istatus_vals[$val] = $status[$key];
          }
       }
@@ -431,10 +450,13 @@ function ss_get_mysql_stats( $options ) {
       }
    }
 
-   if ( $status['unflushed_log'] ) {
+   if ( array_key_exists('unflushed_log', $status)
+         && $status['unflushed_log']
+   ) {
       # TODO: I'm not sure what the deal is here; need to debug this.  But the
       # unflushed log bytes spikes a lot sometimes and it's impossible for it to
       # be more than the log buffer.
+      debug("Unflushed log: $status[unflushed_log]");
       $status['unflushed_log']
          = max($status['unflushed_log'], $status['innodb_log_buffer_size']);
    }
@@ -824,6 +846,7 @@ function get_innodb_array($text) {
 # Returns a bigint from two ulint or a single hex number.
 # ============================================================================
 function make_bigint ($hi, $lo = null) {
+   debug(array($hi, $lo));
    if ( is_null($lo) ) {
       # Assume it is a hex string representation.
       return base_convert($hi, 16, 10);
@@ -844,6 +867,7 @@ function make_bigint ($hi, $lo = null) {
 # quits.
 # ============================================================================
 function to_int ( $str ) {
+   debug($str);
    global $debug;
    preg_match('{(\d+)}', $str, $m); 
    if ( isset($m[1]) ) {
@@ -858,24 +882,33 @@ function to_int ( $str ) {
 }
 
 # ============================================================================
-# Wrap mysql_query in error-handling
+# Wrap mysql_query in error-handling, and instead of returning the result,
+# return an array of arrays in the result.
 # ============================================================================
 function run_query($sql, $conn) {
    global $debug;
+   debug($sql);
    $result = @mysql_query($sql, $conn);
    if ( $debug ) {
       $error = @mysql_error($conn);
       if ( $error ) {
+         debug(array($sql, $error));
          die("SQLERR $error in $sql");
       }
    }
-   return $result;
+   $array = array();
+   while ( $row = @mysql_fetch_array($result) ) {
+      $array[] = $row;
+   }
+   debug(array($sql, $array));
+   return $array;
 }
 
 # ============================================================================
 # Safely increments a value that might be null.
 # ============================================================================
 function increment(&$arr, $key, $howmuch) {
+   debug(array($key, $howmuch));
    if ( array_key_exists($key, $arr) && isset($arr[$key]) ) {
       $arr[$key] = big_add($arr[$key], $howmuch);
    }
@@ -890,12 +923,15 @@ function increment(&$arr, $key, $howmuch) {
 # ============================================================================
 function big_multiply ($left, $right) {
    if ( function_exists("gmp_mul") ) {
+      debug(array('gmp_mul', $left, $right));
       return gmp_strval( gmp_mul( $left, $right ));
    }
    elseif ( function_exists("bcmul") ) {
+      debug(array('bcmul', $left, $right));
       return bcmul( $left, $right );
    }
    else {
+      debug(array('sprintf', $left, $right));
       return sprintf(".0f", $left * $right);
    }
 }
@@ -904,15 +940,19 @@ function big_multiply ($left, $right) {
 # Subtract two big integers as accurately as possible with reasonable effort.
 # ============================================================================
 function big_sub ($left, $right) {
+   debug(array($left, $right));
    if ( is_null($left)  ) { $left = 0; }
    if ( is_null($right) ) { $right = 0; }
    if ( function_exists("gmp_sub") ) {
+      debug(array('gmp_sub', $left, $right));
       return gmp_strval( gmp_sub( $left, $right ));
    }
    elseif ( function_exists("bcsub") ) {
+      debug(array('bcsub', $left, $right));
       return bcsub( $left, $right );
    }
    else {
+      debug(array('to_int', $left, $right));
       return to_int($left - $right);
    }
 }
@@ -925,13 +965,47 @@ function big_add ($left, $right) {
    if ( is_null($left)  ) { $left = 0; }
    if ( is_null($right) ) { $right = 0; }
    if ( function_exists("gmp_add") ) {
+      debug(array('gmp_add', $left, $right));
       return gmp_strval( gmp_add( $left, $right ));
    }
    elseif ( function_exists("bcadd") ) {
+      debug(array('bcadd', $left, $right));
       return bcadd( $left, $right );
    }
    else {
+      debug(array('to_int', $left, $right));
       return to_int($left + $right);
+   }
+}
+
+# ============================================================================
+# Writes to a debugging log.
+# ============================================================================
+function debug($val) {
+   global $debug_log;
+   if ( !$debug_log ) {
+      return;
+   }
+   if ( $fp = fopen($debug_log, 'a+') ) {
+      $trace = debug_backtrace();
+      $calls = array();
+      $i    = 0;
+      $line = 0;
+      $file = '';
+      foreach ( debug_backtrace() as $arr ) {
+         if ( $i++ ) {
+            $calls[] = "$arr[function]() at $file:$line";
+         }
+         $line = $arr['line'];
+         $file = $arr['file'];
+      }
+      fwrite($fp, date('Y-M-D h:i:s') . ' ' . implode(' <- ', $calls));
+      fwrite($fp, "\n" . var_export($val, TRUE) . "\n");
+      fclose($fp);
+   }
+   else { # Disable logging
+      print("Warning: disabling debug logging to $debug_log\n");
+      $debug_log = FALSE;
    }
 }
 
