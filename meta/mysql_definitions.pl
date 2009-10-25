@@ -18,6 +18,10 @@
 {
    name   => 'MySQL Server',
    hash   => 'hash_02_VER_3df221ff7893faad48ecc15026687215',
+   version => {
+      version => '1.1.4',
+      hash    => 'hash_06_VER_ac10705723a27cae224aa85dc7e38cde',
+   },
    graphs => [
       {  base_value => '1000',
          dt         => {

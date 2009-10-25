@@ -585,21 +585,24 @@ $t->{gprints} ||= {
    };
 
 # #############################################################################
-# Read the command-line script and extract the short names from it.
+# Read the command-line script and extract the version and short names from it.
 # #############################################################################
 open $fh, '<', $opts{script} or die "Can't open $opts{script}: $OS_ERROR";
 my %short_names;
+my $script_version;
 {
    local $INPUT_RECORD_SEPARATOR = '';
    PARA:
    while ( my $para = <$fh> ) {
+      if ( (my ($version) = $para =~ m/^\$version\s+=\s+["']([0-9.]*)['"];/m) ) {
+         $script_version = $version;
+      }
       if ( $para =~ m/MAGIC_VARS_DEFINITIONS/ ) {
          $para =~ s/\$\w+ = array\(/(/; # Convert $foo = array() to ()
          %short_names = eval($para);
          if ( $EVAL_ERROR ) {
             die $EVAL_ERROR;
          }
-         last PARA;
       }
    }
    die "$opts{script} doesn't look like the right kind of file.  It needs to be"
@@ -607,6 +610,17 @@ my %short_names;
       unless %short_names;
 }
 close $fh;
+
+# #############################################################################
+# Add a GPRINT preset that combines the script and template versions.
+# #############################################################################
+die "Both the meta file and the script file must have a version"
+   unless $t->{version} && $script_version;
+my $version_string = "t$t->{version}->{version}:s$script_version";
+$t->{gprints}->{$t->{name} . " Version $version_string"} = {
+   gprint_text => $version_string,
+   hash        => $t->{version}->{hash},
+};
 
 # #############################################################################
 # Global variables.
