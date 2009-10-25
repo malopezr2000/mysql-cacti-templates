@@ -8,6 +8,51 @@ This page explains how to install and use the pre-built templates that ship with
 
 ==Configuring==
 
+The templates themselves don't need to be configured, but you might need to configure the scripts that they execute to gather their data.  For example, you might need to specify a username and password to connect to MySQL and gather statistics.  There are several ways to do this.
+
+===Embedding Configuration===
+
+The simplest way is to embed the configuration options in the script file itself.  Open up the script file (such as ss_get_mysql_stats.php) with your favorite text editor, and look for a section like the following:
+
+{{{
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+# Define MySQL connection constants in config.php.  Arguments explicitly passed
+# in from Cacti will override these.  However, if you leave them blank in Cacti
+# and set them here, you can make life easier.  Instead of defining parameters
+# here, you can define them in another file named the same as this file, with a
+# .cnf extension.
+# ============================================================================
+$mysql_user = 'cactiuser';
+$mysql_pass = 'cactiuser';
+$mysql_port = 3306;
+... [snip]...
+}}}
+
+Each PHP file has its own configuration options, and there should be comments that explain them.  In the above example, the options are MySQL connection options.  Change them as desired, and save and close the PHP file.
+
+This method this has some disadvantages.  If you upgrade the PHP script file, you'll lose your configuration.  And this only works if all of your monitored resources need the same configuration parameters.
+
+===A Configuration File===
+
+If you don't want to store the configuration options directly into the PHP script file, you can create another file with the same name and the filename extension `.cnf`.  Place this in the same directory as the PHP script file, and ensure it is valid PHP.  This file will be included by the PHP script file, so you can define the same configuration options there that you might define in the PHP script file.  For example, you might create ss_get_mysql_stats.php.cnf with the following contents:
+
+{{{
+<?php
+mysql_user = "root";
+mysql_pass = "s3cret";
+?>
+}}}
+
+Notice the opening and closing PHP tags.
+
+This method still has the disadvantage that it works only if you use the same global configuration for every monitored resource.  If you need to specify a username and password for each host or each graph, it won't work.
+
+===Passing Command-Line Arguments===
+
+TODO
+
 ==Testing==
 
 ==Creating Graphs==
