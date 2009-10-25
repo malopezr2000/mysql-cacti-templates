@@ -1,6 +1,7 @@
   * [FAQ] (Frequently Asked Questions)
   * Using the Ready-Made Templates
     * InstallingTemplates
+    * CustomizingTemplates
     * [MySQLTemplates]
     * ApacheTemplates
     * NginxTemplates
