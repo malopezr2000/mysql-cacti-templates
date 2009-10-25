@@ -5,9 +5,9 @@ Changes for templates:
 	* Added the InnoDB Active/Locked Transactions graph.
 	* Added the InnoDB Memory Allocation graph.
 	* Added the InnoDB Adaptive Hash Index graph.
-	* Added the InnoDB Tables In Use graph.
+	* Added the InnoDB Tables In Use graph (issue 32).
 	* Added the InnoDB Current Lock Waits graph.
-	* Added the InnoDB Lock Structures graph.
+	* Added the InnoDB Lock Structures graph (issue 32).
 
 2009-10-24: version 1.1.3
 
