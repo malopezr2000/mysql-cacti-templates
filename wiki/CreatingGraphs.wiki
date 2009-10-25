@@ -7,8 +7,11 @@ The stuff you need is in meta/mysql_definitions.pl.
 This file is read in as a big variable by make_template.pl.  It consists of the following sections, which will be combined to form a template for Cacti:
 
   * name and hash -- properties for the template.
+  * version -- a hash and string to indicate the template version.
   * graphs -- a graph is a data template plus a collection of graph items.
   * inputs -- this basically defines how the command-line script is called.
+
+The version will really be turned into a GPRINT preset, which you can then view from the Cacti interface by going to Graph Management, then GPRINT Presets.  You will then see a GPRINT named something like "X MySQL Server Version t1.1.4:s1.1.4", which indicates that the installed version of the template was generated with version 1.1.4 of the template definition against version 1.1.4 of the related data-gathering script.
 
 Optionally, you can define these:
 
