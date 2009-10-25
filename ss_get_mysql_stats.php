@@ -255,33 +255,39 @@ function ss_get_mysql_stats( $options ) {
    # First, check the cache.
    $fp = null;
    if ( !isset($options['nocache']) ) {
-      # This will block if someone else is accessing the file.
-      $result = run_query(
-         "SELECT GET_LOCK('cacti_monitoring', $poll_time) AS ok", $conn);
-      $row = $result[0];
-      if ( $row['ok'] ) { # Nobody else had the file locked.
-         if ( file_exists($cache_file) && filesize($cache_file) > 0
-            && filectime($cache_file) + ($poll_time/2) > time() )
-         {
+      $fp = fopen($cache_file, 'a+');
+      $locked = flock($fp, 1); # LOCK_SH
+      if ( $locked ) {
+         if ( filesize($cache_file) > 0
+            && filectime($cache_file) + ($poll_time/2) > time()
+            && ($arr = file($cache_file))
+         ) {# The cache file is good to use.
             debug("Using the cache file");
-            # The file is fresh enough to use.
-            $arr = file($cache_file);
-            # The file ought to have some contents in it!  But just in case it
-            # doesn't... (see issue #6).
-            if ( count($arr) ) {
-               run_query("SELECT RELEASE_LOCK('cacti_monitoring')", $conn);
-               return $arr[0];
-            }
-            else {
-               if ( $debug ) {
-                  trigger_error("The function file($cache_file) returned nothing!\n");
+            fclose($fp);
+            return $arr[0];
+         }
+         else {
+            debug("The cache file seems too small or stale");
+            # Escalate the lock to exclusive, so we can write to it.
+            if ( flock($fp, 2) ) { # LOCK_EX
+               # We might have blocked while waiting for that LOCK_EX, and
+               # another process ran and updated it.  Let's see if we can just
+               # return the data now:
+               if ( filesize($cache_file) > 0
+                  && filectime($cache_file) + ($poll_time/2) > time()
+                  && ($arr = file($cache_file))
+               ) {# The cache file is good to use.
+                  debug("Using the cache file");
+                  fclose($fp);
+                  return $arr[0];
                }
+               ftruncate($fp, 0); # Now it's ready for writing later.
             }
          }
       }
-      debug("Not using the cache file");
-      if ( !$fp = fopen($cache_file, 'w+') ) {
-         die("Can't open '$cache_file'");
+      else {
+         debug("Couldn't lock the cache file, ignoring it.");
+         $fp = null;
       }
    }
 
@@ -630,7 +636,6 @@ function ss_get_mysql_stats( $options ) {
          die("Can't write '$cache_file'");
       }
       fclose($fp);
-      run_query("SELECT RELEASE_LOCK('cacti_monitoring')", $conn);
    }
    return $result;
 }
@@ -998,6 +1003,9 @@ function debug($val) {
          }
          $line = $arr['line'];
          $file = $arr['file'];
+      }
+      if ( !count($calls) ) {
+         $calls[] = "at $file:$line";
       }
       fwrite($fp, date('Y-M-D h:i:s') . ' ' . implode(' <- ', $calls));
       fwrite($fp, "\n" . var_export($val, TRUE) . "\n");
