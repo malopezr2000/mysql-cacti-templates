@@ -1,0 +1,21 @@
+#summary How to generate your own versions of the templates
+
+<wiki:toc />
+
+The templates that are included in the release packages are generic, designed to be suitable for default installations.  However, if they don't meet your needs, you can generate your own quite easily.
+
+It is important to note that these templates are designed to avoid the problems caused by modifying templates within Cacti and then exporting them.  Instead of doing this, you should use the provided command-line tools to modify the templates before you import them. If you want to, you can modify them over and over again and keep re-importing them.  Cacti will update its database to match the changes that you import.
+
+You can customize many aspects of the templates.  The following sections will explain the possible customizations.  All of these are possible simply by passing the correct options to the `make-template.pl` command-line tool.
+
+=Generate Templates for a Specific Cacti Version=
+
+=Accept Input in Each Data Source=
+
+=Specify a Different Graph Width or Height=
+
+=Specify a Different Name Prefix=
+
+=Specify a Different Polling Interval=
+
+=Change the Default Maximum Permitted Value in RRD Files=
