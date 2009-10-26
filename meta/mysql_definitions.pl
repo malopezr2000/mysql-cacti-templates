@@ -2724,6 +2724,9 @@
             innodb_tables_in_use       => 'hash_07_VER_3d13178a274f969a7540fb31e1af0fba',
             innodb_locked_tables       => 'hash_07_VER_26358a240479440b75db2d9e3338736a',
             uncheckpointed_bytes       => 'hash_07_VER_30861a68d971c7a677c271bc70a64769',
+            ibuf_cell_count            => 'hash_07_VER_af210dfa133a405ec94c7c4f6ff7b357',
+            ibuf_used_cells            => 'hash_07_VER_14736a4af45c543245bda9f649598035',
+            ibuf_free_cells            => 'hash_07_VER_fd38ab6c2dccadac35079d48a5171ab8',
          },
          type_id => 1
       },
