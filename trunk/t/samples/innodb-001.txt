@@ -101,7 +101,7 @@ I/O thread 1 state: waiting for i/o request (log thread)
 I/O thread 2 state: waiting for i/o request (read thread)
 I/O thread 3 state: waiting for i/o request (write thread)
 Pending normal aio reads: 0, aio writes: 0,
- ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
+ ibuf aio reads: 1, log i/o's: 2, sync i/o's: 3
 Pending flushes (fsync) log: 0; buffer pool: 0
 5985113 OS file reads, 633045221 OS file writes, 537534629 OS fsyncs
 0 pending preads, 1 pending pwrites
@@ -136,9 +136,9 @@ Internal hash tables (constant factor + variable factor)
     Dictionary cache    145525560 	(140250984 + 5274576)
     File system         313848 	(82672 + 231176)
     Lock system         29232616 	(29219368 + 13248)
-    Recovery system     0 	(0 + 0)
+    Recovery system     1 	(1 + 0)
     Threads             409336 	(406936 + 2400)
-    innodb_io_pattern   0 	(0 + 0)
+    innodb_io_pattern   1 	(1 + 0)
 Buffer pool size        720896
 Buffer pool size, bytes 11811160064
 Free buffers            0

@@ -616,16 +616,23 @@ function ss_get_mysql_stats( $options ) {
        'Handler_update'             => 'dv',
        'Handler_write'              => 'dw',
        # Some InnoDB stats added later...
-       'innodb_tables_in_use'       => 'dx',
-       'innodb_lock_wait_secs'      => 'dy',
-       'hash_index_cells_total'     => 'dz',
-       'hash_index_cells_used'      => 'e0',
-       'total_mem_alloc'            => 'e1',
-       'additional_pool_alloc'      => 'e2',
-       'uncheckpointed_bytes'       => 'e3',
-       'ibuf_used_cells'            => 'e4',
-       'ibuf_free_cells'            => 'e5',
-       'ibuf_cell_count'            => 'e6',
+       'innodb_tables_in_use'    => 'dx',
+       'innodb_lock_wait_secs'   => 'dy',
+       'hash_index_cells_total'  => 'dz',
+       'hash_index_cells_used'   => 'e0',
+       'total_mem_alloc'         => 'e1',
+       'additional_pool_alloc'   => 'e2',
+       'uncheckpointed_bytes'    => 'e3',
+       'ibuf_used_cells'         => 'e4',
+       'ibuf_free_cells'         => 'e5',
+       'ibuf_cell_count'         => 'e6',
+      'adaptive_hash_memory'    => 'e7',
+      'page_hash_memory'        => 'e8',
+      'dictionary_cache_memory' => 'e9',
+      'file_system_memory'      => 'ea',
+      'lock_system_memory'      => 'eb',
+      'recovery_system_memory'  => 'ec',
+      'thread_hash_memory'      => 'ed',
    );
 
    # Return the output.
@@ -649,13 +656,67 @@ function ss_get_mysql_stats( $options ) {
 # ============================================================================
 # Given INNODB STATUS text, returns a key-value array of the parsed text.  Each
 # line shows a sample of the input for both standard InnoDB as you would find in
-# MySQL 5.0, and XtraDB or enhanced InnoDB from Percona if applicable.
+# MySQL 5.0, and XtraDB or enhanced InnoDB from Percona if applicable.  Note
+# that extra leading spaces are ignored due to trim().
 # ============================================================================
 function get_innodb_array($text) {
    $results  = array(
       'spin_waits'  => array(),
       'spin_rounds' => array(),
       'os_waits'    => array(),
+      'pending_normal_aio_reads'  => null,
+      'pending_normal_aio_writes' => null,
+      'pending_ibuf_aio_reads'    => null,
+      'pending_aio_log_ios'       => null,
+      'pending_aio_sync_ios'      => null,
+      'pending_log_flushes'       => null,
+      'pending_buf_pool_flushes'  => null,
+      'file_reads'                => null,
+      'file_writes'               => null,
+      'file_fsyncs'               => null,
+      'ibuf_inserts'              => null,
+      'ibuf_merged'               => null,
+      'ibuf_merges'               => null,
+      'innodb_lsn'                => null,
+      'unflushed_log'             => null,
+      'flushed_to'                => null,
+      'pending_log_writes'        => null,
+      'pending_chkp_writes'       => null,
+      'log_writes'                => null,
+      'pool_size'                 => null,
+      'free_pages'                => null,
+      'database_pages'            => null,
+      'modified_pages'            => null,
+      'pages_read'                => null,
+      'pages_created'             => null,
+      'pages_written'             => null,
+      'queries_inside'            => null,
+      'queries_queued'            => null,
+      'read_views'                => null,
+      'rows_inserted'             => null,
+      'rows_updated'              => null,
+      'rows_deleted'              => null,
+      'rows_read'                 => null,
+      'innodb_transactions'       => null,
+      'unpurged_txns'             => null,
+      'history_list'              => null,
+      'current_transactions'      => null,
+      'hash_index_cells_total'    => null,
+      'hash_index_cells_used'     => null,
+      'total_mem_alloc'           => null,
+      'additional_pool_alloc'     => null,
+      'last_checkpoint'           => null,
+      'uncheckpointed_bytes'      => null,
+      'ibuf_used_cells'           => null,
+      'ibuf_free_cells'           => null,
+      'ibuf_cell_count'           => null,
+      'adaptive_hash_memory'      => null,
+      'page_hash_memory'          => null,
+      'dictionary_cache_memory'   => null,
+      'file_system_memory'        => null,
+      'lock_system_memory'        => null,
+      'recovery_system_memory'    => null,
+      'thread_hash_memory'        => null,
    );
    $txn_seen = FALSE;
    foreach ( explode("\n", $text) as $line ) {
@@ -739,8 +800,7 @@ function get_innodb_array($text) {
          $results['pending_normal_aio_reads']  = to_int($row[4]);
          $results['pending_normal_aio_writes'] = to_int($row[7]);
       }
-      elseif (strpos($line, ' ibuf aio reads') === 0 ) {
-         # Note the extra leading space
+      elseif (strpos($line, 'ibuf aio reads') === 0 ) {
          #  ibuf aio reads: 0, log i/o's: 0, sync i/o's: 0
          $results['pending_ibuf_aio_reads'] = to_int($row[3]);
          $results['pending_aio_log_ios']    = to_int($row[6]);
@@ -825,6 +885,38 @@ function get_innodb_array($text) {
          # Total memory allocated 29642194944; in additional pool allocated 0
          $results['total_mem_alloc']       = to_int($row[3]);
          $results['additional_pool_alloc'] = to_int($row[8]);
+      }
+      elseif(strpos($line, 'Adaptive hash index ') === 0 ) {
+         #   Adaptive hash index 1538240664 	(186998824 + 1351241840)
+         $results['adaptive_hash_memory'] = to_int($row[3]);
+      }
+      elseif(strpos($line, 'Page hash           ') === 0 ) {
+         #   Page hash           11688584
+         $results['page_hash_memory'] = to_int($row[2]);
+      }
+      elseif(strpos($line, 'Dictionary cache    ') === 0 ) {
+         #   Dictionary cache    145525560 	(140250984 + 5274576)
+         $results['dictionary_cache_memory'] = to_int($row[2]);
+      }
+      elseif(strpos($line, 'File system         ') === 0 ) {
+         #   File system         313848 	(82672 + 231176)
+         $results['file_system_memory'] = to_int($row[2]);
+      }
+      elseif(strpos($line, 'Lock system         ') === 0 ) {
+         #   Lock system         29232616 	(29219368 + 13248)
+         $results['lock_system_memory'] = to_int($row[2]);
+      }
+      elseif(strpos($line, 'Recovery system     ') === 0 ) {
+         #   Recovery system     0 	(0 + 0)
+         $results['recovery_system_memory'] = to_int($row[2]);
+      }
+      elseif(strpos($line, 'Threads             ') === 0 ) {
+         #   Threads             409336 	(406936 + 2400)
+         $results['thread_hash_memory'] = to_int($row[1]);
+      }
+      elseif(strpos($line, 'innodb_io_pattern   ') === 0 ) {
+         #   innodb_io_pattern   0 	(0 + 0)
+         $results['innodb_io_pattern_memory'] = to_int($row[1]);
       }
       elseif (strpos($line, "Buffer pool size ") === 0 ) {
          # The " " after size is necessary to avoid matching the wrong line:
