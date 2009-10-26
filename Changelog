@@ -1,5 +1,7 @@
 Changes for templates:
 
+	* The log_bytes_flushed and log_bytes_written were renamed (issue 81).
+
 2009-10-25: version 1.1.4
 
 	* Changed SSH options so host keys are accepted automatically (issue 68).
