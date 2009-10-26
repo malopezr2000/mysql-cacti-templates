@@ -47,29 +47,29 @@ Inspect the page that results.  You should see something like the following:
 Cacti has imported the following items:
 
 CDEF
-[success] X Negate CDEF [create]
+[success] X Negate CDEF [new]
 
 GPRINT Preset
-[success] X MySQL Server Version t1.1.4:s1.1.4 [create]
-[success] X Normal [create]
+[success] X MySQL Server Version t1.1.4:s1.1.4 [new]
+[success] X Normal [new]
 
 Data Input Method
-[success] X Get MySQL Stats/MyISAM Indexes IM [create]
+[success] X Get MySQL Stats/MyISAM Indexes IM [new]
 ... snip ...
 
 Data Template
-[success] X MyISAM Indexes DT [create]
+[success] X MyISAM Indexes DT [new]
 ... snip ...
 
 Graph Template
-[success] X MyISAM Indexes GT [create]
+[success] X MyISAM Indexes GT [new]
 ... snip ...
 
 Host Template
-[success] X MySQL Server HT [create]
+[success] X MySQL Server HT [new]
 }}}
 
-The above is an abbreviated list.  Every line should show "success" at the beginning, and "create" (or "update" if you're upgrading) at the end.
+The above is an abbreviated list.  Every line should show "success" at the beginning, and "new" (or "update" if you're upgrading) at the end.
 
 ==Configuring==
 
