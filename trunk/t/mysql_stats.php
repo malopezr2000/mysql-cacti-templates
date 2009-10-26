@@ -81,6 +81,9 @@ is_deeply(
       'additional_pool_alloc'     => '1048576',
       'last_checkpoint'           => '540805205461',
       'uncheckpointed_bytes'      => '121403',
+      'ibuf_used_cells'           => '1',
+      'ibuf_free_cells'           => '4634',
+      'ibuf_cell_count'           => '4636',
    ),
    'samples/innodb-001.txt'
 );
@@ -134,6 +137,9 @@ is_deeply(
       'additional_pool_alloc'     => '0',
       'last_checkpoint'           => '13093217877062',
       'uncheckpointed_bytes'      => '731618794',
+      'ibuf_used_cells'           => '10204',
+      'ibuf_free_cells'           => '157151',
+      'ibuf_cell_count'           => '167356',
    ),
    'samples/innodb-002.txt'
 );
@@ -190,8 +196,63 @@ is_deeply(
       'additional_pool_alloc'     => '744704',
       'last_checkpoint'           => '103216',
       'uncheckpointed_bytes'      => '0',
+      'ibuf_used_cells'           => '1',
+      'ibuf_free_cells'           => '0',
+      'ibuf_cell_count'           => '2',
    ),
    'samples/innodb-006.txt'
+);
+
+is_deeply(
+   get_innodb_array(file_get_contents('samples/innodb-009.txt')),
+   array(
+      'spin_waits'                => '820880',
+      'spin_rounds'               => '3373874',
+      'os_waits'                  => '32601',
+      'pending_normal_aio_reads'  => '0',
+      'pending_normal_aio_writes' => '0',
+      'pending_log_flushes'       => '0',
+      'pending_buf_pool_flushes'  => '0',
+      'file_reads'                => '1516536',
+      'file_writes'               => '268607',
+      'file_fsyncs'               => '27641',
+      'ibuf_used_cells'           => '9909',
+      'ibuf_free_cells'           => '36366',
+      'ibuf_cell_count'           => '46276',
+      'ibuf_inserts'              => '403495',
+      'ibuf_merged'               => '391709',
+      'ibuf_merges'               => '94372',
+      'hash_index_cells_total'    => '24902177',
+      'hash_index_cells_used'     => '12151667',
+      'innodb_lsn'                => '541333186407',
+      'flushed_to'                => '541333186407',
+      'last_checkpoint'           => '541046660013',
+      'pending_log_writes'        => '0',
+      'pending_chkp_writes'       => '0',
+      'log_writes'                => '19521',
+      'total_mem_alloc'           => '13711864112',
+      'additional_pool_alloc'     => '5884416',
+      'pool_size'                 => '768000',
+      'free_pages'                => '60',
+      'database_pages'            => '743356',
+      'modified_pages'            => '177204',
+      'pages_read'                => '1580077',
+      'pages_created'             => '7462',
+      'pages_written'             => '276034',
+      'queries_inside'            => '3',
+      'queries_queued'            => '0',
+      'rows_inserted'             => '430539',
+      'rows_updated'              => '251931',
+      'rows_deleted'              => '257631',
+      'rows_read'                 => '83306576',
+      'innodb_transactions'       => '4106483684',
+      'unpurged_txns'             => '1293',
+      'current_transactions'      => '23',
+      'active_transactions'       => '21',
+      'unflushed_log'             => '0',
+      'uncheckpointed_bytes'      => '286526394',
+   ),
+   'samples/innodb-009.txt'
 );
 
 ?>

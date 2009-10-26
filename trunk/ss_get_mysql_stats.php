@@ -623,6 +623,9 @@ function ss_get_mysql_stats( $options ) {
        'total_mem_alloc'            => 'e1',
        'additional_pool_alloc'      => 'e2',
        'uncheckpointed_bytes'       => 'e3',
+       'ibuf_used_cells'            => 'e4',
+       'ibuf_free_cells'            => 'e5',
+       'ibuf_cell_count'            => 'e6',
    );
 
    # Return the output.
@@ -750,6 +753,21 @@ function get_innodb_array($text) {
       }
 
       # INSERT BUFFER AND ADAPTIVE HASH INDEX
+      elseif (strpos($line, 'Ibuf for space 0: size ') === 0 ) {
+         # Older InnoDB code seemed to be ready for an ibuf per tablespace.  It
+         # had two lines in the output.  Newer has just one line, see below.
+         # Ibuf for space 0: size 1, free list len 887, seg size 889, is not empty
+         # Ibuf for space 0: size 1, free list len 887, seg size 889,
+         $results['ibuf_used_cells']  = to_int($row[5]);
+         $results['ibuf_free_cells']  = to_int($row[9]);
+         $results['ibuf_cell_count']  = to_int($row[12]);
+      }
+      elseif (strpos($line, 'Ibuf: size ') === 0 ) {
+         # Ibuf: size 1, free list len 4634, seg size 4636,
+         $results['ibuf_used_cells']  = to_int($row[2]);
+         $results['ibuf_free_cells']  = to_int($row[6]);
+         $results['ibuf_cell_count']  = to_int($row[9]);
+      }
       elseif (strpos($line, ' merged recs, ') > 0 ) {
          # 19817685 inserts, 19817684 merged recs, 3552620 merges
          $results['ibuf_inserts'] = to_int($row[0]);
