@@ -482,6 +482,7 @@ my @opt_spec = (
    { s => 'cactiver=s',     d => 'Create templates for this Cacti version' },
    { s => 'graph_height=i', d => 'Height of generated graphs (default 120)' },
    { s => 'graph_width=i',  d => 'Width of generated graphs (default 500)' },
+   { s => 'lint_check',     d => 'Complain about unused data found in the script' },
    { s => 'mpds=H',         d => 'Comma-separated list of input method options'
                               .  ' to make per-data-source' },
    { s => 'name_prefix=s',  d => 'Template name prefix (default X)' },
@@ -838,8 +839,11 @@ foreach my $i ( keys %{$t->{inputs}} ) {
 }
 my @unused_php_keys = grep { !$used_php_keys{$_} } keys %short_names;
 
-if ( @unused_php_keys || @key_not_used_in_graph || @key_not_in_dt || @key_not_in_script ) {
-   print STDERR "Keys in PHP not used: " . join(',', @unused_php_keys), "\n";
+if ( @unused_php_keys && $opts{lint_check} ) {
+   warn "Warning: the template doesn't use some keys defined in the script file: "
+      . join(',', @unused_php_keys), "\n";
+}
+if ( @key_not_used_in_graph || @key_not_in_dt || @key_not_in_script ) {
    print STDERR "Keys in GT not in DT: " . join(',', @key_not_in_dt), "\n";
    print STDERR "Keys in DT not in DS: " . join(',', @key_not_in_script), "\n";
    print STDERR "Keys in DT not in GT: " . join(',', @key_not_used_in_graph), "\n";
