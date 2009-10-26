@@ -41,6 +41,10 @@ while ( my $line = <> ) {
       die "hash $hash isn't the right length" unless length($hash) == 32;
       if ( $refresh || $seen{$hash}++ ) {
          my $new = md5_hex('abcd' . gettimeofday() . rand());
+         while ( $seen{$new} ) {
+            $new = md5_hex('abcd' . gettimeofday() . rand());
+         }
+         $seen{$new}++;
          $line =~ s/$hash/$new/;
       }
    }
