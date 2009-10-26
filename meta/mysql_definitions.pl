@@ -236,6 +236,8 @@
          ],
       },
       {  base_value => '1000',
+         name       => 'InnoDB Insert Buffer',
+         hash       => 'hash_00_VER_d9a54b856fe871e5724bc5bce7d02c62',
          dt         => {
             hash         => 'hash_01_VER_41c5206e4ce414e2bda8b85db4da77dd',
             ibuf_inserts => {
@@ -252,7 +254,6 @@
             },
             input => 'Get MySQL Stats',
          },
-         hash  => 'hash_00_VER_d9a54b856fe871e5724bc5bce7d02c62',
          items => [
             {  color  => '157419',
                hashes => [
@@ -288,7 +289,61 @@
                type => 'LINE1',
             },
          ],
-         name => 'InnoDB Insert Buffer',
+      },
+      {  base_value => '1000',
+         name       => 'InnoDB Insert Buffer Usage',
+         hash       => 'hash_00_VER_d94542ff35285d4680d9cf7f60d60521',
+         dt         => {
+            hash         => 'hash_01_VER_8e12dec1ab42ddbb950a166cce0d8807',
+            ibuf_cell_count => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_276ecc8a6883cd2e682b9472aa07efd3',
+            },
+            ibuf_used_cells => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_a11c4b97f86d8ec2d2ab3736f34b7af8',
+            },
+            ibuf_free_cells => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_d11fd524940bdc0e76c7cd96d2880fd8',
+            },
+            input => 'Get MySQL Stats',
+         },
+         items => [
+            {  color  => '793A57',
+               hashes => [
+                  'hash_10_VER_1283bcc057a75c9b4a1ad945c36116e2',
+                  'hash_10_VER_1bd9b6067c7883300217fdfed54eadb8',
+                  'hash_10_VER_3e867179f7cd5319a9e65771f8cb795e',
+                  'hash_10_VER_230324959eea20e2fbf2397c18f7ee2e',
+               ],
+               item => 'ibuf_cell_count',
+               task => 'hash_09_VER_3973f9adb262db70661b0e5c3ad1f9dc',
+               type => 'AREA',
+            },
+            {  color  => '8C873E',
+               hashes => [
+                  'hash_10_VER_cafd729f7b96ad271abd303d83a0f628',
+                  'hash_10_VER_97c06e1784fb0fb8ad56701c18068259',
+                  'hash_10_VER_a10bf1415bdf5f4a6343db5d2ed7d7ce',
+                  'hash_10_VER_f480a98c47e31ff409c1e98703df2728',
+               ],
+               item => 'ibuf_used_cells',
+               task => 'hash_09_VER_e98fab4899c6412b181d4ef87e8d4511',
+               type => 'AREA',
+            },
+            {  color  => 'A38A5F',
+               hashes => [
+                  'hash_10_VER_9e94ff3b69618aeb94f2619c8d5430ab',
+                  'hash_10_VER_9f9ccdf93b45a2e449f17a71281f8652',
+                  'hash_10_VER_af165ce034593dcc42f1ebb937fa3116',
+                  'hash_10_VER_ce83e36534594ac857b951faee4c73b7',
+               ],
+               item => 'ibuf_free_cells',
+               task => 'hash_09_VER_1db934de6b22cf5ded1735173d764425',
+               type => 'STACK',
+            },
+         ],
       },
       {  base_value => '1000',
          dt         => {
