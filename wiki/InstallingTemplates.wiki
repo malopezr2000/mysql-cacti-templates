@@ -4,6 +4,8 @@ This page explains how to install and use the pre-built templates that ship with
 
 The following instructions assume you have the necessary privileges to make changes to your Cacti server.  You probably need to become root on that server.
 
+It is a good idea to make sure your Web browser doesn't save your password when you're using Cacti.  There are some screens in the administrative interface that have hidden password fields you can't see, but the browser will fill in, and it'll cause you a lot of confusion and grief.
+
 ==Downloading==
 
 You can download the templates from the Downloads tab of the Google Code project, at http://code.google.com/p/mysql-cacti-templates/downloads/list.  Get the latest released version.  You will need to get a copy of the scripts on the server, and you need access to the templates locally, so you can import them through your web browser:
