@@ -1,5 +1,7 @@
 Changes for templates:
 
+2009-10-25: version 1.1.4
+
 	* Changed SSH options so host keys are accepted automatically (issue 68).
 	* Parsing of the pending_ibuf_aio_reads property was broken.
 	* Parsing of the pending_aio_log_ios property was broken.
