@@ -31,6 +31,7 @@
 $ssh_user   = 'cacti';                          # SSH username
 $ssh_port   = 22;                               # SSH port
 $ssh_iden   = '-i /var/www/cacti/.ssh/id_rsa';  # SSH identity
+$ssh_tout   = 10;                               # SSH connect timeout
 $cache_dir  = '';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300; # Adjust to match your polling interval.
 $use_ss     = FALSE; # Whether to use the script server or not
@@ -199,7 +200,7 @@ function parse_cmdline( $args ) {
 # top of this file.
 # ============================================================================
 function ss_get_by_ssh( $options ) {
-   global $debug, $ssh_user, $ssh_port, $ssh_iden, $url, $cache_dir, $poll_time;
+   global $debug, $ssh_user, $ssh_port, $ssh_iden, $ssh_tout, $url, $cache_dir, $poll_time;
 
    # TODO: generate filename via a hash.
    $cache_file = "$cache_dir/$options[host]-$options[type]_cacti_stats.txt";
@@ -233,7 +234,8 @@ function ss_get_by_ssh( $options ) {
    $user = $ssh_user;
    $port = isset($options['port']) ? $options['port'] : $ssh_port;
    $iden = $ssh_iden;
-   $cmd = "ssh $user@$options[host] -p $port $iden ";
+   $cmd = "ssh -o \"ConnectTimeout $ssh_tout\" -o \"StrictHostKeyChecking no\" "
+        . "$user@$options[host] -p $port $iden ";
 
    $result = array();
    switch ( $options['type'] ) {

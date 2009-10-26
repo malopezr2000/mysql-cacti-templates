@@ -1,5 +1,6 @@
 Changes for templates:
 
+	* Changed SSH options so host keys are accepted automatically (issue 68).
 	* Added a debugging log for ss_get_mysql_stats.php (issue 54).
 	* Added the --lint_check option to make-template.pl (issue 80).
 	* Removed the use of GET_LOCK() and changed to flock() instead (issue 78).
