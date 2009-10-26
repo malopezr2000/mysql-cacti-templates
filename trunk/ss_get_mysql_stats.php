@@ -677,9 +677,9 @@ function get_innodb_array($text) {
       'ibuf_inserts'              => null,
       'ibuf_merged'               => null,
       'ibuf_merges'               => null,
-      'innodb_lsn'                => null,
+      'log_bytes_written'         => null,
       'unflushed_log'             => null,
-      'flushed_to'                => null,
+      'log_bytes_flushed'         => null,
       'pending_log_writes'        => null,
       'pending_chkp_writes'       => null,
       'log_writes'                => null,
@@ -858,7 +858,7 @@ function get_innodb_array($text) {
          # This number is NOT printed in hex in InnoDB plugin.
          # Log sequence number 13093949495856 //plugin
          # Log sequence number 125 3934414864 //normal
-         $results['innodb_lsn']
+         $results['log_bytes_written']
             = isset($row[4])
             ? make_bigint($row[3], $row[4])
             : to_int($row[3]);
@@ -867,7 +867,7 @@ function get_innodb_array($text) {
          # This number is NOT printed in hex in InnoDB plugin.
          # Log flushed up to   13093948219327
          # Log flushed up to   125 3934414864
-         $results['flushed_to']
+         $results['log_bytes_flushed']
             = isset($row[5])
             ? make_bigint($row[4], $row[5])
             : to_int($row[4]);
@@ -962,9 +962,9 @@ function get_innodb_array($text) {
       $results[$key] = to_int(array_sum($results[$key]));
    }
    $results['unflushed_log']
-      = big_sub($results['innodb_lsn'], $results['flushed_to']);
+      = big_sub($results['log_bytes_written'], $results['log_bytes_flushed']);
    $results['uncheckpointed_bytes']
-      = big_sub($results['innodb_lsn'], $results['last_checkpoint']);
+      = big_sub($results['log_bytes_written'], $results['last_checkpoint']);
 
    return $results;
 }
