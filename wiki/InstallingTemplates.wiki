@@ -1,5 +1,7 @@
 #summary How to install templates downloaded from this project
 
+<wiki:toc />
+
 This page explains how to install and use the pre-built templates that ship with this project.  If the templates are not exactly what you need, see CustomizingTemplates.
 
 The following instructions assume you have the necessary privileges to make changes to your Cacti server.  You probably need to become root on that server.
@@ -116,7 +118,39 @@ This method still has the disadvantage that it works only if you use the same gl
 
 ===Passing Command-Line Arguments===
 
-TODO
+The above configuration methods make configuration available to the scripts as PHP variables, but it is also possible to pass command-line arguments to the scripts.  If you execute the script without any options, you'll see the available options.  For example,
+
+{{{
+php ss_get_mysql_stats.php
+Required option --host is missing
+Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
+
+   --host      Hostname to connect to; use host:port syntax to specify a port
+               Use :/path/to/socket if you want to connect via a UNIX socket
+   --items     Comma-separated list of the items whose data you want
+   --user      MySQL username; defaults to cactiuser if not given
+   --pass      MySQL password; defaults to cactiuser if not given
+   --heartbeat MySQL heartbeat table; defaults to '' (see mk-heartbeat)
+   --nocache   Do not cache results in a file
+   --port      MySQL port; defaults to 3306 if not given
+}}}
+
+You can make Cacti pass configuration options to the script with these command-line options when it executes the script.  To do this, you will need to do one of two things.  You can customize specific graphs that require configuration options, or you can generate your own templates so every graph requires you to fill in values for the options.
+
+Generating custom graphs is covered in CustomizingTemplates.
+
+Here's how to customize specific graphs.  From the Console tab, click into Data Templates.  Find the desired Data Template and click it so you can edit it.  I'll use 'X MySQL Binary/Relay Logs DT' as an example.  Now, check the checkboxes so the desired command-line options use per-data-source values.  This means that the global template's value doesn't override the individual graph's values; the individual graphs must specify their own values.  For example, I've attached a screenshot here of setting the checkboxes so that username and password are per-data-source:
+
+http://sites.google.com/site/bettercactitemplates/Home/use-per-data-source-value.png
+
+Next find the data source by clicking into Data Sources.  Now that you've specified that this data source should use per-data-source values for the username and password, there are text boxes to fill in.  Here's a screenshot:
+
+http://sites.google.com/site/bettercactitemplates/Home/fill-in-data-source-values.png
+
+Cacti will now pass the given arguments to the PHP script when it executes.  Here's a snippet from the Cacti log, showing this in action:
+
+    10/26/2009 03:00:09 PM - CMDPHP: Poller[0] Host[1] DS[18] CMD: /usr/bin/php -q /usr/share/cacti/site/scripts/ss_get_mysql_stats.php --host 127.0.0.1 --items cv,cx,cy,cz --user root --pass s3cret --port 3306
+
 
 ==Creating Graphs==
 
