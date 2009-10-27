@@ -1,8 +1,23 @@
 #summary Documentation on the MySQL graphs
 
-This page shows examples of graphs in the MySQL template collection, and shows what they do.  You might want to look at http://dev.mysql.com/doc/refman/5.1/en/server-status-variables.html to learn the meaning of the status variables contained in the graphs.
+This page gives installation instructions specific to the MySQL graph templates, shows examples of graphs in the MySQL template collection, and shows what they do.  You might want to look at http://dev.mysql.com/doc/refman/5.1/en/server-status-variables.html to learn the meaning of the status variables contained in the graphs.
 
 <wiki:toc max_depth="1" />
+
+= Installation Notes =
+
+The MySQL templates work by executing a PHP script that gathers information from MySQL servers and returns it to Cacti.  The script makes an ordinary MySQL connection to gather its input.
+
+It is highly recommended that you use the same MySQL username and password for all servers you want to graph, to ease the installation and configuration.  If you don't, you will need to follow the instructions in InstallingTemplates and CustomizingTemplates to accommodate your installation.
+
+The script requires that you be able to connect to MySQL from your Cacti server.  You can test this with the mysql command-line program.  Debugging MySQL connection problems is beyond the scope of this documentation; refer to the MySQL manual if you have trouble.
+
+To install,
+
+  # Create a MySQL user with the SUPER and PROCESS privileges on each server you want to monitor.  Assuming you use "cacti" and "s3cret" as your username and password, execute the following command on each server: `GRANT SUPER, PROCESS ON *.* TO 'cacti'@'%' IDENTIFIED BY "s3cret";`
+    # If you want to monitor replication with mk-heartbeat from the Maatkit toolkit (recommended), you must grant SELECT on the heartbeat table also.  Assuming the mk-heartbeat table is maatkit.heartbeat, execute `GRANT SELECT ON maatkit.heartbeat TO 'cacti'@'%';`
+  # Copy ss_get_mysql_stats.php into your Cacti installation's scripts/ directory.
+  # All other steps are the same as mentioned in InstallingTemplates.
 
 = graph_image_002.png =
 
