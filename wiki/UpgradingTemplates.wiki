@@ -1,0 +1,7 @@
+#summary How to upgrade between template versions
+
+Upgrading is normally a simple process.  Before you begin, find the version of the templates and scripts that is currently installed.  In releases 1.1.4 and higher, you can find this as a GPRINT item, as in the following screenshot:
+
+http://sites.google.com/site/bettercactitemplates/Home/mysql-cacti-templates-installed-version.png
+
+This shows that the MySQL templates installed were generated from version 1.1.4 of the templates, against version 1.1.4 of the PHP script file.
