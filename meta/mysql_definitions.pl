@@ -2636,7 +2636,7 @@
                hash        => 'hash_07_VER_c89cbc8b1c987e050a310ee5414b2a02',
                name        => 'hostname',
             },
-            {  allow_nulls => '',
+            {  allow_nulls => 'on',
                hash        => 'hash_07_VER_161780da82a325e725612ea3285a5af5',
                name        => 'port',
             },
