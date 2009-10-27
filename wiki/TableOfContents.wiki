@@ -10,9 +10,9 @@
     * [MemcachedTemplates Memcached Templates]
     * [UnixTemplates Unix Templates]
   * Creating Your Own Templates
-  * Developer Documentation
     * [CreatingGraphs Creating Graphs]
     * [CactiHashes Cacti Hashes]
+  * Developer Documentation
     * [DataQueryProject Data Query Project]
     * [UpdatingExamples Updating Examples]
   * [http://code.google.com/p/mysql-cacti-templates/w/list List & Search Wiki Pages]
