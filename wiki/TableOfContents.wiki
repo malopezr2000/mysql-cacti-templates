@@ -3,6 +3,7 @@
   * Using the Ready-Made Templates
     * [InstallingTemplates Installing Templates]
     * [CustomizingTemplates Customizing Templates]
+    * [UpgradingTemplates Upgrading Templates]
     * [MySQLTemplates MySQL Templates]
     * [ApacheTemplates Apache Templates]
     * [NginxTemplates Nginx Templates]
