@@ -2,6 +2,16 @@
 
 <wiki:toc max_depth="1" />
 
+= Overview =
+
+These templates use ss_get_by_ssh.php to connect to a server via SSH and extract standard metrics (memory usage, number of users, CPU usage, etc) from it.  This is a good substitute for the standard kinds of system metrics one might graph via SNMP, when SNMP is not available or not desired.  For example, I've used this technique when SELinux was preventing SNMP and the company's security policy forbade modifications; or when they didn't want to pay for the time it'd take; or when monitoring servers exposed all over the Internet, and only SSH access was desired.
+
+Right now the scripts are written and tested for GNU/Linux, but it is possible that they will work on other Unix-like operating systems.  It should certainly be easy to modify them if not, so if you find any problems, please submit bug reports or discuss on the mailing list.
+
+= Installation =
+
+No special installation is necessary.  Once the SSH setup is working, everything should just work.
+
 = unix_context_switches.png =
 
 http://sites.google.com/site/bettercactitemplates/Home/unix_context_switches.png
