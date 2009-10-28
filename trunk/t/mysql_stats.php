@@ -1,6 +1,6 @@
 <?php
 require('test-more.php');
-require('../ss_get_mysql_stats.php');
+require('../scripts/ss_get_mysql_stats.php');
 
 is(
    make_bigint('0', '1170663853'),
