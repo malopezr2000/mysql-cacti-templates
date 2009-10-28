@@ -251,7 +251,8 @@ function ss_get_mysql_stats( $options ) {
 
    $sanitized_host
        = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   $cache_file = "$cache_dir/$sanitized_host-mysql_cacti_stats.txt";
+   $cache_file = "$cache_dir/$sanitized_host-mysql_cacti_stats.txt"
+               . (isset($options['port']) || $port != 3306 ? ":$port" : '');
    debug("Cache file is $cache_file");
 
    # First, check the cache.
