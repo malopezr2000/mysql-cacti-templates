@@ -30,9 +30,17 @@ BUGS OR PROBLEMS
 If you find any bugs or problems not listed in the FAQ, please enter an issue
 report at http://code.google.com/p/mysql-cacti-templates/.  Please make sure you
 read the official Cacti documentation and forums first.  Many of the issues and
-questions that come up have nothing to do with these templates, and the answers
-are readily available in the Cacti manual or forums.
+questions that come up are unrelated to these templates, and the answers are
+readily available in the Cacti manual or forums.
 
 Documentation is at the wiki hosted on
 http://code.google.com/p/mysql-cacti-templates/, and there is a mailing list at
 http://groups.google.com/group/better-cacti-templates.
+
+CONTRIBUTING
+============
+
+This is an open-source project, and everyone is welcome to participate.  Just
+join the mailing list and introduce yourself.  Commit access to SVN, editing
+permission on the wiki, and anything else you need will be happily and speedily
+granted if you ask.

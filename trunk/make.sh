@@ -1,24 +1,25 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 set -u
 set -x
 
-NAME=better-cacti-templates
-VERSION=`grep version Changelog | head -n 1 | cut -d ' ' -f 3`;
-DISTFILES="COPYING README ss_get_mysql_stats.php Changelog meta/make-template.pl meta/mysql_definitions.pl"
-DISTFILES="${DISTFILES} ss_get_by_ssh.php meta/apache_definitions.pl meta/gnu_linux_definitions.pl meta/memcached_definitions.pl meta/nginx_definitions.pl"
-
-DISTDIR=$NAME-$VERSION
+VERSION=`head -n 5 Changelog | grep version | head -n 1 | cut -d ' ' -f 3`;
+DISTDIR=better-cacti-templates$VERSION
 
 if test -d $DISTDIR ; then rm -rf $DISTDIR ; fi
-mkdir $DISTDIR
-cp -a $DISTFILES $DISTDIR
+mkdir -p $DISTDIR/{scripts,templates,tools,definitions}
+cp -a Changelog COPYING README $DISTDIR
+cp -a tools/*.pl $DISTDIR/tools
+cp -a scripts/*.php $DISTDIR/scripts
+cp -a definitions/*.pl $DISTDIR/definitions
 
 # Build the template.xml files...
-perl meta/make-template.pl --script ss_get_mysql_stats.php meta/mysql_definitions.pl > ${DISTDIR}/cacti_host_template_x_mysql_server_ht_0.8.6i-sver${VERSION}.xml
-for thing in apache gnu_linux memcached nginx; do
-   perl meta/make-template.pl --script ss_get_by_ssh.php meta/${thing}_definitions.pl > ${DISTDIR}/cacti_host_template_x_${thing}_server_ht_0.8.6i-sver${VERSION}.xml
+for file in definitions/*.pl; do
+   SCRIPT=`grep Autobuild $file | cut -d ' ' -f 3`;
+   NAME=`basename $file | sed -e s'/_definitions.pl//'`;
+   perl tools/make-template.pl --script scripts/$SCRIPT $file \
+      > $DISTDIR/templates/cacti_host_template_x_${NAME}_server_ht_0.8.6i-sver${VERSION}.xml
 done
 
 tar czf $DISTDIR.tar.gz $DISTDIR
