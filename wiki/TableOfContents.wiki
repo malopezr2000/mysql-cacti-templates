@@ -5,6 +5,7 @@
     * [CustomizingTemplates Customizing Templates]
     * [UpgradingTemplates Upgrading Templates]
     * [MySQLTemplates MySQL Templates]
+    * [SSHBasedTemplates SSH-Based Templates]
     * [ApacheTemplates Apache Templates]
     * [NginxTemplates Nginx Templates]
     * [MemcachedTemplates Memcached Templates]
