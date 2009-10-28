@@ -839,7 +839,8 @@ function get_innodb_array($text) {
          # Hash table size 4425293, used cells 4229064, ....
          # Hash table size 57374437, node heap has 72964 buffer(s) <-- no used cells
          $results['hash_index_cells_total'] = to_int($row[3]);
-         $results['hash_index_cells_used']  = to_int($row[6]);
+         $results['hash_index_cells_used']
+            = strpos($line, 'used cells') > 0 ? to_int($row[6]) : '0';
       }
 
       # LOG
