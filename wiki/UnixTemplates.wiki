@@ -10,7 +10,7 @@ Right now the scripts are written and tested for GNU/Linux, but it is possible t
 
 = Installation =
 
-No special installation is necessary.  Once the SSH setup is working, everything should just work.
+No special installation is necessary.  Once the [SSHBasedTemplates SSH setup] is working, everything should just work.
 
 = unix_context_switches.png =
 
