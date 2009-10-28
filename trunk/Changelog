@@ -1,5 +1,6 @@
 Changes for templates:
 
+	* Added the -q option to the SSH command to quell missing homedir warnings.
 	* The --port option to the MySQL templates could not be null.
 	* The log_bytes_flushed and log_bytes_written were renamed (issue 81).
 

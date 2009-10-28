@@ -234,7 +234,7 @@ function ss_get_by_ssh( $options ) {
    $user = $ssh_user;
    $port = isset($options['port']) ? $options['port'] : $ssh_port;
    $iden = $ssh_iden;
-   $cmd = "ssh -o \"ConnectTimeout $ssh_tout\" -o \"StrictHostKeyChecking no\" "
+   $cmd = "ssh -q -o \"ConnectTimeout $ssh_tout\" -o \"StrictHostKeyChecking no\" "
         . "$user@$options[host] -p $port $iden ";
 
    $result = array();
