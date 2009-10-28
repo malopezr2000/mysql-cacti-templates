@@ -16,6 +16,8 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA.
 
+# Autobuild: ss_get_by_ssh.php
+
 {
    name   => 'Memcached Server',
    hash   => 'hash_02_VER_1827008740e9ec8ca2103434f56302c8',

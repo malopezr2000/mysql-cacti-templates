@@ -16,6 +16,8 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA.
 
+# Autobuild: ss_get_by_ssh.php
+
 {
    name   => 'GNU/Linux Server',
    hash   => 'hash_02_VER_0a83853ee620998961253e285c00406a',
