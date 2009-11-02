@@ -16,6 +16,10 @@ Q. I get a blank page when I try to import the templates.  Why?
 
   # A. Check your webserver log.  PHP might have run out of memory.  If you see something like "Allowed memory size of 8388608 bytes exhausted (tried to allocate 10 bytes)" then you should increase memory_limit in your php.ini file and restart the webserver.
 
+Q. When I try to import the templates, my browser asks me if I want to download templates_import.php.  Why?
+
+  # A. This might be the same problem as the blank page, above.  Check your web server's error logs.
+
 Q. I see an error on some huge SQL like SELECT CONCAT(0+104857683+104857795+104857873.....
 
   # A. You must have a lot of binary log files!  Set expire_logs_days or purge old binlogs with PURGE MASTER LOGS.
