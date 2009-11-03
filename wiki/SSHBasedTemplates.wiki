@@ -104,6 +104,11 @@ debian:~# cat > /usr/share/cacti/site/scripts/ss_get_by_ssh.php.cnf <<EOF
 EOF
 }}}
 
+Note: If you're not sure what this is: 
+`$status_url    = '/server-status';`
+Check out [http://httpd.apache.org/docs/2.2/mod/mod_status.html mod_status].
+
+
 = Testing the Setup =
 
 Finally, I'll test the script to see if it can connect and retrieve values.  It is important to do this as the same user the crontab runs under, with an empty environment, just as the crontab does.  Otherwise the results will not necessarily indicate anything about whether Cacti's polling will succeed or fail!  The sample call to the script that follows is a good example.  Make sure you specify the correct username; here I am using www-data.
