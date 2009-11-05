@@ -292,4 +292,10 @@ is_deeply(
    'samples/innodb-009.txt'
 );
 
+is_deeply(
+   get_innodb_array(file_get_contents('samples/innodb-014.txt')),
+   array(),
+   'samples/innodb-014.txt'
+);
+
 ?>
