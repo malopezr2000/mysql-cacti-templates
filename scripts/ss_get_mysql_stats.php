@@ -999,7 +999,7 @@ function make_bigint ($hi, $lo = null) {
 function to_int ( $str ) {
    debug($str);
    global $debug;
-   preg_match('{(\d+)}', $str, $m); 
+   preg_match('{(\d+)}', $str, $m);
    if ( isset($m[1]) ) {
       return $m[1];
    }
