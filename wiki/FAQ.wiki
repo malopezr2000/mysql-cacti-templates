@@ -27,3 +27,7 @@ Q. I see an error on some huge SQL like SELECT CONCAT(0+104857683+104857795+1048
 Q. After I import the templates, the angle brackets around hostname, etc are gone.  What's wrong?
 
   # A. See http://code.google.com/p/mysql-cacti-templates/issues/detail?id=49#c20
+
+Q. If I have a host that is both an Apache and MySQL server should I be creating two separate Devices in cacti, each with the appropriate Host Template?
+
+  # A. You don't need to. You can simply make it a MySQL server, create the appropriate graphs, and then switch to an Apache server and create the appropriate graphs.
