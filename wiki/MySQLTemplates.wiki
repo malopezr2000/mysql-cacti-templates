@@ -115,3 +115,9 @@ http://sites.google.com/site/bettercactitemplates/Home/graph_image_025.png
 = graph_image_026.png =
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_026.png
+
+= MySQL Processlist =
+
+http://sites.google.com/site/bettercactitemplates/Home/MySQL_Processlist.png
+
+The MySQL Processlist shows the number (count) of queries from SHOW PROCESSLIST in given statuses.  Some of the statuses are lumped together into the "other" category.
