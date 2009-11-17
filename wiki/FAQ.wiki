@@ -14,7 +14,7 @@ Q. Running poller.php or ss_get_mysql_stats.php shows the correct output, but I 
 
 Q. I get a blank page when I try to import the templates.  Why?
 
-  # A. Check your webserver log.  PHP might have run out of memory.  If you see something like "Allowed memory size of 8388608 bytes exhausted (tried to allocate 10 bytes)" then you should increase memory_limit in your php.ini file and restart the webserver.
+  # A. Check your webserver log.  PHP might have run out of memory.  If you see something like "Allowed memory size of 8388608 bytes exhausted (tried to allocate 10 bytes)" then you should increase memory_limit in your php.ini file and restart the webserver.  Check that you've changed the correct php.ini file.  If the problem persists, you might be changing the wrong one or doing it wrong.  Some users have reported that they need to add `ini_set('memory_limit', '64M');` to the top of include/global.php.
 
 Q. When I try to import the templates, my browser asks me if I want to download templates_import.php.  Why?
 
@@ -22,7 +22,7 @@ Q. When I try to import the templates, my browser asks me if I want to download 
 
 Q. I see an error on some huge SQL like SELECT CONCAT(0+104857683+104857795+104857873.....
 
-  # A. You must have a lot of binary log files!  Set expire_logs_days or purge old binlogs with PURGE MASTER LOGS.
+  # A. You must have a lot of binary log files!  Set expire_logs_days or purge old binlogs with PURGE MASTER LOGS.  (You also have an old version of the templates.  New versions don't do this at all anymore.)
 
 Q. After I import the templates, the angle brackets around hostname, etc are gone.  What's wrong?
 
