@@ -12,30 +12,44 @@ Right now the scripts are written and tested for GNU/Linux, but it is possible t
 
 No special installation is necessary.  Once the [SSHBasedTemplates SSH setup] is working, everything should just work.
 
-= unix_context_switches.png =
+= Context Switches =
+
+This graph shows the number of context switches performed by the server.
 
 http://sites.google.com/site/bettercactitemplates/Home/unix_context_switches.png
 
-= unix_cpu_usage.png =
+= CPU Usage =
+
+This graph shows CPU usage as derived from the /proc filesystem.  The example shows a server with two CPUs.  The values will increase by 100 with each added CPU.
 
 http://sites.google.com/site/bettercactitemplates/Home/unix_cpu_usage.png
 
-= unix_forks.png =
+= Forks =
+
+This graph shows the number of new processes created by the system.
 
 http://sites.google.com/site/bettercactitemplates/Home/unix_forks.png
 
-= unix_interrupts.png =
+= Interrupts =
+
+This graph shows how many interrupts the system handles.
 
 http://sites.google.com/site/bettercactitemplates/Home/unix_interrupts.png
 
-= unix_load_average.png =
+= Load Average =
+
+This graph shows system load average.  If you're used to looking at a "pretty" load average graph, you might think this one has less information.  Not so!  The standard graph that comes with Cacti is very silly: it shows the same information averaged over three time intervals, which is useless and redundant.  RRDtool can average the number for you just fine.
 
 http://sites.google.com/site/bettercactitemplates/Home/unix_load_average.png
 
-= unix_memory.png =
+= Memory =
+
+This graph shows the system's memory usage, as reported by the "free" command.
 
 http://sites.google.com/site/bettercactitemplates/Home/unix_memory.png
 
-= unix_number_of_users.png =
+= Number of Users =
+
+This graph shows how many users were logged into the system, as reported by the "w" command.
 
 http://sites.google.com/site/bettercactitemplates/Home/unix_number_of_users.png
