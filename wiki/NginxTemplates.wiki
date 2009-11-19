@@ -1,15 +1,34 @@
-#summary Examples and documentation for the Nginx templates
+#summary Cacti templates for graphing Nginx
 
 <wiki:toc max_depth="1" />
 
-= nginx_accepts_handled.png =
+= Overview =
+
+These templates use ss_get_by_ssh.php to connect to a server via SSH and extract statistics from the Nginx server running there, by executing the "wget" program with the url "/server-status".  This means you don't need to install any special tools.  Standard Unix command-line tools are all you need.
+
+= Installation =
+
+Once the [SSHBasedTemplates SSH setup] is working, test one of your hosts like this.  You may need to change some of the example values below, such as the cacti username and the hostname you're connecting to.
+
+{{{
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type nginx --host 127.0.0.1 --items az,b0'
+
+}}}
+
+= Accepts and Handled =
+
+This graph shows how many connections the server accepted and handled.
 
 http://sites.google.com/site/bettercactitemplates/Home/nginx_accepts_handled.png
 
-= nginx_requests.png =
+= Requests =
+
+This graph shows how many requests the Nginx server received.
 
 http://sites.google.com/site/bettercactitemplates/Home/nginx_requests.png
 
-= nginx_scoreboard.png =
+= Scoreboard =
+
+This graph shows how many connections to the Nginx servers are in various states.
 
 http://sites.google.com/site/bettercactitemplates/Home/nginx_scoreboard.png
