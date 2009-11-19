@@ -1,6 +1,7 @@
 <?php
 require('test-more.php');
 require('../scripts/ss_get_mysql_stats.php');
+$debug = true;
 
 is(
    make_bigint('0', '1170663853'),
@@ -173,7 +174,7 @@ is_deeply(
       'innodb_tables_in_use'      => '1',
       'innodb_locked_tables'      => '1',
       'locked_transactions'       => 1,
-      'innodb_lock_structs'       => '5',
+      'innodb_lock_structs'       => '9',
       'pending_normal_aio_reads'  => '0',
       'pending_normal_aio_writes' => '0',
       'pending_ibuf_aio_reads'    => '0',
@@ -292,10 +293,70 @@ is_deeply(
    'samples/innodb-009.txt'
 );
 
+/* TODO: I am not sure anymore what this file is meant to test.  Got pulled away
+ * in the midst of working on it, now can't remember what I was doing.
 is_deeply(
    get_innodb_array(file_get_contents('samples/innodb-014.txt')),
-   array(),
+   array(
+      'spin_waits'                => '335',
+      'spin_rounds'               => '1682',
+      'os_waits'                  => '210',
+      'pending_normal_aio_reads'  => '0',
+      'pending_normal_aio_writes' => '0',
+      'pending_ibuf_aio_reads'    => '0',
+      'pending_aio_log_ios'       => '0',
+      'pending_aio_sync_ios'      => '0',
+      'pending_log_flushes'       => '0',
+      'pending_buf_pool_flushes'  => '0',
+      'file_reads'                => '2158',
+      'file_writes'               => '1530',
+      'file_fsyncs'               => '992',
+      'ibuf_inserts'              => '6',
+      'ibuf_merged'               => '6',
+      'ibuf_merges'               => '6',
+      'log_bytes_written'         => '3068940702',
+      'unflushed_log'             => '0',
+      'log_bytes_flushed'         => '3068940702',
+      'pending_log_writes'        => '0',
+      'pending_chkp_writes'       => '0',
+      'log_writes'                => '686',
+      'pool_size'                 => '16000',
+      'free_pages'                => '13771',
+      'database_pages'            => '2148',
+      'modified_pages'            => '0',
+      'pages_read'                => '2148',
+      'pages_created'             => '0',
+      'pages_written'             => '694',
+      'queries_inside'            => '0',
+      'queries_queued'            => '0',
+      'read_views'                => '1',
+      'rows_inserted'             => '169',
+      'rows_updated'              => '336',
+      'rows_deleted'              => '4',
+      'rows_read'                 => '3713963',
+      'innodb_transactions'       => '8799060',
+      'unpurged_txns'             => '28',
+      'history_list'              => '9',
+      'current_transactions'      => '54',
+      'hash_index_cells_total'    => '1155127',
+      'hash_index_cells_used'     => '0',
+      'total_mem_alloc'           => '288139706',
+      'additional_pool_alloc'     => '2118912',
+      'last_checkpoint'           => '3068940702',
+      'uncheckpointed_bytes'      => '0',
+      'ibuf_used_cells'           => '1',
+      'ibuf_free_cells'           => '0',
+      'ibuf_cell_count'           => '2',
+      'adaptive_hash_memory'      => NULL,
+      'page_hash_memory'          => NULL,
+      'dictionary_cache_memory'   => NULL,
+      'file_system_memory'        => NULL,
+      'lock_system_memory'        => NULL,
+      'recovery_system_memory'    => NULL,
+      'thread_hash_memory'        => NULL,
+   ),
    'samples/innodb-014.txt'
 );
+*/
 
 ?>
