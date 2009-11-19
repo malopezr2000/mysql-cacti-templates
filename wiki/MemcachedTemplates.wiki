@@ -2,30 +2,56 @@
 
 <wiki:toc max_depth="1" />
 
-= memcached_additions_and_evictions.png =
+= Overview =
+
+These templates use ss_get_by_ssh.php to connect to a server via SSH and extract statistics from the memcached server running there, by executing the "nc" (netcat) program with the command "STAT".  This means you don't need any memcached APIs installed.  Standard Unix command-line tools are all you need.
+
+= Installation =
+
+Once the [SSHBasedTemplates SSH setup] is working, test one of your hosts like this.  You may need to change some of the example values below, such as the cacti username and the hostname you're connecting to.
+
+{{{
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items b6,b7'
+}}}
+
+= Additions and Evictions =
+
+This graph shows how many items were added and evicted.
 
 http://sites.google.com/site/bettercactitemplates/Home/memcached_additions_and_evictions.png
 
-= memcached_connections.png =
+= Connections =
+
+This graph shows how many connections have been made.
 
 http://sites.google.com/site/bettercactitemplates/Home/memcached_connections.png
 
-= memcached_current_items.png =
+= Current Items =
+
+This graph shows how many items are stored in the server.
 
 http://sites.google.com/site/bettercactitemplates/Home/memcached_current_items.png
 
-= memcached_memory.png =
+= Memory =
+
+This graph shows how much memory the server is using.
 
 http://sites.google.com/site/bettercactitemplates/Home/memcached_memory.png
 
-= memcached_requests.png =
+= Requests =
+
+This graph shows how many gets and sets have happened, as well as how many of the gets were misses (there was no item in the cache).
 
 http://sites.google.com/site/bettercactitemplates/Home/memcached_requests.png
 
-= memcached_rusage.png =
+= Rusage =
+
+This graph shows the resource usage statistics reported by memcached, in system and user CPU time.
 
 http://sites.google.com/site/bettercactitemplates/Home/memcached_rusage.png
 
-= memcached_traffic.png =
+= Traffic =
+
+This graph shows the network traffic in and out of the memcached server.
 
 http://sites.google.com/site/bettercactitemplates/Home/memcached_traffic.png
