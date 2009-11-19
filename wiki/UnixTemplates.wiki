@@ -1,4 +1,4 @@
-#summary Examples and documentation for the Unix templates
+#summary Cacti templates for Unix system statistics
 
 <wiki:toc max_depth="1" />
 
