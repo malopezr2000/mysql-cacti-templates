@@ -771,10 +771,6 @@ function get_innodb_array($text) {
          # ------- TRX HAS BEEN WAITING 32 SEC FOR THIS LOCK TO BE GRANTED:
          increment($results, 'innodb_lock_wait_secs', to_int($row[5]));
       }
-      elseif ( $txn_seen && strpos($line, 'LOCK WAIT') === 0 ) {
-         # LOCK WAIT 2 lock struct(s), heap size 368
-         increment($results, 'locked_transactions', 1);
-      }
       elseif ( strpos($line, 'read views open inside InnoDB') > 0 ) {
          # 1 read views open inside InnoDB
          $results['read_views'] = to_int($row[0]);
@@ -784,9 +780,17 @@ function get_innodb_array($text) {
          increment($results, 'innodb_tables_in_use', to_int($row[4]));
          increment($results, 'innodb_locked_tables', to_int($row[6]));
       }
-      elseif ( strpos($line, 'lock struct(s)') > 0 ) {
+      elseif ( $txn_seen && strpos($line, 'lock struct(s)') > 0 ) {
          # 23 lock struct(s), heap size 3024, undo log entries 27
-         increment($results, 'innodb_lock_structs', to_int($row[0]));
+         # LOCK WAIT 12 lock struct(s), heap size 3024, undo log entries 5
+         # LOCK WAIT 2 lock struct(s), heap size 368
+         if ( strpos($line, 'LOCK WAIT') === 0 ) {
+            increment($results, 'innodb_lock_structs', to_int($row[2]));
+            increment($results, 'locked_transactions', 1);
+         }
+         else {
+            increment($results, 'innodb_lock_structs', to_int($row[0]));
+         }
       }
 
       # FILE I/O
