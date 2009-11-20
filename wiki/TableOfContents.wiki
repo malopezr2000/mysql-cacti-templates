@@ -1,5 +1,6 @@
   * [FAQ Frequently Asked Questions]
   * [AdvantagesAndFeatures Advantages and Features]
+  * [Changelog]
   * Using the Ready-Made Templates
     * [InstallingTemplates Installing Templates]
     * [CustomizingTemplates Customizing Templates]
