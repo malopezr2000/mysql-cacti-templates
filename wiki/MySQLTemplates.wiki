@@ -21,6 +21,18 @@ To install,
 
 If you want to specify a different MySQL port for various servers, see http://code.google.com/p/mysql-cacti-templates/wiki/CustomizingTemplates#Accept_Input_in_Each_Data_Source
 
+= InnoDB Active/Locked Transactions =
+
+This template shows active and locked transactions inside InnoDB.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Active_Locked_Transactions.png
+
+= InnoDB Adaptive Hash Index =
+
+This graph shows the hash index's cells total and cells used.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Adaptive_Hash_Index.png
+
 = InnoDB Buffer Pool Activity =
 
 This graph shows activity inside the buffer pool: pages created, read, and written.
@@ -33,11 +45,35 @@ This graph shows the current status of the InnoDB buffer pool: the size, free pa
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_022.png
 
+= InnoDB Checkpoint Age =
+
+This graph shows the InnoDB checkpoint age, which is the same thing as the number of uncheckpointed bytes, and thus the amount of recovery that'll have to be performed if there's a crash.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Checkpoint_Age.png
+
+= InnoDB Current Lock Waits =
+
+This graph shows the total number of seconds that InnoDB transactions have been waiting for locks.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Current_Lock_Waits.png
+
 = InnoDB Insert Buffer =
 
 This graph shows information about InnoDB's insert buffer: inserts, merge operations, and merged records.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_012.png
+
+= InnoDB Insert Buffer Usage =
+
+This graph shows the total cells in the insert buffer, and the used and free cells.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Insert_Buffer_Usage.png
+
+= InnoDB Internal Hash Memory Usage =
+
+This graph shows how much memory InnoDB uses for various internal hash structures: the adaptive hash index, page hash, dictionary cache, filesystem, locks, recovery system, and thread hash.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Internal_Hash_Memory_Usage.png
 
 = InnoDB I/O Activity =
 
@@ -51,11 +87,23 @@ This graph shows InnoDB's pending synchronous and asynchronous I/O operations in
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_005.png
 
+= InnoDB Lock Structures =
+
+This graph shows how many lock structures InnoDB has internally.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Lock_Structures.png
+
 = InnoDB Log Activity =
 
 This graph shows InnoDB log activity: the log buffer size, bytes written, flushed, and unflushed.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_024.png
+
+= InnoDB Memory Allocation =
+
+This graph shows InnoDB's total memory allocation, and how much of that is in the additional pool (as opposed to the buffer pool).
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Memory_Allocation.png
 
 = InnoDB Row Operations =
 
@@ -69,11 +117,23 @@ This graph shows information on InnoDB semaphore activity: the number of spin ro
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_017.png
 
+= InnoDB Tables In Use =
+
+This graph shows how many tables InnoDB has in use and how many are locked.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Tables_In_Use.png
+
 = InnoDB Transaction Activity =
 
 This graph shows information about transactions within InnoDB: transactions created, open, active time, lock wait time, MVCC read views, and the length of the history list.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_006.png
+
+= MyISAM Indexes =
+
+This graph shows information about how many logical and physical reads and writes took place to MyISAM indexes.
+
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_021.png
 
 = MySQL Binary/Relay logs =
 
@@ -99,11 +159,11 @@ This graph shows status of MySQL's table cache and file handles: the size of the
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_004.png
 
-= MySQL MyISAM Indexes =
+= MySQL Handlers =
 
-This graph shows information about how many logical and physical reads and writes took place to MyISAM indexes.
+This graph shows the various Handler counters, which record how many operations MySQL has done through the storage engine API.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_021.png
+http://sites.google.com/site/bettercactitemplates/Home/MySQL_Handlers.png
 
 = MySQL Network Traffic =
 
@@ -165,3 +225,9 @@ http://sites.google.com/site/bettercactitemplates/Home/graph_image_011.png
 This graph shows information about temporary objects created by the MySQL server: temporary tables, temporary files, and temporary tables created on disk instead of in memory.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_025.png
+
+= MySQL Transaction Handler =
+
+This graph shows the transactional operations that took place at the MySQL server level.
+
+http://sites.google.com/site/bettercactitemplates/Home/MySQL_Transaction_Handlers.png
