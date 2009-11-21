@@ -1,4 +1,4 @@
-#summary Documentation on the MySQL graphs
+#summary Cacti templates and scripts for graphing MySQL
 
 This page gives installation instructions specific to the MySQL graph templates, shows examples of graphs in the MySQL template collection, and shows what they do.  You might want to look at http://dev.mysql.com/doc/refman/5.1/en/server-status-variables.html to learn the meaning of the status variables contained in the graphs.
 
@@ -21,53 +21,73 @@ To install,
 
 If you want to specify a different MySQL port for various servers, see http://code.google.com/p/mysql-cacti-templates/wiki/CustomizingTemplates#Accept_Input_in_Each_Data_Source
 
-= graph_image_002.png =
+= InnoDB Row Operations =
+
+This graph shows row operations InnoDB has performed.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_002.png
 
-= graph_image_003.png =
+= InnoDB I/O =
+
+This graph shows InnoDB's I/O activity.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_003.png
 
-= graph_image_004.png =
+= MySQL Files and Tables =
+
+This graph shows status of MySQL's table cache and file handles.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_004.png
 
-= graph_image_005.png =
+= InnoDB I/O Pending =
+
+This graph shows InnoDB's pending I/O operations.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_005.png
 
-= graph_image_006.png =
+= InnoDB Transaction Activity =
+
+This graph shows information about transactions within InnoDB.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_006.png
 
-= graph_image_007.png =
+= MySQL Sorts =
+
+This graph shows information about MySQL sort operations.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_007.png
 
-= graph_image_010.png =
+= MySQL Command Counters =
+
+This graph shows counters for various MySQL commands.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_010.png
 
-= graph_image_011.png =
+= MySQL Table Locks =
+
+This graph shows information about table-level lock operations inside MySQL.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_011.png
 
-= graph_image_012.png =
+= InnoDB Insert Buffer =
+
+This graph shows information about InnoDB's insert buffer.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_012.png
 
-= graph_image_013.png =
+= MySQL Binary/Relay logs =
+
+This graph shows information about server binary and relay logs.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_013.png
 
-= graph_image_014.png =
+= MySQL Query Cache =
+
+This graph shows information about the query cache inside MySQL.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_014.png
 
-= Replication Status =
-
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_015.png
+= MySQL Replication Status =
 
 This graph displays the status of the replication thread.  There are two ways to measure the replication delay:
 
@@ -78,48 +98,70 @@ When replication is running, there is an AREA of the same size as the replicatio
 
 The graph also shows open temporary tables and retried transactions.
 
-= graph_image_016.png =
+http://sites.google.com/site/bettercactitemplates/Home/graph_image_015.png
+
+= InnoDB Buffer Pool Activity =
+
+This graph shows activity inside the buffer pool: pages created, read, and written.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_016.png
 
-= graph_image_017.png =
+= InnoDB Semaphores =
+
+This graph shows information on InnoDB semaphore activity: the number of spin rounds, spin waits, and OS waits.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_017.png
 
-= graph_image_019.png =
+= MySQL Select Types =
+
+This graph shows information on how many of each type of select the MySQL server has performed: full join, full range join, range, range check, and scan.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_019.png
 
-= graph_image_020.png =
+= MySQL Connections =
+
+This graph shows information about the connection parameters and counters inside MySQL: connections permitted, connections used, connections aborted, clients aborted, current connections, and connections created.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_020.png
 
-= graph_image_021.png =
+= MySQL MyISAM Indexes =
+
+This graph shows information about how many logical and physical reads and writes took place to MyISAM indexes.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_021.png
 
-= graph_image_022.png =
+= InnoDB Buffer Pool Status =
+
+This graph shows the current status of the InnoDB buffer pool: the size, free pages, used (database) pages, and dirty (modified) pages.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_022.png
 
-= graph_image_023.png =
+= MySQL Network Traffic =
+
+This graph shows network traffic to and from the MySQL Server, in bytes.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_023.png
 
-= graph_image_024.png =
+= InnoDB Log Activity =
+
+This graph shows InnoDB log activity: the log buffer size, bytes written, flushed, and unflushed.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_024.png
 
-= graph_image_025.png =
+= MySQL Temporary Objects =
+
+This graph shows information about temporary objects created by the MySQL server: temporary tables, temporary files, and temporary tables created on disk instead of in memory.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_025.png
 
-= graph_image_026.png =
+= MySQL Query Cache Memory =
+
+This graph shows information on the query cache's memory usage: total size, free memory, total blocks and free blocks.  Blocks are not of a uniform size, despite the name.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_026.png
 
 = MySQL Processlist =
 
-http://sites.google.com/site/bettercactitemplates/Home/MySQL_Processlist.png
-
 The MySQL Processlist shows the number (count) of queries from SHOW PROCESSLIST in given statuses.  Some of the statuses are lumped together into the "other" category.
+
+http://sites.google.com/site/bettercactitemplates/Home/MySQL_Processlist.png
