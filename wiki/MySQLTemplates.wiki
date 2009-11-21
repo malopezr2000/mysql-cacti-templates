@@ -35,19 +35,19 @@ http://sites.google.com/site/bettercactitemplates/Home/graph_image_022.png
 
 = InnoDB Insert Buffer =
 
-This graph shows information about InnoDB's insert buffer.
+This graph shows information about InnoDB's insert buffer: inserts, merge operations, and merged records.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_012.png
 
 = InnoDB I/O Activity =
 
-This graph shows InnoDB's I/O activity.
+This graph shows InnoDB's I/O activity: file reads and writes, log writes, and fsync() calls.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_003.png
 
 = InnoDB I/O Pending =
 
-This graph shows InnoDB's pending I/O operations.
+This graph shows InnoDB's pending synchronous and asynchronous I/O operations in various parts of the engine.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_005.png
 
@@ -59,7 +59,7 @@ http://sites.google.com/site/bettercactitemplates/Home/graph_image_024.png
 
 = InnoDB Row Operations =
 
-This graph shows row operations InnoDB has performed.
+This graph shows row operations InnoDB has performed: reads, deletes, inserts, and updates.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_002.png
 
@@ -71,19 +71,19 @@ http://sites.google.com/site/bettercactitemplates/Home/graph_image_017.png
 
 = InnoDB Transaction Activity =
 
-This graph shows information about transactions within InnoDB.
+This graph shows information about transactions within InnoDB: transactions created, open, active time, lock wait time, MVCC read views, and the length of the history list.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_006.png
 
 = MySQL Binary/Relay logs =
 
-This graph shows information about server binary and relay logs.
+This graph shows information about server binary and relay logs: the binary log cache usage, cache misses, and space used by the binary and relay logs.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_013.png
 
 = MySQL Command Counters =
 
-This graph shows counters for various MySQL commands.
+This graph shows counters for various MySQL commands.  These are derived from the Com_ counters from SHOW STATUS.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_010.png
 
@@ -95,7 +95,7 @@ http://sites.google.com/site/bettercactitemplates/Home/graph_image_020.png
 
 = MySQL Files and Tables =
 
-This graph shows status of MySQL's table cache and file handles.
+This graph shows status of MySQL's table cache and file handles: the size of the cache, and how many open files and tables there are.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_004.png
 
@@ -119,7 +119,7 @@ http://sites.google.com/site/bettercactitemplates/Home/MySQL_Processlist.png
 
 = MySQL Query Cache =
 
-This graph shows information about the query cache inside MySQL.
+This graph shows information about the query cache inside MySQL: the number of queries in the cache, inserted, queries not cached, queries pruned due to low memory, and cache hits.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_014.png
 
@@ -150,13 +150,13 @@ http://sites.google.com/site/bettercactitemplates/Home/graph_image_019.png
 
 = MySQL Sorts =
 
-This graph shows information about MySQL sort operations.
+This graph shows information about MySQL sort operations: rows sorted, merge passes, and number of sorts triggered by range and scan queries.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_007.png
 
 = MySQL Table Locks =
 
-This graph shows information about table-level lock operations inside MySQL.
+This graph shows information about table-level lock operations inside MySQL: locks waited, locks granted without waiting, and slow queries.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_011.png
 
