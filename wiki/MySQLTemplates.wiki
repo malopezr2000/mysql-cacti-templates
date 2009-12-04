@@ -19,7 +19,7 @@ To install,
   # Copy ss_get_mysql_stats.php into your Cacti installation's scripts/ directory.
   # All other steps are the same as mentioned in InstallingTemplates.
 
-If you want to specify a different MySQL port for various servers, see http://code.google.com/p/mysql-cacti-templates/wiki/CustomizingTemplates#Accept_Input_in_Each_Data_Source
+If you want to specify a different MySQL port for various servers, see [http://code.google.com/p/mysql-cacti-templates/wiki/CustomizingTemplates#Accept_Input_in_Each_Data_Source how to accept input in each data source].
 
 = InnoDB Active/Locked Transactions =
 
