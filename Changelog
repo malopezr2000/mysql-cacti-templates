@@ -1,5 +1,6 @@
 Changes for templates:
 
+  * The COUNTER data type caused spikes; switched to DERIVE instead (issue41).
   * LOCK WAIT in an InnoDB transaction could cause an error (issue 91).
   * The cache file name didn't include the MySQL port (issue 82).
   * Added the -q option to the SSH command to quell missing homedir warnings.
