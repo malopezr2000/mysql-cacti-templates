@@ -601,7 +601,7 @@ function get_stats_memcached ( $cmd, $options ) {
 
    $srv = isset($options['server']) ? $options['server'] : $options['host'];
    $prt = isset($options['port2'])  ? $options['port2']  : $memcache_port;
-   $cmd = "$cmd 'echo stats | nc $srv $prt'";
+   $cmd = "$cmd 'echo \"stats\nquit\" | nc $srv $prt'";
    $str = `$cmd`;
 
    $result = array();
