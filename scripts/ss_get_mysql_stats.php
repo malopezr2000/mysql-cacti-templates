@@ -347,7 +347,9 @@ function ss_get_mysql_stats( $options ) {
    # Get SHOW SLAVE STATUS, and add it to the $status array.
    if ( $chk_options['slave'] ) {
       $result = run_query("SHOW SLAVE STATUS", $conn);
+      $slave_status_rows_gotten = 0;
       foreach ( $result as $row ) {
+         $slave_status_rows_gotten++;
          # Must lowercase keys because different MySQL versions have different
          # lettercase.
          $row = array_change_key_case($row, CASE_LOWER);
@@ -358,8 +360,22 @@ function ss_get_mysql_stats( $options ) {
          if ( $heartbeat ) {
             $result2 = run_query(
                "SELECT GREATEST(0, UNIX_TIMESTAMP() - UNIX_TIMESTAMP(ts) - 1)"
-               . "FROM $heartbeat WHERE id = 1", $conn);
-            $status['slave_lag'] = $result2[0][0];
+               . " AS delay FROM $heartbeat WHERE id = 1", $conn);
+            $slave_delay_rows_gotten = 0;
+            foreach ( $result2 as $row2 ) {
+               $slave_delay_rows_gotten++;
+               if ( $row2 && is_array($row2)
+                  && array_key_exists('delay', $row2) )
+               {
+                  $status['slave_lag'] = $row2['delay'];
+               }
+               else {
+                  debug("Couldn't get slave lag from $heartbeat");
+               }
+            }
+            if ( $slave_delay_rows_gotten == 0 ) {
+               debug("Got nothing from heartbeat query");
+            }
          }
 
          # Scale slave_running and slave_stopped relative to the slave lag.
@@ -367,6 +383,9 @@ function ss_get_mysql_stats( $options ) {
             ? $status['slave_lag'] : 0;
          $status['slave_stopped'] = ($row['slave_sql_running'] == 'Yes')
             ? 0 : $status['slave_lag'];
+      }
+      if ( $slave_status_rows_gotten == 0 ) {
+         debug("Got nothing from SHOW SLAVE STATUS");
       }
    }
 
