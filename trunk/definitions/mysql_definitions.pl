@@ -28,19 +28,19 @@
       {  base_value => '1000',
          dt         => {
             Key_read_requests => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_b407e61e9948460c99116f7f6a72cf92',
             },
             Key_reads => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_0de2bf128eac0bc672d77085da38f8cf',
             },
             Key_write_requests => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_039d69d0262c783f20b77fa3b3f62e88',
             },
             Key_writes => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_f8851b46ed984a9e8fba454c48995230',
             },
             hash  => 'hash_01_VER_29f0b43ffd723039d3428839ab9f5174',
@@ -171,21 +171,21 @@
          name       => 'InnoDB I/O',
          dt         => {
             file_fsyncs => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_1b83b09538bc14ae68e1e9a58d0ea4ce',
             },
             file_reads => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_9faa26c606b6b28778864d5081588c62',
             },
             file_writes => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_1452aa7aa7147b5a81f90acf29e344a7',
             },
             hash       => 'hash_01_VER_c56de26b6cec34796af17026e8b1e1f5',
             input      => 'Get MySQL Stats',
             log_writes => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_506dc7cea79a8e9167a2961e4af16f4f',
             },
          },
@@ -243,15 +243,15 @@
          dt         => {
             hash         => 'hash_01_VER_41c5206e4ce414e2bda8b85db4da77dd',
             ibuf_inserts => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_d4ee67c833d28a979599b71381360734',
             },
             ibuf_merged => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_c289a34d4c63e31f02be38ad26ffb077',
             },
             ibuf_merges => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_db421787539f02497406cd293f1a522a',
             },
             input => 'Get MySQL Stats',
@@ -352,15 +352,15 @@
             hash     => 'hash_01_VER_c74a58d5af8d4b98f99fa997c7c75480',
             input    => 'Get MySQL Stats',
             os_waits => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_522f5ed5373d54e612f2e2a32b58c8ca',
             },
             spin_rounds => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_c88c11b5a4da84fd95ff088a4d815cd6',
             },
             spin_waits => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_d1a72d8ab6137fcf3df95b2e14a89a58',
             },
          },
@@ -407,19 +407,19 @@
             hash         => 'hash_01_VER_8c0c000f2a5a0bef224c8c2cd3bdd9c9',
             input        => 'Get MySQL Stats',
             rows_deleted => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_9d6fb10c7a6fad13a42d29c5b77a26b1',
             },
             rows_inserted => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_ac8e609e24e306fef2ec8ef425fe0ea6',
             },
             rows_read => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_f643eab7bbcd11417e0685d138c2e4b4',
             },
             rows_updated => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_16c850e649dd91edf9d2241bc635377c',
             },
          },
@@ -538,15 +538,15 @@
             hash            => 'hash_01_VER_f12a4fdc2bbe8cee87181ba0feaf67ee',
             input           => 'Get MySQL Stats',
             Aborted_clients => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_b9482e8e8f3a6d0e95978e19715ac447',
             },
             Aborted_connects => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_fc1dba80f47aacc5247d7a598bc79e85',
             },
             Connections => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_3790fcbadbe72404d2826fc88c29b1d0',
             },
             Max_used_connections => {
@@ -636,7 +636,7 @@
                hash => 'hash_08_VER_25cf8ecc2e97a7de94bc1cb48151a5e2',
             },
             Slave_retried_transactions => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_bc1d5cacb2e2c6f0785f369f6baaa349',
             },
             hash  => 'hash_01_VER_b4e58a773aa9fb5b2b40c13850434ef5',
@@ -710,19 +710,19 @@
             hash  => 'hash_01_VER_758e5dfa7c1b43158c99c9ae8f5c9151',
             input => 'Get MySQL Stats',
             Qcache_hits => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_f07477338949616d6eea54ee637f6d4e',
             },
             Qcache_inserts => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_22845ea66b30de205a53b333a5a90164',
             },
             Qcache_lowmem_prunes => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_14595905d0a5cd47d859662262beced7',
             },
             Qcache_not_cached => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_bed31c9faf2bd44892d858ca786520ef',
             },
             Qcache_queries_in_cache => {
@@ -862,47 +862,47 @@
       {  base_value => '1000',
          dt         => {
             Com_delete => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_338ab0cab8bfed0e33c57639bac678a2',
             },
             Com_delete_multi => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_149230bfe45c31f9f844e726a6fd4821',
             },
             Com_insert => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_3d9a4c7361041aa0bcb36b4bb98e3853',
             },
             Com_insert_select => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_08217f95d7cd474051c926b7c5fbf6e7',
             },
             Com_load => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_87cacd948ec07d17babbbf9f1ff0867e',
             },
             Com_replace => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_758bec4a0d6344ccd03f47e7be7068cf',
             },
             Com_replace_select => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_ab2e63aef3037b7c7d134fbba74d3c3e',
             },
             Com_select => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_196a931365006b70189f1252a7601ecb',
             },
             Com_update => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_2ded5946a4f8009c895f7416cbfa4c74',
             },
             Com_update_multi => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_caf6c3ae61650a2096daaca96b837bb0',
             },
             Questions => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_542f25b1dd6cc52340253c02a3b8da1b',
             },
             hash  => 'hash_01_VER_f8fa7fbf4c5d4ee7d82f7b4c22cc5c26',
@@ -1039,23 +1039,23 @@
          # Color palette: http://www.colourlovers.com/palette/354987/DSH
          dt         => {
             Select_full_join => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_5e6cf8e6439278754a5ffb80e3bdef57',
             },
             Select_full_range_join => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_c9a6d87d4df6f96364f7bc700fadbc45',
             },
             Select_range => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_61fff8036b63b07d8863feeacc81c1d4',
             },
             Select_range_check => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_8245046cf427baa6fb2a253a533225f3',
             },
             Select_scan => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_e71fb77d0613171bc9b0fc92f2e58326',
             },
             hash  => 'hash_01_VER_a2121560753c5140690165f8c594b84b',
@@ -1123,19 +1123,19 @@
       {  base_value => '1000',
          dt         => {
             Sort_merge_passes => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_8aa489c6bb70310d14a24e56e31c9592',
             },
             Sort_range => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_b77c61e0c59b1210d4ab0d94efc3c49e',
             },
             Sort_rows => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_362757dae7975981676b254896863a43',
             },
             Sort_scan => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_ef1c94da33bc5d6378f01bd4afdb7c1c',
             },
             hash  => 'hash_01_VER_bd1be5ddd62b90c9d5be5bfc592e7b95',
@@ -1193,15 +1193,15 @@
       {  base_value => '1000',
          dt         => {
             Created_tmp_disk_tables => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_5668ee63d100ff3e25f235b47099e56c',
             },
             Created_tmp_files => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_10c2532bfb063c2795e0846f5c8466a1',
             },
             Created_tmp_tables => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_322a90733977c40c16f4ea07987e39c0',
             },
             hash  => 'hash_01_VER_08d29df27f37a2c74559f48ff77905a0',
@@ -1256,11 +1256,11 @@
          name => 'MySQL Network Traffic',
          dt         => {
             Bytes_sent => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_7fb4bf9ceb329586e4b503c1e1923ca8',
             },
             Bytes_received => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_0dc4474ee42f80143630b1c03f5292c6',
             },
             hash  => 'hash_01_VER_86055944cd5a58072ab8b2db2488a1ef',
@@ -1300,15 +1300,15 @@
             hash          => 'hash_01_VER_71058b0c913ca3b1c3f4246c628731fb',
             input         => 'Get MySQL Stats',
             pages_created => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_9a01b6e087c3ef063799178d306feb97',
             },
             pages_read => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_c398c4cdc2f9c82448fa443a641b810d',
             },
             pages_written => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_53c047bd9eadb7ad5e743d05cbaaf84b',
             },
          },
@@ -1504,15 +1504,15 @@
             },
             input             => 'Get MySQL Stats',
             log_bytes_flushed => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_de41286a9e5734185c7a4eac909a1580',
             },
             log_bytes_written => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_dc4885299416ee40c40c96b36f1a0511',
             },
             unflushed_log => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_dbfd089a2e1f44392fcfa1c3499f1013',
             },
          },
@@ -1565,11 +1565,11 @@
       {  base_value => '1024',
          dt         => {
             Binlog_cache_disk_use => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_c5d1d5f676d73244c30e0d71c9324fd1',
             },
             Binlog_cache_use => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_f787be2f29e6a6c727d51629d310dd4c',
             },
             binary_log_space => {
@@ -1647,7 +1647,7 @@
                hash => 'hash_08_VER_d77d77348050b6a61f9df87f2cd0a47c',
             },
             innodb_transactions => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_4bb48cfeb0c6ba33cd0efc263f17d3d6',
             },
             read_views => {
@@ -1754,7 +1754,7 @@
                hash => 'hash_08_VER_6a4c5bbc5e1010c27f25ae5099125a9b',
             },
             Opened_tables => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_b31d2e1ef1d9178247ce4e874ae88e33',
             },
             hash        => 'hash_01_VER_a9377536471aa6701b8fb1eeb264e1c0',
@@ -1815,7 +1815,7 @@
             hash  => 'hash_01_VER_f12a4fdc2bbe8cee87181ba0feaf67ed',
             input => 'Get MySQL Stats',
             Threads_created => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_b46bed6846abf8d3061ff730d770d13e',
             },
             thread_cache_size => {
@@ -2417,15 +2417,15 @@
             hash  => 'hash_01_VER_2227a4794731fe2fa387cc096c39e514',
             input => 'Get MySQL Stats',
             Handler_commit => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_7e7fad9a6481fc3d92c088d62899892f',
             },
             Handler_rollback => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_3f5d445e7498402b46163527830eecae',
             },
             Handler_savepoint => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_66125ea03534f65a210ffccb18d2f6dc',
             },
             Handler_savepoint_rollback => {
@@ -2487,39 +2487,39 @@
             hash  => 'hash_01_VER_50c34827f19eba780d2f1333bdfa85b4',
             input => 'Get MySQL Stats',
             Handler_write => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_8f5a845776c2a5f6919dddb3568a888e',
             },
             Handler_update => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_43ce1f5b5037c2ed2248701375f60b52',
             },
             Handler_delete                  => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_3d4ae5e57097e4d4fb2df7b87fc21386',
             },
             Handler_read_first        => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_9d7ed56c6442f3da58f2c04509786bc2',
             },
             Handler_read_key                 => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_98ddc8ca88ead8ba056d7479df92a64c',
             },
             Handler_read_next               => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_d1e9cd45a9a5bdb9695a816d0422d469',
             },
             Handler_read_prev                => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_b7b81cd4e433f02bf8579f910377e94e',
             },
             Handler_read_rnd            => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_d4ce6e9298605da94efdea368148544a',
             },
             Handler_read_rnd_next     => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_f0c6936a50af8f0c5c7bdee7e59ff902',
             },
          },

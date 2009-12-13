@@ -33,7 +33,7 @@
             hash       => 'hash_01_VER_200c3b9af34f3c6c96e68c8e561660bd',
             input      => 'Get Nginx Stats',
             NGINX_server_requests => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_e4b05773e000997ad54f63f312a97e08'
             },
          },
@@ -58,11 +58,11 @@
             hash       => 'hash_01_VER_ada5ac735d555cb01993d27575398b95',
             input      => 'Get Nginx Stats',
             NGINX_server_accepts => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_49fb074c37172a9be39e78187fa42957'
             },
             NGINX_server_handled => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_a4cc1ed0cd85151e74b1b4c4fc5c76a9'
             },
          },
