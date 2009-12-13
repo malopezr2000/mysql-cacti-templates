@@ -33,11 +33,11 @@
             hash       => 'hash_01_VER_07ad123d392f3d06d255271acb37f628',
             input      => 'Get Memcached Stats',
             MEMC_rusage_user => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_ccda4eba57a840570248abdcfc46043f'
             },
             MEMC_rusage_system => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_d51a5c5f1b7194edb50c9c6c2b50776b'
             },
          },
@@ -98,11 +98,11 @@
             hash       => 'hash_01_VER_8bf04184980e94d02929412c0da0e8ed',
             input      => 'Get Memcached Stats',
             MEMC_total_items => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_aa7bfa7266ac4c57af2c3402945e1ac2'
             },
             MEMC_evictions => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_c8edc0984b23d25afe50283ad9bcf20b'
             },
          },
@@ -168,7 +168,7 @@
                hash => 'hash_08_VER_0725ee8c887b598a97b978e188527629'
             },
             MEMC_total_connections => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_5215c2bb84d484ca5a7f653e37bcf169'
             },
          },
@@ -204,15 +204,15 @@
             hash       => 'hash_01_VER_0c8f26f3e3a38d4953955ee4556bd948',
             input      => 'Get Memcached Stats',
             MEMC_cmd_get => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_28953d4c95e4b887bd0f2a70aedb4f7e'
             },
             MEMC_cmd_set => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_50e0d9fdd8764e55727c5f74ad06f3ee'
             },
             MEMC_get_misses => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_89581f8238b3e80caad434c3a09d3a8d'
             },
          },
@@ -260,11 +260,11 @@
             hash       => 'hash_01_VER_58a735642fc8886c54763c0d7daee893',
             input      => 'Get Memcached Stats',
             MEMC_bytes_read => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_9055e96b91e4aa2d84a110c8cff1d2ed'
             },
             MEMC_bytes_written => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_f5cb902cf58b3c4fbca7e85edd9d676e'
             },
          },

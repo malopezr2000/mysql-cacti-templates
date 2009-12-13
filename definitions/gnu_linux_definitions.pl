@@ -33,7 +33,7 @@
             hash       => 'hash_01_VER_3cd70fcd5fa165fcad84b3b54803ed86',
             input      => 'Get Proc Stats',
             STAT_interrupts => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_5856aae85ebd429a27c01c95a7a41e8a'
             },
          },
@@ -58,7 +58,7 @@
             hash       => 'hash_01_VER_98d7a3b21446fd1fcee4e8ec7e0bb352',
             input      => 'Get Proc Stats',
             STAT_context_switches => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_cd257aa0c6d27dd53587d361f00c5f42'
             },
          },
@@ -83,7 +83,7 @@
             hash       => 'hash_01_VER_493ed41bd1f902d083f80d8d673f151d',
             input      => 'Get Proc Stats',
             STAT_forks => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_e41ee66c659ed1afe2a6faeea17390ef'
             },
          },
@@ -108,39 +108,39 @@
             hash       => 'hash_01_VER_a23b607098aca1e8985765ffe0577aca',
             input      => 'Get Proc Stats',
             STAT_CPU_user => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_0536a8683791c498e0e2acc3d0311504'
             },
             STAT_CPU_nice => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_6aaeb871f3d46d19f9b3fc5aa7c902f3'
             },
             STAT_CPU_system => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_fe1a5642a47b67eee7371a24d1d1c1d3'
             },
             STAT_CPU_idle => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_8a21a24a887a03ea128c642af38b3a71'
             },
             STAT_CPU_iowait => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_d3199f78dafc5c469c97cd56991126ad'
             },
             STAT_CPU_irq => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_118f47b0457c032ca8b2483af7fa7421'
             },
             STAT_CPU_softirq => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_583d5902dc2f3af737d580eb38b3b99a'
             },
             STAT_CPU_steal => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_c5e2813e5c38e221a9e307d709ac49c8'
             },
             STAT_CPU_guest => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_e5f9bec5d8b5e6b12222558f97692476'
             },
          },

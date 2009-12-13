@@ -33,7 +33,7 @@
             hash       => 'hash_01_VER_b126c9d16618d1cd99dc2d4eb27703c3',
             input      => 'Get Apache Stats',
             Requests => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_9ab18f7a0cdc99e5a704af15dd0908cc'
             },
          },
@@ -58,7 +58,7 @@
             hash       => 'hash_01_VER_fcd7e3d3cfb9ff2086af3573da16c4bb',
             input      => 'Get Apache Stats',
             Bytes_sent => {
-               data_source_type_id => '2',
+               data_source_type_id => '3',
                hash => 'hash_08_VER_4f32e43daef6ae3e1423c80578c06ce1'
             },
          },
