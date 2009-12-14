@@ -8,4 +8,4 @@ Here's how to create a release:
   # run `./make.sh` in the top level.
   # Upload the file.  Set it to Featured, and set the description to `Version XXX`.  Unset Featured on the old file.
   # Update [Changelog].
-  # Update the installation instructions if necessary.
+  # Update the instructions at UpgradingTemplates, if necessary.
