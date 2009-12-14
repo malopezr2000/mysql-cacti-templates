@@ -23,7 +23,21 @@ Each step in the following list assumes that you have upgraded to the previous v
 
 = Version 1.1.5 =
 
-To upgrade from version 1.1.4, you need to copy the new ss_get_mysql_stats.php and ss_get_by_ssh.php files into your Cacti scripts directory, and re-import the new version of the templates.  All of the templates were changed.  You do not need to re-edit devices, because there are no new graphs.  However, the RRA definitions are changed to use DERIVE instead of COUNTER, and the RRA files need to be rebuilt for that to take effect.
+To upgrade from version 1.1.4, you need to copy the new ss_get_mysql_stats.php and ss_get_by_ssh.php files into your Cacti scripts directory, and re-import the new version of the templates.  All of the templates were changed.  You do not need to re-edit devices, because there are no new graphs.  However, the RRA definitions are changed to use DERIVE instead of COUNTER, and the RRA files need to be rebuilt for that to take effect.  This is optional, but is a nice improvement because it will prevent spikes from making the graphs unreadable.  To rebuild the RRA files with DERIVE, run the following code in your RRA directory, which is probably something like `/var/lib/cacti/rra/`:
+
+{{{
+for file in *.rrd; do
+  if rrdtool info $file | grep -q COUNTER; then
+    mv $file $file.bak;
+    rrdtool dump $file.bak > $file.xml;
+    perl -pi -e 's/COUNTER/DERIVE/' $file.xml;
+    rrdtool restore $file.xml $file;
+    rm $file.xml;
+  fi
+done
+}}}
+
+You should then test that everything is OK.  If needed, the original files are still there with a .bak filename extension.  These can be deleted after you determine everything's all right.
 
 = Version 1.1.4 =
 
