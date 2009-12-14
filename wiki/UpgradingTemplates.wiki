@@ -4,7 +4,7 @@
 
 Upgrading is normally a simple process.
 
-= Finding Installed Version =
+= Finding The Installed Version =
 
 Before you begin, find the version of the templates and scripts that is currently installed.  In releases 1.1.4 and higher, you can find this as a GPRINT item, as in the following screenshot:
 
@@ -20,6 +20,10 @@ $version = "1.1.4";
 }}}
 
 Each step in the following list assumes that you have upgraded to the previous version already.
+
+= Version 1.1.5 =
+
+To upgrade from version 1.1.4, you need to copy the new ss_get_mysql_stats.php and ss_get_by_ssh.php files into your Cacti scripts directory, and re-import the new version of the templates.  All of the templates were changed.  You do not need to re-edit devices, because there are no new graphs.  However, the RRA definitions are changed to use DERIVE instead of COUNTER, and the RRA files need to be rebuilt for that to take effect.
 
 = Version 1.1.4 =
 
