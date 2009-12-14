@@ -1,0 +1,11 @@
+#summary How to make a release of the templates
+
+Here's how to create a release:
+
+  # Make sure the Changelog is up to date and check the issue list.
+  # Make a note of any changes that will require special upgrade instructions.
+  # Add a "version" line to the top of the Changelog.
+  # run `./make.sh` in the top level.
+  # Upload the file.  Set it to Featured, and set the description to `Version XXX`.  Unset Featured on the old file.
+  # Update [Changelog].
+  # Update 
