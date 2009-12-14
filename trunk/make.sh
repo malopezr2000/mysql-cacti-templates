@@ -5,7 +5,7 @@ set -u
 set -x
 
 VERSION=`head -n 5 Changelog | grep version | head -n 1 | cut -d ' ' -f 3`;
-DISTDIR=better-cacti-templates$VERSION
+DISTDIR=better-cacti-templates-$VERSION
 
 if test -d $DISTDIR ; then rm -rf $DISTDIR ; fi
 mkdir -p $DISTDIR/{scripts,templates,tools,definitions}
