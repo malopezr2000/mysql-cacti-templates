@@ -54,7 +54,7 @@ $use_ss     = FALSE; # Whether to use the script server or not
 # ============================================================================
 # You should not need to change anything below this line.
 # ============================================================================
-$version = "1.1.4";
+$version = "1.1.5";
 
 # ============================================================================
 # Include settings from an external config file (issue 39).
