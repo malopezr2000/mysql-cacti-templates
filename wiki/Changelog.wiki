@@ -1,5 +1,16 @@
 #summary Changes in the templates and scripts
 
+2009-12-13: version 1.1.5
+
+  * Support for getting slave lag via mk-heartbeat was broken (issue 87).
+  * The memcached stats command hung because it lacked "quit" (issue 65).
+  * The COUNTER data type caused spikes; switched to DERIVE instead (issue41).
+  * LOCK WAIT in an InnoDB transaction could cause an error (issue 91).
+  * The cache file name didn't include the MySQL port (issue 82).
+  * Added the -q option to the SSH command to quell missing homedir warnings.
+  * The --port option to the MySQL templates could not be null.
+  * The log_bytes_flushed and log_bytes_written were renamed (issue 81).
+
 2009-10-25: version 1.1.4
 
   * Changed SSH options so host keys are accepted automatically (issue 68).
