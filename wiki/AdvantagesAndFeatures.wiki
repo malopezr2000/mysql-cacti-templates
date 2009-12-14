@@ -15,6 +15,7 @@ http://forums.cacti.net/viewtopic.php?t=26448.
 
 The templates also have the following features:
 
+  * There is a test suite, to keep the code high quality.
   * Much more data is collected and graphed.
   * Graphs have attractive colors and consistent formatting.  Metrics are printed as well as graphed, so you can read the numbers as well as look at the picture.
   * Integration with Maatkit.
