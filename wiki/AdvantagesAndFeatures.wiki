@@ -7,7 +7,7 @@ templates I've designed should work around all of these problems, which are pret
 
   *  No duplicated data in RRD files.
   *  No unused data in RRD files.
-  *  No wasted polling for the same data over and over.
+  *  No wasted polling for the same data over and over, so your Cacti installation won't start timing out.
 
 The techniques I've used to work around this are caching with one data template
 per graph template.  You can read more at
