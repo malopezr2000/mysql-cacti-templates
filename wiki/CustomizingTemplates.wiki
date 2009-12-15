@@ -13,9 +13,9 @@ You can customize many aspects of the templates.  The following sections will ex
 The process of generating a template is very simple.  You simply execute the make-template.pl program and give it the associated script and template definition file.  For example, to create MySQL templates identical to the ones in the release file:
 
 {{{
-$ perl meta/make-template.pl \
-  --script ss_get_mysql_stats.php
-  meta/mysql_definitions.pl > mysql-template.xml
+$ perl tools/make-template.pl \
+  --script scripts/ss_get_mysql_stats.php \
+  definitions/mysql_definitions.pl > mysql-template.xml
 }}}
 
 =Generate Templates for a Specific Cacti Version=
@@ -31,8 +31,8 @@ If you want to specify command-line options to data sources, you can easily make
 The option to use is --mpds, which is short for "make per data source".  You give it a comma-separated list of options.  Here's an example with --port.
 
 {{{
-perl meta/make-template.pl \
-  --script ss_get_mysql_stats.php meta/mysql_definitions.pl \
+perl tools/make-template.pl \
+  --script scripts/ss_get_mysql_stats.php definitions/mysql_definitions.pl \
   --mpds port > templates_requiring_port.xml
 }}}
 
@@ -45,8 +45,8 @@ http://sites.google.com/site/bettercactitemplates/Home/create-graphs-input-port.
 The default size of the Cacti graphs is 120 pixels high by 500 pixels wide.  If you would like to specify a different size, you can use the --graph_height and --graph_width options.  For example,
 
 {{{
-perl meta/make-template.pl \
-  --script ss_get_mysql_stats.php meta/mysql_definitions.pl \
+perl tools/make-template.pl \
+  --script scripts/ss_get_mysql_stats.php definitions/mysql_definitions.pl \
   --graph_height 240 --graph_width 1000 > templates_240x1000.xml
 }}}
 
