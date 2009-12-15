@@ -38,7 +38,7 @@ The general process is to copy the data-gathering scripts into place, and then t
 Copy the PHP scripts into your Cacti installation's scripts directory, on the server that hosts Cacti.  This is usually `/usr/share/cacti/site/scripts/`, but might be different on your system.  Let's assume you want to install the MySQL templates.
 
 {{{
-root@cactiserver# cp ss_get_mysql_stats.php /usr/share/cacti/site/scripts
+root@cactiserver# cp scripts/ss_get_mysql_stats.php /usr/share/cacti/site/scripts
 }}}
 
 Now import the template files through your web browser.  In the Cacti web interface's Console tab, click on the *Import Templates* link in the left sidebar.  Browse to the directory containing the unpacked templates, select the XML file for the templates you're installing, and submit the form.  In our example, the file will be named something like `cacti_host_template_x_mysql_server_ht_0.8.6i-sver1.1.4.xml`.
@@ -79,7 +79,7 @@ The templates themselves don't need to be configured, but you might need to conf
 
 ==Embedding Configuration==
 
-The simplest way is to embed the configuration options in the script file itself.  Open up the script file (such as ss_get_mysql_stats.php) with your favorite text editor, and look for a section like the following:
+The simplest way is to embed the configuration options in the script file itself.  Open up the script file (such as scripts/ss_get_mysql_stats.php) with your favorite text editor, and look for a section like the following:
 
 {{{
 # ============================================================================
@@ -103,7 +103,7 @@ This method this has some disadvantages.  If you upgrade the PHP script file, yo
 
 ==A Configuration File==
 
-If you don't want to store the configuration options directly into the PHP script file, you can create another file with the same name and the filename extension `.cnf`.  Place this in the same directory as the PHP script file, and ensure it is valid PHP.  This file will be included by the PHP script file, so you can define the same configuration options there that you might define in the PHP script file.  For example, you might create ss_get_mysql_stats.php.cnf with the following contents:
+If you don't want to store the configuration options directly into the PHP script file, you can create another file with the same name and the filename extension `.cnf`.  Place this in the same directory as the PHP script file, and ensure it is valid PHP.  This file will be included by the PHP script file, so you can define the same configuration options there that you might define in the PHP script file.  For example, you might create scripts/ss_get_mysql_stats.php.cnf with the following contents:
 
 {{{
 <?php
