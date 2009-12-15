@@ -2,9 +2,9 @@
 
 = Introduction =
 
-The stuff you need is in meta/mysql_definitions.pl.
+You can base your new graph off the existing ones.  For the MySQL graphs, everything you need is in definitions/mysql_definitions.pl.
 
-This file is read in as a big variable by make_template.pl.  It consists of the following sections, which will be combined to form a template for Cacti:
+This file is read in as a big variable by tools/make_template.pl.  It consists of the following sections, which will be combined to form a template for Cacti:
 
   * name and hash -- properties for the template.
   * version -- a hash and string to indicate the template version.
@@ -19,15 +19,15 @@ Optionally, you can define these:
   * rras -- these are just some custome RRA definitions so you can keep more than the usual amount of data.
   * cdefs -- these are custom CDEF sections, which generally don't need to be modified.
 
-If you don't define these, built-in defaults are used.  They're kept in the make-template.pl script.
+If you don't define these, built-in defaults are used.  They're kept in the tools/make-template.pl script.
 
-In addition, there's a magical word that you can put into the script file that'll be read with the --script option.  This will cause the entire paragraph to be read in and included into the definition too.  This lets you specify a short_names array/hash that shortens the command-line output to avoid problems with Cacti's limited built-in buffer sizes.
+In addition, there's a magical word `MAGIC_VARS_DEFINITIONS` that you can put into the script file that'll be read with the --script option.  This will cause the entire following paragraph to be read in and included into the definition too.  This lets you specify a short_names array/hash that shortens the command-line output to avoid problems with Cacti's limited built-in buffer sizes.
 
 The hardest part is keeping track of how all these things are related to each other.  I have simplified the relationships significantly: one data template per each graph template, etc.
 
 A graph will really be input to Cacti as a graph template and a data template.
 
-The graph item in the meta/mysql_definitions.pl file has the following properties:
+The graph item in the definitions/mysql_definitions.pl file has the following properties:
 
   * base_value -- either 1024 or 1000 depending on whether the unit is an amount of data or not.  (Rule: don't mix things with different units on a single graph.  If you do, you get meaningless crap most of the time.)
   * name -- the name of the graph.  Keep it short.
@@ -36,7 +36,7 @@ The graph item in the meta/mysql_definitions.pl file has the following propertie
     * hash.
     * Name of the data input.  This is the name of an item in the inputs section at the top level.
     * items to get from the data input.  These are a hash reference.  The key is the name of the value to get from the data input (e.g. pool_size for the InnoDB Buffer Pool graph template).  The hash reference's children are the:
-      * type: 1 => GAUGE, 2 => COUNTER (increasing, with overflow checks), 3 => DERIVE (no overflow checks).
+      * type: 1 => GAUGE, 2 => COUNTER (increasing, with overflow checks), 3 => DERIVE (no overflow checks).  Prefer DERIVE with a min value of 0 over COUNTER (see issue 41).
       * hash.
   * items -- the array of graph items (lines and such).  Each item is a hash.  There are these properties:
     * color -- a hex color code.
@@ -51,12 +51,12 @@ The graph item in the meta/mysql_definitions.pl file has the following propertie
 The basic steps I use when developing templates are as follows.
 
   * Pick some new things to graph.  For example, let's say I want to graph Handler statistics.
-  * Open ss_get_mysql_stats.php and add the new variables.  See r171 for an example of what to change.
-  * Open meta/mysql_definitions.pl and copy/paste a graph's definition; add it to the end of the existing ones.
+  * Open scripts/ss_get_mysql_stats.php and add the new variables.  See r171 for an example of what to change.
+  * Open definitions/mysql_definitions.pl and copy/paste a graph's definition; add it to the end of the existing ones.
   * Go through and edit the names, colors, data types, etc in the copy/pasted graph.
-  * Run meta/unique-hashes.pl meta/mysql_definitions.pl and save the output over the existing mysql_definitions.pl to make sure all the hashes are unique.
-  * Open a terminal and go to /var/www/cacti/scripts.  'cat' the edited ss_get_mysql_stats.php file over the top of the existing one.
-  * Run meta/make-template.pl --script ss_get_mysql_stats.php meta/mysql_definitions.pl and save the output in ~/mysql-definitions.xml
+  * Run tools/unique-hashes.pl definitions/mysql_definitions.pl and save the output over the existing definitions/mysql_definitions.pl to make sure all the hashes are unique.
+  * Open a terminal and go to /var/www/cacti/scripts.  'cat' the edited scripts/ss_get_mysql_stats.php file over the top of the existing one.
+  * Run tools/make-template.pl --script scripts/ss_get_mysql_stats.php definitions/mysql_definitions.pl and save the output in ~/mysql-definitions.xml
   * Run "mysql cacti < ~/cacti.sql" to initialize the database.
   * Open the web browser, import the templates into Cacti, edit the Localhost device to be an "X MySQL Server", and add/create graphs.  Wait for data to be gathered.
   * Go to /var/www/cacti/scripts and run, for example, `php ss_get_mysql_stats.php --host localhost --items dn,ds,dw` and make sure you get some data.
