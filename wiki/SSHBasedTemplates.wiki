@@ -95,7 +95,7 @@ Notice that I copied the public key (id_rsa.pub) and then logged in with the pri
 I should now be ready to use the PHP script to connect to this server over SSH.  All I need to do is copy ss_get_by_ssh.php to the Cacti script directory and set the proper configuration variables.  I'll do it with an external configuration file, but you can do it any way you please:
 
 {{{
-debian:~# cp mysql-cacti-templates/ss_get_by_ssh.php /usr/share/cacti/site/scripts/
+debian:~# cp mysql-cacti-templates/scripts/ss_get_by_ssh.php /usr/share/cacti/site/scripts/
 debian:~# cat > /usr/share/cacti/site/scripts/ss_get_by_ssh.php.cnf <<EOF
 <?php
 \$ssh_user   = 'cacti';
