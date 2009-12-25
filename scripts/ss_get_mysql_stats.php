@@ -23,9 +23,12 @@
 # ============================================================================
 # To make this code testable, we need to prevent code from running when it is
 # included from the test script.  The test script and this file have different
-# filenames, so we can compare them.
+# filenames, so we can compare them.  In some cases $_SERVER['SCRIPT_FILENAME']
+# seems not to be defined, so we skip the check -- this check should certainly
+# pass in the test environment.
 # ============================================================================
-if ( basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) ) {
+if ( !array_key_exists('SCRIPT_FILENAME', $_SERVER)
+   || basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME']) ) {
 
 # ============================================================================
 # CONFIGURATION
