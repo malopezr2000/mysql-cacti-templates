@@ -247,7 +247,11 @@ function ss_get_mysql_stats( $options ) {
    $host_str  = $options['host']
               . (isset($options['port']) || $port != 3306 ? ":$port" : '');
    debug(array('connecting to', $host_str, $user, $pass));
-   $conn = @mysql_connect($host_str, $user, $pass);
+   if ( !extension_loaded('mysql') ) {
+      debug("The MySQL extension is not loaded");
+      die("The MySQL extension is not loaded");
+   }
+   $conn = mysql_connect($host_str, $user, $pass);
    if ( !$conn ) {
       die("MySQL: " . mysql_error());
    }
