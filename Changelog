@@ -1,5 +1,7 @@
 Changes for templates:
 
+  * Code to make ss_get_mysql_stats.php testable was broken (issue 108).
+
 2009-12-13: version 1.1.5
 
   * Support for getting slave lag via mk-heartbeat was broken (issue 87).
