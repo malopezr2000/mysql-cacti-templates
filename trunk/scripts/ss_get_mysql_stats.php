@@ -457,7 +457,6 @@ function ss_get_mysql_stats( $options ) {
          'Innodb_buffer_pool_pages_dirty' => 'modified_pages',
          'Innodb_buffer_pool_pages_free'  => 'free_pages',
          'Innodb_buffer_pool_pages_total' => 'pool_size',
-         'Innodb_buffer_pool_reads'       => 'pages_read',
          'Innodb_data_fsyncs'             => 'file_fsyncs',
          'Innodb_data_pending_reads'      => 'pending_normal_aio_reads',
          'Innodb_data_pending_writes'     => 'pending_normal_aio_writes',

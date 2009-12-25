@@ -1,5 +1,6 @@
 Changes for templates:
 
+  * There was ambiguity (but no error) in SHOW STATUS overrides (issue 106).
   * It was hard to debug failures caused by missing ext/mysql (issue 105).
   * Code to make ss_get_mysql_stats.php testable was broken (issue 108).
 
