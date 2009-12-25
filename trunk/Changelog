@@ -1,5 +1,6 @@
 Changes for templates:
 
+  * It was hard to debug failures caused by missing ext/mysql (issue 105).
   * Code to make ss_get_mysql_stats.php testable was broken (issue 108).
 
 2009-12-13: version 1.1.5
