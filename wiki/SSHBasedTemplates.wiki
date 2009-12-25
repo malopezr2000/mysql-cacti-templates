@@ -90,7 +90,7 @@ it works
 
 Notice that I copied the public key (id_rsa.pub) and then logged in with the private key (id_rsa).
 
-= Installing the PHP Script =
+= Installing and Configuring the PHP Script =
 
 I should now be ready to use the PHP script to connect to this server over SSH.  All I need to do is copy ss_get_by_ssh.php to the Cacti script directory and set the proper configuration variables.  I'll do it with an external configuration file, but you can do it any way you please:
 
@@ -108,6 +108,7 @@ Note: If you're not sure what this is:
 `$status_url    = '/server-status';`
 Check out [http://httpd.apache.org/docs/2.2/mod/mod_status.html mod_status].
 
+If you need a more complex configuration setup, such as connecting to a different SSH port on different servers, use the instructions at [CustomizingTemplates#Accept_Input_in_Each_Data_Source].
 
 = Testing the Setup =
 
