@@ -103,7 +103,7 @@ if ( $use_ss ) {
 # ============================================================================
 if (!isset($called_by_script_server)) {
    debug($_SERVER["argv"]);
-   array_shift($_SERVER["argv"]); # Strip off ss_get_mysql_stats.php
+   array_shift($_SERVER["argv"]); # Strip off this script's filename
    $options = parse_cmdline($_SERVER["argv"]);
    validate_options($options);
    $result = ss_get_mysql_stats($options);
@@ -1002,7 +1002,8 @@ function get_innodb_array($text) {
 
 
 # ============================================================================
-# Returns a bigint from two ulint or a single hex number.
+# Returns a bigint from two ulint or a single hex number.  This is tested in
+# t/mysql_stats.php and copied, without tests, to ss_get_by_ssh.php.
 # ============================================================================
 function make_bigint ($hi, $lo = null) {
    debug(array($hi, $lo));
@@ -1023,7 +1024,8 @@ function make_bigint ($hi, $lo = null) {
 # will be truncated.  And you can't use sprintf(%u) either, because the maximum
 # value that will return on some platforms is 4022289582.  So this just handles
 # them as a string instead.  It extracts digits until it finds a non-digit and
-# quits.
+# quits.  This is tested in t/mysql_stats.php and copied, without tests, to
+# ss_get_by_ssh.php.
 # ============================================================================
 function to_int ( $str ) {
    debug($str);
@@ -1078,7 +1080,8 @@ function increment(&$arr, $key, $howmuch) {
 
 # ============================================================================
 # Multiply two big integers together as accurately as possible with reasonable
-# effort.
+# effort.  This is tested int/mysql_stats.php and copied, without tests, to
+# ss_get_by_ssh.php.
 # ============================================================================
 function big_multiply ($left, $right) {
    if ( function_exists("gmp_mul") ) {
@@ -1097,6 +1100,8 @@ function big_multiply ($left, $right) {
 
 # ============================================================================
 # Subtract two big integers as accurately as possible with reasonable effort.
+# This is tested int/mysql_stats.php and copied, without tests, to
+# ss_get_by_ssh.php.
 # ============================================================================
 function big_sub ($left, $right) {
    debug(array($left, $right));
@@ -1118,7 +1123,8 @@ function big_sub ($left, $right) {
 
 # ============================================================================
 # Add two big integers together as accurately as possible with reasonable
-# effort.
+# effort.  This is tested int/mysql_stats.php and copied, without tests, to
+# ss_get_by_ssh.php.
 # ============================================================================
 function big_add ($left, $right) {
    if ( is_null($left)  ) { $left = 0; }
