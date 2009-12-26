@@ -1,5 +1,7 @@
 Changes for templates:
 
+  * Added a test suite for ss_get_by_ssh.php (issue 110).
+  * The 'free' stats suffered from PHP's issues with big numbers (issue 102).
   * There was ambiguity (but no error) in SHOW STATUS overrides (issue 106).
   * It was hard to debug failures caused by missing ext/mysql (issue 105).
   * Code to make ss_get_mysql_stats.php testable was broken (issue 108).
