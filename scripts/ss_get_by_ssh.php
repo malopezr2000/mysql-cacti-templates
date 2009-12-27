@@ -66,9 +66,9 @@ if ( file_exists(__FILE__ . '.cnf' ) ) {
 # ============================================================================
 # Define whether you want debugging behavior.
 # ============================================================================
-$debug = TRUE;
+$debug = FALSE;
 # If $debug_log is a filename, debugging info will be logged to it.
-$debug_log = '/tmp/debug.log';
+$debug_log = FALSE;
 error_reporting($debug ? E_ALL : E_ERROR);
 
 # Make this a happy little script even when there are errors.
