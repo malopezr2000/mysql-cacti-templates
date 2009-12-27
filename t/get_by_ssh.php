@@ -48,7 +48,7 @@ is_deeply(
 );
 
 is_deeply(
-   free_parse( null, file_get_contents('samples/free-001.txt') ),
+   memory_parse( null, file_get_contents('samples/free-001.txt') ),
    array(
       'STAT_memcached' => '22106112',
       'STAT_membuffer' => '1531904',
@@ -60,7 +60,7 @@ is_deeply(
 );
 
 is_deeply(
-   free_parse( null, file_get_contents('samples/free-002.txt') ),
+   memory_parse( null, file_get_contents('samples/free-002.txt') ),
    array(
       'STAT_memcached' => '1088184320',
       'STAT_membuffer' => '131469312',
