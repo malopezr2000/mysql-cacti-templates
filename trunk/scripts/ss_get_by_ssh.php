@@ -44,6 +44,8 @@ $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300; # Adjust to match your polling interval.
 $use_ss     = FALSE; # Whether to use the script server or not
 $use_ssh    = TRUE;  # Whether to connect via SSH or not (default yes).
+$debug      = FALSE; # Define whether you want debugging behavior.
+$debug_log  = FALSE; # If $debug_log is a filename, it'll be used.
 
 # Parameters for specific graphs can be specified here, or in the .cnf file.
 $status_server = 'localhost';             # Which server to query
@@ -64,17 +66,17 @@ if ( file_exists(__FILE__ . '.cnf' ) ) {
    require(__FILE__ . '.cnf');
 }
 
-# ============================================================================
-# Define whether you want debugging behavior.
-# ============================================================================
-$debug = FALSE;
-# If $debug_log is a filename, debugging info will be logged to it.
-$debug_log = FALSE;
-error_reporting($debug ? E_ALL : E_ERROR);
-
 # Make this a happy little script even when there are errors.
 $no_http_headers = true;
 ini_set('implicit_flush', false); # No output, ever.
+if ( $debug ) {
+   ini_set('display_errors', true);
+   ini_set('display_startup_errors', true);
+   ini_set('error_reporting', 2147483647);
+}
+else {
+   ini_set('error_reporting', E_ERROR);
+}
 ob_start(); # Catch all output such as notices of undefined array indexes.
 function error_handler($errno, $errstr, $errfile, $errline) {
    print("$errstr at $errfile line $errline\n");

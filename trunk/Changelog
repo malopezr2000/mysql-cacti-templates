@@ -1,5 +1,7 @@
 Changes for templates:
 
+  * Added extra error-reporting (issue 110).
+  * The $debug $debug_log options couldn't be set in the .cnf file (issue 110).
   * Added a --use-ssh option to ss_get_by_ssh.php (issue 66).
   * Added a debugging log to ss_get_by_ssh.php (issue 54).
   * Enabled caching of results in ss_get_by_ssh.php (issue 46).

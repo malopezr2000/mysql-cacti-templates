@@ -53,7 +53,10 @@ $chk_options = array (
    'slave'  => true,    # Do you want to check slave status?
    'procs'  => true,    # Do you want to check SHOW PROCESSLIST?
 );
-$use_ss     = FALSE; # Whether to use the script server or not
+
+$use_ss    = FALSE; # Whether to use the script server or not
+$debug     = FALSE; # Define whether you want debugging behavior.
+$debug_log = FALSE; # If $debug_log is a filename, it'll be used.
 
 # ============================================================================
 # You should not need to change anything below this line.
@@ -67,17 +70,17 @@ if ( file_exists(__FILE__ . '.cnf' ) ) {
    require(__FILE__ . '.cnf');
 }
 
-# ============================================================================
-# Define whether you want debugging behavior.
-# ============================================================================
-$debug = FALSE;
-# If $debug_log is a filename, debugging info will be logged to it.
-$debug_log = FALSE;
-error_reporting($debug ? E_ALL : E_ERROR);
-
 # Make this a happy little script even when there are errors.
 $no_http_headers = true;
 ini_set('implicit_flush', false); # No output, ever.
+if ( $debug ) {
+   ini_set('display_errors', true);
+   ini_set('display_startup_errors', true);
+   ini_set('error_reporting', 2147483647);
+}
+else {
+   ini_set('error_reporting', E_ERROR);
+}
 ob_start(); # Catch all output such as notices of undefined array indexes.
 function error_handler($errno, $errstr, $errfile, $errline) {
    print("$errstr at $errfile line $errline\n");
