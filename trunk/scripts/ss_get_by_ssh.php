@@ -43,6 +43,7 @@ $ssh_tout   = 10;                               # SSH connect timeout
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300; # Adjust to match your polling interval.
 $use_ss     = FALSE; # Whether to use the script server or not
+$use_ssh    = TRUE;  # Whether to connect via SSH or not (default yes).
 
 # Parameters for specific graphs can be specified here, or in the .cnf file.
 $status_server = 'localhost';             # Which server to query
@@ -149,7 +150,7 @@ if ( !function_exists('array_change_key_case') ) {
 function validate_options($options) {
    debug($options);
    $opts = array('host', 'port', 'items', 'nocache', 'type', 'url', 'http-user',
-                 'http-password', 'server', 'port2');
+                 'http-password', 'server', 'port2', 'use-ssh');
    # Required command-line options
    foreach ( array('host', 'items', 'type') as $option ) {
       if ( !isset($options[$option]) || !$options[$option] ) {
@@ -188,6 +189,7 @@ General options:
    --type      One of apache, nginx, proc_stat, w, memory, memcached
                (more are TODO)
    --url       The url, such as /server-status, where server status lives
+   --use-ssh   Whether to connect via SSH to gather info (default yes).
    --http-user The HTTP authentication user
    --http-password
                The HTTP authentication password
@@ -227,7 +229,10 @@ function ss_get_by_ssh( $options ) {
    # 0) Build a cache file name.
    #    This is done in $type_cachefile().
    # 1) Build a command-line string.
-   #    This is done in $type_cmdline() and will often be trivially simple.
+   #    This is done in $type_cmdline() and will often be trivially simple.  The
+   #    resulting command-line string should use double-quotes wherever quotes
+   #    are needed, because it'll end up being enclosed in single-quotes if it
+   #    is executed remotely via SSH (which is typically the case).
    # 2) SSH to the server and execute that command to get its output.
    #    This is common code, done in get_command_result().
    # 3) Parse the result.
@@ -411,14 +416,14 @@ function check_cache ( $cache_dir, $poll_time, $filename, $options ) {
 # Execute the command to get the output and return it.
 # ============================================================================
 function get_command_result($cmd, $options) {
-   global $debug, $ssh_user, $ssh_port, $ssh_iden, $ssh_tout;
+   global $debug, $ssh_user, $ssh_port, $ssh_iden, $ssh_tout, $use_ssh;
 
    # Build the SSH command line.
    $port = isset($options['port']) ? $options['port'] : $ssh_port;
    $ssh  = "ssh -q -o \"ConnectTimeout $ssh_tout\" -o \"StrictHostKeyChecking no\" "
          . "$ssh_user@$options[host] -p $port $ssh_iden";
    debug($ssh);
-   $final_cmd = "$ssh '$cmd'";
+   $final_cmd = $use_ssh ? "$ssh '$cmd'" : $cmd;
    debug($final_cmd);
    $result = `$final_cmd`; # XXX this is the ssh command.
    debug($result);
@@ -580,7 +585,7 @@ function apache_cmdline ( $options ) {
    $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
    $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
    $auth = ($user ? "--http-user=$user" : '') . ' ' . ($pass ? "--http-password=$pass" : '');
-   return "wget $auth -U Cacti/1.0 -q -O - -T 5 'http://$srv$url?auto'";
+   return "wget $auth -U Cacti/1.0 -q -O - -T 5 \"http://$srv$url?auto\"";
 }
 
 function apache_parse ( $options, $output ) {
@@ -665,7 +670,7 @@ function nginx_cmdline ( $options ) {
    $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
    $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
    $auth = ($user ? "--http-user=$user" : '') . ' ' . ($pass ? "--http-password=$pass" : '');
-   return "wget $auth -U Cacti/1.0 -q -O - -T 5 'http://$srv$url?auto'";
+   return "wget $auth -U Cacti/1.0 -q -O - -T 5 \"http://$srv$url?auto\"";
 }
 
 function nginx_parse ( $options, $output ) {
