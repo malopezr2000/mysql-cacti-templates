@@ -2,7 +2,8 @@
 
 # ============================================================================
 # This is a script to retrieve information from a MySQL server for input to a
-# Cacti graphing process.
+# Cacti graphing process.  It is hosted at
+# http://code.google.com/p/mysql-cacti-templates/.
 #
 # This program is copyright (c) 2007 Baron Schwartz. Feedback and improvements
 # are welcome.
@@ -1080,7 +1081,7 @@ function increment(&$arr, $key, $howmuch) {
 
 # ============================================================================
 # Multiply two big integers together as accurately as possible with reasonable
-# effort.  This is tested int/mysql_stats.php and copied, without tests, to
+# effort.  This is tested in t/mysql_stats.php and copied, without tests, to
 # ss_get_by_ssh.php.
 # ============================================================================
 function big_multiply ($left, $right) {
@@ -1100,7 +1101,7 @@ function big_multiply ($left, $right) {
 
 # ============================================================================
 # Subtract two big integers as accurately as possible with reasonable effort.
-# This is tested int/mysql_stats.php and copied, without tests, to
+# This is tested in t/mysql_stats.php and copied, without tests, to
 # ss_get_by_ssh.php.
 # ============================================================================
 function big_sub ($left, $right) {
@@ -1123,7 +1124,7 @@ function big_sub ($left, $right) {
 
 # ============================================================================
 # Add two big integers together as accurately as possible with reasonable
-# effort.  This is tested int/mysql_stats.php and copied, without tests, to
+# effort.  This is tested in t/mysql_stats.php and copied, without tests, to
 # ss_get_by_ssh.php.
 # ============================================================================
 function big_add ($left, $right) {
@@ -1161,13 +1162,13 @@ function debug($val) {
          if ( $i++ ) {
             $calls[] = "$arr[function]() at $file:$line";
          }
-         $line = $arr['line'];
-         $file = $arr['file'];
+         $line = array_key_exists('line', $arr) ? $arr['line'] : '?';
+         $file = array_key_exists('file', $arr) ? $arr['file'] : '?';
       }
       if ( !count($calls) ) {
          $calls[] = "at $file:$line";
       }
-      fwrite($fp, date('Y-M-D h:i:s') . ' ' . implode(' <- ', $calls));
+      fwrite($fp, date('Y-m-d h:i:s') . ' ' . implode(' <- ', $calls));
       fwrite($fp, "\n" . var_export($val, TRUE) . "\n");
       fclose($fp);
    }
