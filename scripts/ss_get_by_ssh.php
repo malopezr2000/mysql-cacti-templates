@@ -226,20 +226,6 @@ function parse_cmdline( $args ) {
 function ss_get_by_ssh( $options ) {
    global $debug, $cache_dir, $poll_time;
 
-   # The rest of the work is broken down into parts by several functions,
-   # one set for each type of data collection, based on the --type option:
-   # 0) Build a cache file name.
-   #    This is done in $type_cachefile().
-   # 1) Build a command-line string.
-   #    This is done in $type_cmdline() and will often be trivially simple.  The
-   #    resulting command-line string should use double-quotes wherever quotes
-   #    are needed, because it'll end up being enclosed in single-quotes if it
-   #    is executed remotely via SSH (which is typically the case).
-   # 2) SSH to the server and execute that command to get its output.
-   #    This is common code, done in get_command_result().
-   # 3) Parse the result.
-   #    This is done in $type_parse().
-
    # Build and test the type-specific function names.
    $caching_func = "$options[type]_cachefile";
    $cmdline_func = "$options[type]_cmdline";
@@ -431,6 +417,175 @@ function get_command_result($cmd, $options) {
    debug($result);
    return $result;
 }
+
+# ============================================================================
+# Extracts the numbers from a string.  You can't reliably do this by casting to
+# an int, because numbers that are bigger than PHP's int (varies by platform)
+# will be truncated.  So this just handles them as a string instead.
+# ============================================================================
+function to_int ( $str ) {
+   debug($str);
+   global $debug;
+   preg_match('{(\d+)}', $str, $m);
+   if ( isset($m[1]) ) {
+      return $m[1];
+   }
+   elseif ( $debug ) {
+      print_r(debug_backtrace());
+   }
+   else {
+      return 0;
+   }
+}
+
+# ============================================================================
+# Extracts a float from a string.  See to_int().  This is tested in
+# get_by_ssh.php.
+# ============================================================================
+function to_float ( $str ) {
+   debug($str);
+   global $debug;
+   preg_match('{([0-9.]+)}', $str, $m); 
+   if ( isset($m[1]) ) {
+      return $m[1];
+   }
+   elseif ( $debug ) {
+      print_r(debug_backtrace());
+   }
+   else {
+      return 0;
+   }
+}
+
+# ============================================================================
+# Safely increments a value that might be null.
+# ============================================================================
+function increment(&$arr, $key, $howmuch) {
+   debug(array($key, $howmuch));
+   if ( array_key_exists($key, $arr) && isset($arr[$key]) ) {
+      $arr[$key] = big_add($arr[$key], $howmuch);
+   }
+   else {
+      $arr[$key] = $howmuch;
+   }
+}
+
+# ============================================================================
+# Multiply two big integers together as accurately as possible with reasonable
+# effort.  This is tested in t/mysql_stats.php and copied, without tests, to
+# ss_get_by_ssh.php.
+# ============================================================================
+function big_multiply ($left, $right) {
+   if ( function_exists("gmp_mul") ) {
+      debug(array('gmp_mul', $left, $right));
+      return gmp_strval( gmp_mul( $left, $right ));
+   }
+   elseif ( function_exists("bcmul") ) {
+      debug(array('bcmul', $left, $right));
+      return bcmul( $left, $right );
+   }
+   else {
+      debug(array('sprintf', $left, $right));
+      return sprintf(".0f", $left * $right);
+   }
+}
+
+# ============================================================================
+# Subtract two big integers as accurately as possible with reasonable effort.
+# This is tested in t/mysql_stats.php and copied, without tests, to
+# ss_get_by_ssh.php.
+# ============================================================================
+function big_sub ($left, $right) {
+   debug(array($left, $right));
+   if ( is_null($left)  ) { $left = 0; }
+   if ( is_null($right) ) { $right = 0; }
+   if ( function_exists("gmp_sub") ) {
+      debug(array('gmp_sub', $left, $right));
+      return gmp_strval( gmp_sub( $left, $right ));
+   }
+   elseif ( function_exists("bcsub") ) {
+      debug(array('bcsub', $left, $right));
+      return bcsub( $left, $right );
+   }
+   else {
+      debug(array('to_int', $left, $right));
+      return to_int($left - $right);
+   }
+}
+
+# ============================================================================
+# Add two big integers together as accurately as possible with reasonable
+# effort.  This is tested in t/mysql_stats.php and copied, without tests, to
+# ss_get_by_ssh.php.
+# ============================================================================
+function big_add ($left, $right) {
+   if ( is_null($left)  ) { $left = 0; }
+   if ( is_null($right) ) { $right = 0; }
+   if ( function_exists("gmp_add") ) {
+      debug(array('gmp_add', $left, $right));
+      return gmp_strval( gmp_add( $left, $right ));
+   }
+   elseif ( function_exists("bcadd") ) {
+      debug(array('bcadd', $left, $right));
+      return bcadd( $left, $right );
+   }
+   else {
+      debug(array('to_int', $left, $right));
+      return to_int($left + $right);
+   }
+}
+
+# ============================================================================
+# Writes to a debugging log.
+# ============================================================================
+function debug($val) {
+   global $debug_log;
+   if ( !$debug_log ) {
+      return;
+   }
+   if ( $fp = fopen($debug_log, 'a+') ) {
+      $trace = debug_backtrace();
+      $calls = array();
+      $i    = 0;
+      $line = 0;
+      $file = '';
+      foreach ( debug_backtrace() as $arr ) {
+         if ( $i++ ) {
+            $calls[] = "$arr[function]() at $file:$line";
+         }
+         $line = array_key_exists('line', $arr) ? $arr['line'] : '?';
+         $file = array_key_exists('file', $arr) ? $arr['file'] : '?';
+      }
+      if ( !count($calls) ) {
+         $calls[] = "at $file:$line";
+      }
+      fwrite($fp, date('Y-m-d h:i:s') . ' ' . implode(' <- ', $calls));
+      fwrite($fp, "\n" . var_export($val, TRUE) . "\n");
+      fclose($fp);
+   }
+   else { # Disable logging
+      print("Warning: disabling debug logging to $debug_log\n");
+      $debug_log = FALSE;
+   }
+}
+
+# ============================================================================
+# Everything from this point down is the functions that do the specific work to
+# get and parse command output.  These are called from get_by_ssh().  The work
+# is broken down into parts by several functions, one set for each type of data
+# collection, based on the --type option:
+# 0) Build a cache file name.
+#    This is done in $type_cachefile().
+# 1) Build a command-line string.
+#    This is done in $type_cmdline() and will often be trivially simple.  The
+#    resulting command-line string should use double-quotes wherever quotes
+#    are needed, because it'll end up being enclosed in single-quotes if it
+#    is executed remotely via SSH (which is typically the case).
+# 2) SSH to the server and execute that command to get its output.
+#    This is common code called from get_by_ssh(), in get_command_result().
+# 3) Parse the result.
+#    This is done in $type_parse().
+# ============================================================================
 
 # ============================================================================
 # Gets and parses /proc/stat from Linux.
@@ -746,157 +901,6 @@ function memcached_parse ( $options, $output ) {
       }
    }
    return $result;
-}
-
-# ============================================================================
-# Extracts the numbers from a string.  You can't reliably do this by casting to
-# an int, because numbers that are bigger than PHP's int (varies by platform)
-# will be truncated.  So this just handles them as a string instead.
-# ============================================================================
-function to_int ( $str ) {
-   debug($str);
-   global $debug;
-   preg_match('{(\d+)}', $str, $m);
-   if ( isset($m[1]) ) {
-      return $m[1];
-   }
-   elseif ( $debug ) {
-      print_r(debug_backtrace());
-   }
-   else {
-      return 0;
-   }
-}
-
-# ============================================================================
-# Extracts a float from a string.  See to_int().  This is tested in
-# get_by_ssh.php.
-# ============================================================================
-function to_float ( $str ) {
-   debug($str);
-   global $debug;
-   preg_match('{([0-9.]+)}', $str, $m); 
-   if ( isset($m[1]) ) {
-      return $m[1];
-   }
-   elseif ( $debug ) {
-      print_r(debug_backtrace());
-   }
-   else {
-      return 0;
-   }
-}
-
-# ============================================================================
-# Safely increments a value that might be null.
-# ============================================================================
-function increment(&$arr, $key, $howmuch) {
-   debug(array($key, $howmuch));
-   if ( array_key_exists($key, $arr) && isset($arr[$key]) ) {
-      $arr[$key] = big_add($arr[$key], $howmuch);
-   }
-   else {
-      $arr[$key] = $howmuch;
-   }
-}
-
-# ============================================================================
-# Multiply two big integers together as accurately as possible with reasonable
-# effort.  This is tested in t/mysql_stats.php and copied, without tests, to
-# ss_get_by_ssh.php.
-# ============================================================================
-function big_multiply ($left, $right) {
-   if ( function_exists("gmp_mul") ) {
-      debug(array('gmp_mul', $left, $right));
-      return gmp_strval( gmp_mul( $left, $right ));
-   }
-   elseif ( function_exists("bcmul") ) {
-      debug(array('bcmul', $left, $right));
-      return bcmul( $left, $right );
-   }
-   else {
-      debug(array('sprintf', $left, $right));
-      return sprintf(".0f", $left * $right);
-   }
-}
-
-# ============================================================================
-# Subtract two big integers as accurately as possible with reasonable effort.
-# This is tested in t/mysql_stats.php and copied, without tests, to
-# ss_get_by_ssh.php.
-# ============================================================================
-function big_sub ($left, $right) {
-   debug(array($left, $right));
-   if ( is_null($left)  ) { $left = 0; }
-   if ( is_null($right) ) { $right = 0; }
-   if ( function_exists("gmp_sub") ) {
-      debug(array('gmp_sub', $left, $right));
-      return gmp_strval( gmp_sub( $left, $right ));
-   }
-   elseif ( function_exists("bcsub") ) {
-      debug(array('bcsub', $left, $right));
-      return bcsub( $left, $right );
-   }
-   else {
-      debug(array('to_int', $left, $right));
-      return to_int($left - $right);
-   }
-}
-
-# ============================================================================
-# Add two big integers together as accurately as possible with reasonable
-# effort.  This is tested in t/mysql_stats.php and copied, without tests, to
-# ss_get_by_ssh.php.
-# ============================================================================
-function big_add ($left, $right) {
-   if ( is_null($left)  ) { $left = 0; }
-   if ( is_null($right) ) { $right = 0; }
-   if ( function_exists("gmp_add") ) {
-      debug(array('gmp_add', $left, $right));
-      return gmp_strval( gmp_add( $left, $right ));
-   }
-   elseif ( function_exists("bcadd") ) {
-      debug(array('bcadd', $left, $right));
-      return bcadd( $left, $right );
-   }
-   else {
-      debug(array('to_int', $left, $right));
-      return to_int($left + $right);
-   }
-}
-
-# ============================================================================
-# Writes to a debugging log.
-# ============================================================================
-function debug($val) {
-   global $debug_log;
-   if ( !$debug_log ) {
-      return;
-   }
-   if ( $fp = fopen($debug_log, 'a+') ) {
-      $trace = debug_backtrace();
-      $calls = array();
-      $i    = 0;
-      $line = 0;
-      $file = '';
-      foreach ( debug_backtrace() as $arr ) {
-         if ( $i++ ) {
-            $calls[] = "$arr[function]() at $file:$line";
-         }
-         $line = array_key_exists('line', $arr) ? $arr['line'] : '?';
-         $file = array_key_exists('file', $arr) ? $arr['file'] : '?';
-      }
-      if ( !count($calls) ) {
-         $calls[] = "at $file:$line";
-      }
-      fwrite($fp, date('Y-m-d h:i:s') . ' ' . implode(' <- ', $calls));
-      fwrite($fp, "\n" . var_export($val, TRUE) . "\n");
-      fclose($fp);
-   }
-   else { # Disable logging
-      print("Warning: disabling debug logging to $debug_log\n");
-      $debug_log = FALSE;
-   }
 }
 
 ?>
