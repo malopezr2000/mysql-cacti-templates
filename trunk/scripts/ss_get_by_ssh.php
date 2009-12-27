@@ -2,7 +2,7 @@
 
 # ============================================================================
 # This is a script to retrieve information over SSH for a Cacti graphing
-# process.
+# process.  It is hosted at http://code.google.com/p/mysql-cacti-templates/.
 #
 # This program is copyright (c) 2008 Baron Schwartz. Feedback and improvements
 # are welcome.
@@ -40,12 +40,11 @@ $ssh_user   = 'cacti';                          # SSH username
 $ssh_port   = 22;                               # SSH port
 $ssh_iden   = '-i /var/www/cacti/.ssh/id_rsa';  # SSH identity
 $ssh_tout   = 10;                               # SSH connect timeout
-$cache_dir  = '';  # If set, this uses caching to avoid multiple calls.
+$cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300; # Adjust to match your polling interval.
 $use_ss     = FALSE; # Whether to use the script server or not
 
-# Parameters for specific graphs are possible to specify here, or in the .cnf
-# file.
+# Parameters for specific graphs can be specified here, or in the .cnf file.
 $status_server = 'localhost';             # Which server to query
 $status_url    = '/server-status';        # Where Apache status lives
 $http_user     = '';
@@ -146,7 +145,6 @@ if ( !function_exists('array_change_key_case') ) {
 
 # ============================================================================
 # Validate that the command-line options are here and correct
-# TODO: --ident
 # ============================================================================
 function validate_options($options) {
    debug($options);
@@ -167,7 +165,6 @@ function validate_options($options) {
 
 # ============================================================================
 # Print out a brief usage summary
-# TODO: add http port, and make user/pass/port/server generic for all types
 # ============================================================================
 function usage($message) {
    $usage = <<<EOF
@@ -225,36 +222,10 @@ function parse_cmdline( $args ) {
 function ss_get_by_ssh( $options ) {
    global $debug, $cache_dir, $poll_time;
 
-   # TODO: generate filename via a hash.
-   $cache_file = "$cache_dir/$options[host]-$options[type]_cacti_stats.txt";
-
-   # First, check the cache. TODO: caching is disabled.
-   $fp = null;
-   if ( !isset($options['nocache']) && $cache_dir ) {
-      if ( file_exists($cache_file) && filesize($cache_file) > 0
-         && filectime($cache_file) + ($poll_time/2) > time() )
-      {
-         # The file is fresh enough to use.
-         $arr = file($cache_file);
-         # The file ought to have some contents in it!  But just in case it
-         # doesn't... (see issue #6).
-         if ( count($arr) ) {
-            # TODO: release the lock
-            return $arr[0];
-         }
-         else {
-            if ( $debug ) {
-               trigger_error("The function file($cache_file) returned nothing!\n");
-            }
-         }
-      }
-      if ( !$fp = fopen($cache_file, 'w+') ) {
-         die("Cannot open file '$cache_file'");
-      }
-   }
-
-   # The rest of the work is broken into three parts by a pair of functions,
-   # one pair for each type of data collection, based on the --type option:
+   # The rest of the work is broken down into parts by several functions,
+   # one set for each type of data collection, based on the --type option:
+   # 0) Build a cache file name.
+   #    This is done in $type_cachefile().
    # 1) Build a command-line string.
    #    This is done in $type_cmdline() and will often be trivially simple.
    # 2) SSH to the server and execute that command to get its output.
@@ -263,14 +234,35 @@ function ss_get_by_ssh( $options ) {
    #    This is done in $type_parse().
 
    # Build and test the type-specific function names.
+   $caching_func = "$options[type]_cachefile";
    $cmdline_func = "$options[type]_cmdline";
    $parsing_func = "$options[type]_parse";
-   debug("Functions: '$cmdline_func', '$parsing_func'");
+   debug("Functions: '$caching_func', '$cmdline_func', '$parsing_func'");
    if ( !function_exists($cmdline_func) ) {
       die("The parsing function '$cmdline_func' does not exist");
    }
    if ( !function_exists($parsing_func) ) {
       die("The parsing function '$parsing_func' does not exist");
+   }
+
+   # Check the cache.
+   $fp = null;
+   if ( $cache_dir && !isset($options['nocache'])
+      && function_exists($caching_func)
+   ) {
+      $cache_file = call_user_func($caching_func, $options);
+      $cache_res  = check_cache($cache_dir, $poll_time, $cache_file, $options);
+      if ( $cache_res[1] ) {
+         debug("The cache is usable.");
+         return $cache_res[1];
+      }
+      elseif ( $cache_res[0] ) {
+         $fp = $cache_res[0];
+         debug("Got a filehandle to the cache file");
+      }
+   }
+   if ( !$fp ) {
+      debug("Caching is disabled.");
    }
 
    # Get the command-line to fetch the data, then fetch and parse the data.
@@ -361,11 +353,58 @@ function ss_get_by_ssh( $options ) {
    if ( $fp ) {
       if ( fwrite($fp, $result) === FALSE ) {
          die("Cannot write to '$cache_file'");
-         # TODO: then truncate file, too
       }
       fclose($fp);
    }
    return $result;
+}
+
+# ============================================================================
+# Checks the cache file.  If its contents are valid, return them.  Otherwise
+# return the filehandle, locked with flock() and ready for writing.  Return an
+# array:
+#  0 => $fp       The file pointer for the cache file
+#  1 => $arr      The contents of the file, if it's valid.
+# ============================================================================
+function check_cache ( $cache_dir, $poll_time, $filename, $options ) {
+   $cache_file = "$cache_dir/${filename}_cacti_stats.txt";
+   debug("Cache file: $cache_file");
+   $fp = fopen($cache_file, 'a+');
+   $locked = flock($fp, 1); # LOCK_SH
+   if ( $locked ) {
+      if ( filesize($cache_file) > 0
+         && filectime($cache_file) + ($poll_time/2) > time()
+         && ($arr = file($cache_file))
+      ) {# The cache file is good to use.
+         debug("Using the cache file");
+         fclose($fp);
+         return array(null, $arr[0]);
+      }
+      else {
+         debug("The cache file seems too small or stale");
+         # Escalate the lock to exclusive, so we can write to it.
+         if ( flock($fp, 2) ) { # LOCK_EX
+            # We might have blocked while waiting for that LOCK_EX, and
+            # another process ran and updated it.  Let's see if we can just
+            # return the data now:
+            if ( filesize($cache_file) > 0
+               && filectime($cache_file) + ($poll_time/2) > time()
+               && ($arr = file($cache_file))
+            ) { # The cache file is good to use.
+               debug("Using the cache file");
+               fclose($fp);
+               return array(null, $arr[0]);
+            }
+            ftruncate($fp, 0); # Now it's ready for writing later.
+         }
+      }
+   }
+   else {
+      debug("Couldn't lock the cache file, ignoring it.");
+      $fp = null;
+   }
+
+   return array($fp, null);
 }
 
 # ============================================================================
@@ -392,6 +431,12 @@ function get_command_result($cmd, $options) {
 # You can test it like this, as root:
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type proc_stat --host 127.0.0.1 --items ag,ah'
 # ============================================================================
+function proc_stat_cachefile ( $options ) {
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   return "${sanitized_host}_proc_stat";
+}
+
 function proc_stat_cmdline ( $options ) {
    return "cat /proc/stat";
 }
@@ -445,11 +490,17 @@ function proc_stat_parse ( $options, $output ) {
 # You can test it like this, as root:
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memory --host 127.0.0.1 --items au,av'
 # ============================================================================
-function free_cmdline ( $options ) {
-   return "$cmd free -ob";
+function memory_cachefile ( $options ) {
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   return "${sanitized_host}_memory";
 }
 
-function free_parse ( $options, $output ) {
+function memory_cmdline ( $options ) {
+   return "free -ob";
+}
+
+function memory_parse ( $options, $output ) {
    $result = array(
       'STAT_memcached' => null,
       'STAT_membuffer' => null,
@@ -482,6 +533,12 @@ function free_parse ( $options, $output ) {
 # You can test it like this, as root:
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type w --host 127.0.0.1 --items as,at'
 # ============================================================================
+function w_cachefile ( $options ) {
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   return "${sanitized_host}_w";
+}
+
 function w_cmdline ( $options ) {
    return "uptime";
 }
@@ -504,8 +561,18 @@ function w_parse ( $options, $output ) {
 # ============================================================================
 # Gets and parses /server-status from Apache.
 # You can test it like this, as root:
-# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type apache --host 127.0.0.1 --items a0,a1'
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type apache --host 127.0.0.1 --items ae,af'
 # ============================================================================
+function apache_cachefile ( $options ) {
+   global $status_server;
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   $sanitized_server
+       = str_replace(array(":", "/"), array("", "_"),
+         isset($options['server']) ? $options['server'] : $status_server);
+   return "${sanitized_host}_apache_${sanitized_server}";
+}
+
 function apache_cmdline ( $options ) {
    global $status_server, $status_url, $http_user, $http_pass;
    $srv = isset($options['server']) ? $options['server'] : $status_server;
@@ -581,6 +648,16 @@ function apache_parse ( $options, $output ) {
 # You can test it like this, as root:
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type nginx --host 127.0.0.1 --items az,b0'
 # ============================================================================
+function nginx_cachefile ( $options ) {
+   global $status_server;
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   $sanitized_server
+       = str_replace(array(":", "/"), array("", "_"),
+         isset($options['server']) ? $options['server'] : $status_server);
+   return "${sanitized_host}_nginx_${sanitized_server}";
+}
+
 function nginx_cmdline ( $options ) {
    global $status_server, $status_url, $http_user, $http_pass;
    $srv = isset($options['server']) ? $options['server'] : $status_server;
@@ -628,6 +705,17 @@ function nginx_parse ( $options, $output ) {
 # You can test it like this, as root:
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items b6,b7'
 # ============================================================================
+function memcached_cachefile ( $options ) {
+   global $status_server, $memcache_port;
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   $sanitized_server
+       = str_replace(array(":", "/"), array("", "_"),
+         isset($options['server']) ? $options['server'] : $status_server);
+   $port = isset($options['port2']) ? $options['port2'] : $memcache_port;
+   return "${sanitized_host}_memcached_${sanitized_server}_$port";
+}
+
 function memcached_cmdline ( $options ) {
    global $memcache_port;
    $srv = isset($options['server']) ? $options['server'] : $options['host'];
@@ -788,13 +876,13 @@ function debug($val) {
          if ( $i++ ) {
             $calls[] = "$arr[function]() at $file:$line";
          }
-         $line = $arr['line'];
-         $file = $arr['file'];
+         $line = array_key_exists('line', $arr) ? $arr['line'] : '?';
+         $file = array_key_exists('file', $arr) ? $arr['file'] : '?';
       }
       if ( !count($calls) ) {
          $calls[] = "at $file:$line";
       }
-      fwrite($fp, date('Y-M-D h:i:s') . ' ' . implode(' <- ', $calls));
+      fwrite($fp, date('Y-m-d h:i:s') . ' ' . implode(' <- ', $calls));
       fwrite($fp, "\n" . var_export($val, TRUE) . "\n");
       fclose($fp);
    }
