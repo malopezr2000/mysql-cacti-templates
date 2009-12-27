@@ -1,5 +1,6 @@
 Changes for templates:
 
+  * Added a debugging log to ss_get_by_ssh.php (issue 54).
   * Enabled caching of results in ss_get_by_ssh.php (issue 46).
   * Added a test suite for ss_get_by_ssh.php (issue 110).
   * The 'free' stats suffered from PHP's issues with big numbers (issue 102).
