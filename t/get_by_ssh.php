@@ -3,12 +3,6 @@ require('test-more.php');
 require('../scripts/ss_get_by_ssh.php');
 $debug = true;
 
-is(
-   to_float('74900191315.1170664159 dollars per hour'),
-   '74900191315.1170664159',
-   'to_float 74900191315.1170664159'
-);
-
 is_deeply(
    proc_stat_parse(null, file_get_contents('samples/proc_stat-001.txt')),
    array(
@@ -47,6 +41,18 @@ is_deeply(
    'samples/proc_stat-002.txt'
 );
 
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/proc_stat-001.txt',
+      'type'    => 'proc_stat',
+      'host'    => 'localhost',
+      'items'   => 'ag,ah,ai,aj,ak,al,am,an,ao,ap,aq,ar'
+   )),
+   'ag:24198 ah:0 ai:69614 aj:2630536 ak:558 al:5872 am:1572 an:0 ao:0'
+      . ' ap:339490 aq:697948 ar:11558',
+   'main(samples/proc_stat-001.txt)'
+);
+
 is_deeply(
    memory_parse( null, file_get_contents('samples/free-001.txt') ),
    array(
@@ -71,6 +77,17 @@ is_deeply(
    'samples/free-002.txt (issue 102)'
 );
 
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/free-001.txt',
+      'type'    => 'memory',
+      'host'    => 'localhost',
+      'items'   => 'au,av,aw,ax,ay'
+   )),
+   'au:22106112 av:1531904 aw:0 ax:17928192 ay:21389312',
+   'main(samples/free-001.txt)'
+);
+
 is_deeply(
    w_parse( null, file_get_contents('samples/w-001.txt') ),
    array(
@@ -87,6 +104,17 @@ is_deeply(
       'STAT_numusers' => '6',
    ),
    'samples/w-002.txt'
+);
+
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/w-001.txt',
+      'type'    => 'w',
+      'host'    => 'localhost',
+      'items'   => 'as,at'
+   )),
+   'as:1.43 at:2',
+   'main(samples/w-002.txt)'
 );
 
 is_deeply(
@@ -154,5 +182,6 @@ is_deeply(
    ),
    'samples/apache-001.txt'
 );
+
 
 ?>

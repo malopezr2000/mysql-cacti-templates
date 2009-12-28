@@ -115,17 +115,7 @@ if (!isset($called_by_script_server)) {
    else {
       ob_end_flush(); # In debugging mode, print out the errors.
    }
-
-   # Split the result up and extract only the desired parts of it.
-   $wanted = explode(',', $options['items']);
-   $output = array();
-   foreach ( explode(' ', $result) as $item ) {
-      if ( in_array(substr($item, 0, 2), $wanted) ) {
-         $output[] = $item;
-      }
-   }
-   debug(array("Final result", $output));
-   print(implode(' ', $output));
+   print($result);
 }
 
 # ============================================================================
@@ -147,12 +137,30 @@ if ( !function_exists('array_change_key_case') ) {
 }
 
 # ============================================================================
+# Extracts the desired bits from a string and returns them.
+# ============================================================================
+function extract_desired ( $options, $text ) {
+   debug($text);
+   # Split the result up and extract only the desired parts of it.
+   $wanted = explode(',', $options['items']);
+   $output = array();
+   foreach ( explode(' ', $text) as $item ) {
+      if ( in_array(substr($item, 0, 2), $wanted) ) {
+         $output[] = $item;
+      }
+   }
+   $result = implode(' ', $output);
+   debug($result);
+   return $result;
+}
+
+# ============================================================================
 # Validate that the command-line options are here and correct
 # ============================================================================
 function validate_options($options) {
    debug($options);
    $opts = array('host', 'port', 'items', 'nocache', 'type', 'url', 'http-user',
-                 'http-password', 'server', 'port2', 'use-ssh');
+                 'file', 'http-password', 'server', 'port2', 'use-ssh');
    # Required command-line options
    foreach ( array('host', 'items', 'type') as $option ) {
       if ( !isset($options[$option]) || !$options[$option] ) {
@@ -180,6 +188,7 @@ option without a value after it, the option is ignored.  For options such as
 
 General options:
 
+   --file      Read input from this file instead of getting via SSH command
    --host      Hostname to connect to (via SSH)
    --items     Comma-separated list of the items whose data you want
    --nocache   Do not cache results in a file
@@ -240,14 +249,14 @@ function ss_get_by_ssh( $options ) {
 
    # Check the cache.
    $fp = null;
-   if ( $cache_dir && !isset($options['nocache'])
+   if ( !isset($options['file']) && $cache_dir && !isset($options['nocache'])
       && function_exists($caching_func)
    ) {
       $cache_file = call_user_func($caching_func, $options);
       $cache_res  = check_cache($cache_dir, $poll_time, $cache_file, $options);
       if ( $cache_res[1] ) {
          debug("The cache is usable.");
-         return $cache_res[1];
+         return extract_desired($options, $cache_res[1]);
       }
       elseif ( $cache_res[0] ) {
          $fp = $cache_res[0];
@@ -334,7 +343,9 @@ function ss_get_by_ssh( $options ) {
       'MEMC_bytes_written'     => 'bi',
    );
 
-   # Return the output.
+   # Prepare and return the output.  The output we have right now is the whole
+   # info, and we need that -- to write it to the cache file -- but what we
+   # return should be only the desired items.
    $output = array();
    foreach ($keys as $key => $short ) {
       # If the value isn't defined, return -1 which is lower than (most graphs')
@@ -349,7 +360,7 @@ function ss_get_by_ssh( $options ) {
       }
       fclose($fp);
    }
-   return $result;
+   return extract_desired($options, $result);
 }
 
 # ============================================================================
@@ -405,6 +416,11 @@ function check_cache ( $cache_dir, $poll_time, $filename, $options ) {
 # ============================================================================
 function get_command_result($cmd, $options) {
    global $debug, $ssh_user, $ssh_port, $ssh_iden, $ssh_tout, $use_ssh;
+
+   # If there is a --file, we just use that.
+   if ( isset($options['file']) ) {
+      return implode("\n", file($options['file']));
+   }
 
    # Build the SSH command line.
    $port = isset($options['port']) ? $options['port'] : $ssh_port;
