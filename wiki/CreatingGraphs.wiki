@@ -50,7 +50,7 @@ Once you have the test written, execute the test file and ensure the test fails!
 mysql-cacti-templates/t$ php get_by_ssh.php
 }}}
 
-You should see a fatal error that the function `diskstats_parse()` doesn't exist.  Great.  Now it's time to write it.  Open up `scripts/ss_get_by_ssh.php`.  Go all the way to the bottom of the file.  Scroll upwards three functions.  Those three functions should be the three magically named functions for some other parsing process.  Take a look at them and use them as a reference for writing your own function.  Copy the block comment header, and start your own function.  It should look like this:
+You should see a fatal error that the function `diskstats_parse()` doesn't exist.  Great.  Now it's time to write it.  Open up `scripts/ss_get_by_ssh.php`.  Go all the way to the bottom of the file.  Scroll upwards three functions.  Those three functions should be the three magically named functions for some other parsing process.  Take a look at them and use them as a reference for writing your own function.  Copy the block comment header (don't worry much about its contents for right now), and start your own function.  It should look like this:
 
 {{{
 function diskstats_parse ( $options, $output ) {
@@ -113,6 +113,57 @@ There is one final detail, which is necessary because this is a rather advanced 
 }}}
 
 Now you can specify `--device sda1` or similar, and the code can access that through `$options['device']`, as you've seen in the examples above.
+
+= Specifying a Short-Name Mapping =
+
+You already created long, descriptive names for the data values you're going to graph.  Unfortunately, due to another Cacti limitation, these names can't be used safely everywhere.  In most Cacti templates, the script returns a key:value string to Cacti, like this:
+
+{{{
+Name_of_data_value:1234 Name_of_another_data_value:5678
+}}}
+
+That's nice, but when you get a few dozen values back from a single call, Cacti starts losing data because it has a fixed-length buffer it reads these things into.  And due to yet another Cacti design flaw, for efficiency it really is important to return all the values at once.  So we need short names, and a mapping between the long and the short names.  It would be a hassle to keep track of all this, but the system you're working in centralizes that all and makes it much easier for you.
+
+The mapping is defined in an array in the PHP script, which -- and this is important -- is one big paragraph of text (no empty lines) preceded by the magic word MAGIC_VARS_DEFINITIONS.  You need to append your data variables to this array and give each name a unique abbreviation.  For example,
+
+{{{
+   # Define the variables to output.  I use shortened variable names so maybe
+   # it'll all fit in 1024 bytes for Cactid and Spine's benefit.  This list must
+   # come right after the word MAGIC_VARS_DEFINITIONS.  The Perl script parses
+   # it and uses it as a Perl variable.
+   $keys = array(
+      # ............. <previous entries omitted> ............
+      # Diskstats stuff
+      'DISK_reads'              => 'bj',
+      'DISK_reads_merged'       => 'bk',
+      'DISK_sectors_read'       => 'bl',
+      'DISK_time_spent_reading' => 'bm',
+      'DISK_writes'             => 'bn',
+      'DISK_writes_merged'      => 'bo',
+      'DISK_sectors_written'    => 'bp',
+      'DISK_time_spent_writing' => 'bq',
+      'DISK_io_ops_in_progress' => 'br',
+      'DISK_io_time'            => 'bs',
+      'DISK_io_time_weighted'   => 'bt',
+   );
+}}}
+
+The convention is two-letter abbreviations, beginning at a0, a1, and so on.  Just append to the list and continue the convention.  Separate your entries with a short comment, such as `Diskstats stuff` as shown above.
+
+Now you can see why the uppercase DISK identifier chosen earlier (during the test phase) is necessary.  This makes the names unique.  Otherwise you might end up with two items in this array with the key 'writes' and you'd have a problem.
+
+The short names go into the `--items` command-line argument.  This argument can take any combination of short names.  Now that you know what your short names are going to be, go back to the comment header right above the `diskstats_cachefile()` function, and write a sample command-line users can use to test the functionality you're creating, such as:
+
+{{{
+# ============================================================================
+# Get and parse stats from /proc/diskstats
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type diskstats --host 127.0.0.1 --items bj,bk,bl,bm,bn,bo,bp'
+# ============================================================================
+function diskstats_cachefile ( $options ) {
+}}}
+
+Notice that the `--items` argument is simply a comma-separated list of the short names you defined in the mapping array.
 
 = Old Content =
 
