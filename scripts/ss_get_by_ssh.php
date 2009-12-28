@@ -487,6 +487,20 @@ function increment(&$arr, $key, $howmuch) {
 }
 
 # ============================================================================
+# Divide $left by $right as accurately as possible with reasonable effort.
+# ============================================================================
+function big_divide ($left, $right) {
+   if ( function_exists("bcdiv") ) {
+      debug(array('bcdiv', $left, $right, 6));
+      return rtrim(bcdiv( $left, $right, 6 ), '0');
+   }
+   else {
+      debug(array('sprintf', $left, $right));
+      return rtrim(sprintf(".0f", $left / $right), '0');
+   }
+}
+
+# ============================================================================
 # Multiply two big integers together as accurately as possible with reasonable
 # effort.  This is tested in t/mysql_stats.php and copied, without tests, to
 # ss_get_by_ssh.php.
