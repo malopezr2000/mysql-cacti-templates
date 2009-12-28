@@ -39,7 +39,7 @@ The graph item in the definitions/mysql_definitions.pl file has the following pr
       * type: 1 => GAUGE, 2 => COUNTER (increasing, with overflow checks), 3 => DERIVE (no overflow checks).  Prefer DERIVE with a min value of 0 over COUNTER (see issue 41).
       * hash.
   * items -- the array of graph items (lines and such).  Each item is a hash.  There are these properties:
-    * color -- a hex color code.
+    * color -- a hex color code.  Try looking at http://www.colourlovers.com/palettes/top
     * item -- the name of the data item to graph.
     * type -- the RRD type, such as LINE1 or AREA or STACK.  Text items will automatically be added for each thing that is drawn on the graph.
     * task -- a hash.
