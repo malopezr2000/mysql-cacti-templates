@@ -64,6 +64,56 @@ The returned value should be the array that you're testing for.  Write until you
 
 = Writing the Command Line =
 
+Once you've gotten this far, you've collected sample data, and written well-tested code to parse it.  This code lives in a function called `diskstats_parse()`, which follows a specific naming convention.  You need two more functions that follow the same naming convention, and the command-line option that'll cause these functions to be executed.
+
+The first function specifies a cache filename.  Caching is an efficiency feature that helps work around a flaw in Cacti's design.  The filename needs to be unique for every different host and device you want to graph, so we're going to need to include the --host and the --device command-line options in the filename.  The second function creates the command line that'll gather the data from /proc/diskstats over SSH.  The functions can be quite simple.
+
+{{{
+function diskstats_cachefile ( $options ) {
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   $sanitized_dev
+       = str_replace(array(":", "/"), array("", "_"), $options['device']);
+   return "${sanitized_host}_diskstats_${sanitized_dev}";
+}
+
+function diskstats_cmdline ( $options ) {
+   return "cat /proc/diskstats";
+}
+}}}
+
+Now you need to let the user know how to execute these functions.  This is done via the `--type` command-line option to the PHP script.  The argument to this option can be free-form text, so all you need to do is add the text to the `--help` output.  Here's a diff to show what to change:
+
+{{{
+@@ -197,7 +198,7 @@
+    --server    The server (DNS name or IP address) from which to fetch the
+                desired data after SSHing.  Default is 'localhost' for HTTP stats
+                and --host for memcached stats.
+-   --type      One of apache, nginx, proc_stat, w, memory, memcached
++   --type      One of apache, nginx, proc_stat, w, memory, memcached, diskstats
+                (more are TODO)
+    --url       The url, such as /server-status, where server status lives
+    --use-ssh   Whether to connect via SSH to gather info (default yes).
+}}}
+
+Hopefully that's clear.
+
+There is one final detail, which is necessary because this is a rather advanced graphing task: we need to add a `--device` command-line option so the PHP code can figure out which disk device the user is interested in graphing.  This should be added in two places: a) the command-line `--help` output we just saw, and b) in the `validate_options()` function.  Here's another diff:
+
+{{{
+@@ -160,7 +160,7 @@
+ function validate_options($options) {
+    debug($options);
+    $opts = array('host', 'port', 'items', 'nocache', 'type', 'url', 'http-user',
+-                 'file', 'http-password', 'server', 'port2', 'use-ssh');
++                 'file', 'http-password', 'server', 'port2', 'use-ssh', 'device');
+    # Required command-line options
+    foreach ( array('host', 'items', 'type') as $option ) {
+       if ( !isset($options[$option]) || !$options[$option] ) {
+}}}
+
+Now you can specify `--device sda1` or similar, and the code can access that through `$options['device']`, as you've seen in the examples above.
+
 = Old Content =
 
 *Everything below here is old content, to be merged into the new content above.*
