@@ -165,6 +165,164 @@ function diskstats_cachefile ( $options ) {
 
 Notice that the `--items` argument is simply a comma-separated list of the short names you defined in the mapping array.
 
+= Write Another Test =
+
+At this point, you're finished with everything PHP'ish, except for one last thing: write another test case.  Write your final test case to test the integration of all the code you've written, and ensure that it all works right together.  Look in the test file for tests against the `ss_get_by_ssh()` function, and emulate that.  For example,
+
+{{{
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/diskstats-001.txt',
+      'type'    => 'diskstats',
+      'host'    => 'localhost',
+      'items'   => 'bj,bk,bl,bm,bn,bo,bp,bq,br,bs,bt',
+      'device'  => 'hda1'
+   )),
+   'bj:12043 bk:387 bl:300113 bm:6.472 bn:12737 bo:21340 bp:272616 bq:22.36 '
+      . 'br:0 bs:12.368 bt:28.832',
+   'main(samples/diskstats-001.txt)'
+);
+}}}
+
+Now you're really done, and you can go on to defining the graphs.
+
+= How the Graph System Works =
+
+Cacti's templating system is really difficult to understand and work with.  It uses cryptic values, has redundant data all over the place (so you can't tell what's meaningful and what's just accidentally duplicated data), and uses randomly generated hashes as unique identifiers for things.  The typical Cacti template is defined within Cacti and then exported, which results in an unholy mess for anyone who tries to import that template.  All sorts of nastiness results.  And to top it off, creating nice consistent templates is tedious.  You could easily spend several days doing it, one click at a time.  I know, because before I wrote this automatic templating system, I spent several weeks trying to whip someone else's templates into a shape that I considered usable and wouldn't sabotage my Cacti installation.
+
+All that is behind us now.  The system you're about to see might look a little cryptic, but that's because it is a highly compressed definition of the template system that Cacti uses.  This system cuts out redundancy, and follows a certain set of conventions to eliminate a lot of work (and a lot of errors).  Without this, it would be just as cryptic -- but it would be an order of magnitude bigger and harder to understand.
+
+In this system, there is a fairly simple relationship between the moving parts in the system.  If you're familiar with Cacti, the following might help you understand:
+
+  # An input is defined only once, instead of being defined over and over for every different graph.  This means that all the graphs for a related set of data draw their data from a common command.  The input is defined by a command-line that executes it, command-line arguments it accepts, and values it outputs.
+  # Each graph is associated with one graph template.
+  # Each graph template has a corresponding data template, which has exactly the inputs and outputs that the graph needs, no more, no less.  Data templates are not shared across several graph templates or vice versa; there is a strict one-to-one relationship.
+  # Each RRD file definition maps exactly to one graph template and therefore to one data template, again in a one-to-one relationship.
+  # The above one-to-one relationships prevent a lot of duplicated data being polled, retrieved, and stored in RRD files (which can get pretty big).
+  # The graph templates, data templates, and RRD definitions are named the same way, but with a distinguishing suffix automatically added by the template generation tools.  This makes it easy to know what you're looking at!
+  # The random hash identifiers are defined once and only once in the system, and are hard-coded into the definition file.  They never change, and that makes a lot of things work better.  Hard-coding removes the randomness and eliminates chaos.  The hashes are written in an abstract form in the definition file, to eliminate problems such as version dependencies (which typically prevent templates exported from a new version of Cacti being imported on an older version).
+
+The summary of the above is "don't repeat yourself."  Cacti repeats itself a lot; this template system cuts all that out and simplifies things by creating a one-to-one-to-one relationship from the data collection all the way through to the graph definition.
+
+Now that you know this, you're probably interested to learn about the definition file!
+
+= Structure of the Definition File =
+
+The definition file is basically one big Perl variable containing nested data structures.  It could have been YAML or JSON or XML or any of a number of other things. But it's not, it's Perl.
+
+The relationship amongst the various types of data looks like this:
+
+  # There is one top-level template.
+  # The template contains some properties such as name and version.
+  # The template contains two major sections: graphs and inputs.
+    # The graph section is an array of graph template definitions.  Because of the one-to-one-to-one relationship amongst them, each graph template definition implicitly defines a corresponding data template and an RRD file definition.
+    # The input section is an array of input definitions.  Each one defines the data that flows between the PHP script you wrote above, and the graph templates.
+
+I'll explain more later, as I go through the steps of creating a new set of graphs from the data we're newly able to collect.
+
+Before we go on, though, you need to understand about hashes.  If you open up the definition file, you'll see some things that look like this:
+
+{{{
+         items => [
+            {  item   => 'STAT_interrupts',
+               color  => 'BF4E15',
+               task   => 'hash_09_VER_e2a72b5aa0b06ad05dcd368ae0a131cf',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_3eae0c8f769939bb30c407d4edcee0c0',
+                  'hash_10_VER_25aaadab40c1c8e12c45ce61693099b7',
+                  'hash_10_VER_43f90f7f26a7c6b3ca41c7219afaa50c',
+                  'hash_10_VER_df9555d08c88c6c0336fe37ffe2ad74a'
+               ],
+            },
+         ],
+      },
+}}}
+
+Those are hashes.  You're going to have to create unique hashes so Cacti doesn't get all confused.  You're going to need a lot of them, too!  Don't worry about it.  Just follow these simple steps and you'll be fine:
+
+  # Always create your template definitions by copying and pasting whatever you're working on.  If you're creating a new input, copy and paste an old one.
+  # Always copy and paste downwards in the file.  Never take something from the file and copy/paste it higher up in the file.
+
+Copying and pasting will create duplicate hashes.  It doesn't matter.  There is a tool to detect these and randomly generate new ones that aren't duplicates.  This works great, as long as you don't copy/paste higher in the file.  If you do that, the pre-existing hashes will get overwritten with newer ones, which is bad.  Later I'll tell you to check for this, just in case.
+
+= Defining an Input =
+
+The first step is to define your input.  You created a whole new group of data, which you can get with `--type diskstats`.  Create a new input for that.  Let's copy/paste the input called "Get Proc Stats".  Copy the whole thing:
+
+{{{
+      'Get Proc Stats' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_b8d0468c0737dcd0863f2a181484f878',
+         input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
+                       . '--host <hostname> --type proc_stat --items <items>',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_509a24f84c924e9252be9a82c6674a6f',
+               name        => 'hostname'
+            },
+         ],
+         outputs => {
+            STAT_interrupts       => 'hash_07_VER_cf50d22f8b5814fbb9e42d1b46612679',
+            STAT_context_switches => 'hash_07_VER_49aa057a3935a96fb25fb511b16a75fa',
+            STAT_forks            => 'hash_07_VER_d5e03c6e39717cc6a58e85e5f25608c6',
+            STAT_CPU_user         => 'hash_07_VER_edfd4ac62e1e43ec35b3f5dc10ae2510',
+            STAT_CPU_nice         => 'hash_07_VER_474ae20e35b85ca08645c018bd4c29c4',
+            STAT_CPU_system       => 'hash_07_VER_89c1f51e8cbf6df135e4446e9c656e9b',
+            STAT_CPU_idle         => 'hash_07_VER_f8ad00b68144973373281261a5100656',
+            STAT_CPU_iowait       => 'hash_07_VER_e2d5a3ef480bb8ed8546fe48c3496717',
+            STAT_CPU_irq          => 'hash_07_VER_a8ff7438a031f05bd223e5a016d443b2',
+            STAT_CPU_softirq      => 'hash_07_VER_b7055f7e8e745ab6c0c7bbd85f7aff03',
+            STAT_CPU_steal        => 'hash_07_VER_5686b4b2d255e674f46932ae60da92af',
+            STAT_CPU_guest        => 'hash_07_VER_367fbfbb15a0bbd73fae5366d02e0c9b',
+         },
+      },
+}}}
+
+What does all that mean?  The name of the input is going to be called "Get Proc Stats".  It is of type 1, which is a PHP script.  It has a hash -- don't worry about that, but that's its unique identifier.  It has an input_string, which is really its command-line.  You can see some special things in angle-brackets, which is Cacti's replacement variable notation.
+
+Next it has inputs.  (I know, it's confusing).  There is only one input, the hostname.  This is a placeholder for Cacti to insert the hostname into the script's command-line arguments when it executes the PHP.  If you're wondering what gets put into the `<items>` argument placeholder in the input_string, that's taken care of automatically by the template generation system.
+
+Finally, the input has outputs.  (Yes, I know...)  These are the values that the PHP script will return when you call it.  However, for sanity, they are mentioned here in their long form.  As I said before, the short-to-long mapping is defined only once, in the PHP file.  Everywhere else you will use the long form of the names, and the template generation system will take care of translating that to the short form where needed.
+
+You need to copy and paste the text, and just update it to make a new input definition.  You'll end up with something like this:
+
+{{{
+      'Get Disk Stats' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_da6fa9ee8283a483d4dea777fd69c629',
+         input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
+                       . '--host <hostname> --type diskstats --items <items> '
+                       . '--device <device>',
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_280cd9c759c52b2477b972334210f920',
+               name        => 'hostname'
+            },
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_e89872554729dcd0695528adec190dd2',
+               name        => 'device'
+            },
+         ],
+         outputs => {
+            DISK_reads              => 'hash_07_VER_00e4dd20a4e29c673a4471b2ee173ac9',
+            DISK_reads_merged       => 'hash_07_VER_8af205c19a7439e83cee53059096b8e3',
+            DISK_sectors_read       => 'hash_07_VER_9c5a554f4d62343e5aaaf9f0d784ada0',
+            DISK_time_spent_reading => 'hash_07_VER_e8fd959febe8cdd5b20b8282ba340f19',
+            DISK_writes             => 'hash_07_VER_1384e83ff216c0377a5f213f9a88c6fa',
+            DISK_writes_merged      => 'hash_07_VER_c9cb7f45fa6ad943c377efb3ba2e661d',
+            DISK_sectors_written    => 'hash_07_VER_43f100a2f54d5b18c3cdc5e8b8a02293',
+            DISK_time_spent_writing => 'hash_07_VER_e1886d79cfa3c526c899de03db6e07ee',
+            DISK_io_time            => 'hash_07_VER_cad0f7e9d765ba4e9341de72c0366575',
+            DISK_io_time_weighted   => 'hash_07_VER_d7ebd195f6d9048b8e1e84114e8a0b6d',
+         },
+      },
+}}}
+
+That should look familiar to you from the work you've done already.  The name is "Get Disk Stats".  The outputs are what you chose in your first test case.  The only thing really special here is that you need to add a command-line option for `--device`, because again, disk statistics have to know what device they're graphing.
+
+Although I've shown newly generated hashes here, don't worry about it.  Copy/paste the hashes from the other input definition.  As long as you paste *below*, generating new hashes is easy.
+
 = Old Content =
 
 *Everything below here is old content, to be merged into the new content above.*
