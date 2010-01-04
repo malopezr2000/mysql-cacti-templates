@@ -1,6 +1,6 @@
 #summary How to create new templates or graphs
 
-*Note: this document is a work in progress, and is incomplete.*
+<wiki:toc max_depth="1" />
 
 = Introduction =
 
