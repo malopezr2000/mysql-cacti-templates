@@ -870,7 +870,9 @@ foreach my $g ( @{ $t->{graphs} } ) {
    el('name', "$name_prefix$g->{name} GT");
    es('graph');
    foreach my $p ( @graph_props ) {
-      el("t_$p", ''); # No idea what this is for, it's always empty.
+      # If this one contains "on", then it means the template's value has to be
+      # overridden/specified for every graph.
+      el("t_$p", $g->{override}->{$p} ? "on" : '');
       el($p, $g->{$p} || (defined $graph_props{$p} ? $graph_props{$p} : ''));
    }
    ee('graph');
