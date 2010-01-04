@@ -381,6 +381,212 @@
             },
          ],
       },
+      {  name       => 'Disk Operations',
+         base_value => '1000',
+         hash       => 'hash_00_VER_252adf181557beb81563c542c737f1c8',
+         override   => { title => 1 },
+         dt         => {
+            hash       => 'hash_01_VER_1cac931efcc07f7875f6d44febc79ab5',
+            input      => 'Get Disk Stats',
+            DISK_reads                    => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_f03abec3626d9fae8bb2459e9f7248fc',
+            },
+            DISK_reads_merged             => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_d4a2e43f4a6c6478e3d6451a05840c5d',
+            },
+            DISK_writes                   => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_cc6085f71f97288a87fb37bfd707498f',
+            },
+            DISK_writes_merged            => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_b571044cb24b77bcabeb29f1b9652bbe',
+            },
+         },
+         items => [
+            # Colors from
+            # http://www.colourlovers.com/palette/903157/Entrapped_InAPalette
+            {  item   => 'DISK_reads',
+               color  => '2A2829',
+               task   => 'hash_09_VER_8075028fd4be854bc996dac375e82e90',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_c2ef347373a55cc9cd98deffb75a9499',
+                  'hash_10_VER_9d3934a94b05d3fd010a3ed25f6d8884',
+                  'hash_10_VER_e32112cd27ea9fd1471fcf09a921a7e1',
+                  'hash_10_VER_348c8be51c5afe993fc0a9c2e09c7385'
+               ],
+            },
+            {  item   => 'DISK_reads_merged',
+               color  => '668284',
+               task   => 'hash_09_VER_554572c6fdc83bf683e33fedcbda11a7',
+               type   => 'STACK',
+               hashes => [
+                  'hash_10_VER_67b6b05a8f42568fcc15a627ed8e24aa',
+                  'hash_10_VER_35b35ffee6f0aae48211e8aba27c7994',
+                  'hash_10_VER_28b68cd50c8304519ad178e58a2ec04b',
+                  'hash_10_VER_35ed19d2111590bf381e7139d71387be'
+               ],
+            },
+            {  item   => 'DISK_writes',
+               color  => '493736',
+               task   => 'hash_09_VER_09973a8ffdda5c60ed1120fa05a70bcb',
+               type   => 'AREA',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_dbfa429e02f524e8bf2387b6d6aa2a1c',
+                  'hash_10_VER_ed609922b0642eef8da782edb7dc3a81',
+                  'hash_10_VER_f6277a7fffd08190d4240e3a10352871',
+                  'hash_10_VER_279ef431a03c400c849f140558f7fa68'
+               ],
+            },
+            {  item   => 'DISK_writes_merged',
+               color  => '7B3B3B',
+               task   => 'hash_09_VER_5ccd9eec4f4329c7f0fea571d19e0487',
+               type   => 'STACK',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_b113ba3a059343a69276f4a8234f9287',
+                  'hash_10_VER_085057affe0cbb00cceac0749cbd8504',
+                  'hash_10_VER_8ed1cc9622a85678d9333df3bd75007a',
+                  'hash_10_VER_1754655b31df88eba280bc3236946509'
+               ],
+            },
+         ],
+      },
+      {  name       => 'Disk Sectors Read/Written',
+         base_value => '1024',
+         hash       => 'hash_00_VER_9fad7377daacfd611dae46b14cc4f67e',
+         override   => { title => 1 },
+         dt         => {
+            hash       => 'hash_01_VER_67811065b100a543ddeadf7464ae017c',
+            input      => 'Get Disk Stats',
+            DISK_sectors_read             => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_80929ee708f7755d09443d3d930a29cc',
+            },
+            DISK_sectors_written          => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_f5d85616af1e03a679042978c938a7ee',
+            },
+         },
+         items => [
+            # Colors from
+            # http://www.colourlovers.com/palette/694737/Thought_Provoking
+            {  item   => 'DISK_sectors_read',
+               color  => '542437',
+               task   => 'hash_09_VER_38f255216fd118d6d88a46d42357323c',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_7fe10cf273b9917b2bd9d4185c95c17d',
+                  'hash_10_VER_bf9926c2b2141684183bf54c53024c67',
+                  'hash_10_VER_93929e0d701da516c2c00b2a986f4afb',
+                  'hash_10_VER_61e3158871ff83b947fa61dd55bf0e62'
+               ],
+            },
+            {  item   => 'DISK_sectors_written',
+               color  => '53777A',
+               task   => 'hash_09_VER_b5085578cca9a7fa280edef3196bbf53',
+               type   => 'AREA',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_f1b8a498e6aa39016e875946005468ca',
+                  'hash_10_VER_53f05855224d069625ee58c490ed1fb3',
+                  'hash_10_VER_4ac5653988f3493af2e4fa9550546a86',
+                  'hash_10_VER_43ca42b3dcd41d7cf16e2ef109931a0c'
+               ],
+            },
+         ],
+      },
+      {  name       => 'Disk Read/Write Time (ms)',
+         base_value => '1000',
+         hash       => 'hash_00_VER_81b3d762b30209f194ea927ed53ccd7b',
+         override   => { title => 1 },
+         dt         => {
+            hash       => 'hash_01_VER_09a56a72a1de71f43e2974190c43c28f',
+            input      => 'Get Disk Stats',
+            DISK_time_spent_reading       => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_e5e740da0d9a119c9e12b503f82aa73f',
+            },
+            DISK_time_spent_writing       => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_4d637254e94e9f70606d324e90164486',
+            },
+         },
+         items => [
+            # Colors from
+            # http://www.colourlovers.com/palette/694737/Thought_Provoking
+            {  item   => 'DISK_time_spent_reading',
+               color  => '755E5E',
+               task   => 'hash_09_VER_ca5c56c8d7b3188012fafc29e09eabd7',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_0481ae7431a4ed9de69dec8d840fe865',
+                  'hash_10_VER_08362e34a4e87bcdd6098c1180cbbaa6',
+                  'hash_10_VER_50b7d9a1e6f069eb0132587c8038fe25',
+                  'hash_10_VER_05c7a1ebaf85b43ce521e784f5ce41bc'
+               ],
+            },
+            {  item   => 'DISK_time_spent_writing',
+               color  => 'C02942',
+               task   => 'hash_09_VER_89d13a35dd51073e0bc4206b1dd8c29a',
+               type   => 'AREA',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_0e183e1ab70abf4eb2ed1249a5ce918b',
+                  'hash_10_VER_b5c18ffc743490c159b68deaf957c251',
+                  'hash_10_VER_bd1bae0d78002efeef676530cbfc6f8e',
+                  'hash_10_VER_570c3dcd3c0782372031de748751b6db'
+               ],
+            },
+         ],
+      },
+      {  name       => 'Disk Elapsed IO Time (ms)',
+         base_value => '1000',
+         hash       => 'hash_00_VER_3f8d2cdca4117539c0aa5046019335e0',
+         override   => { title => 1 },
+         dt         => {
+            hash       => 'hash_01_VER_55e420939c886691b4b851f71805c048',
+            input      => 'Get Disk Stats',
+            DISK_io_time          => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_179149f87390bdd5a70a1a5f7ff073a9',
+            },
+            DISK_io_time_weighted => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_cabbd5b55ccefa0daccd43c8f24fb14b',
+            },
+         },
+         items => [
+            # Colors from
+            # http://www.colourlovers.com/palette/194715/Crueberry_Shake
+            {  item   => 'DISK_io_time',
+               color  => '4E3F30',
+               task   => 'hash_09_VER_ffe96530ddb9204dd1818b957292cfcf',
+               type   => 'LINE1',
+               hashes => [
+                  'hash_10_VER_7498182ddb44f7f0b5d51c798b05d5de',
+                  'hash_10_VER_d3b457875ff91bcbc1bb478a855193db',
+                  'hash_10_VER_769307477beee977791b79b4c47f30b1',
+                  'hash_10_VER_e0af8cc8499ad7f4057c5865c85af482'
+               ],
+            },
+            {  item   => 'DISK_io_time_weighted',
+               color  => '2C5043',
+               task   => 'hash_09_VER_ce630ea4757485bc08fb8f5df59ab5e7',
+               type   => 'LINE1',
+               hashes => [
+                  'hash_10_VER_e6ec4f6cc1d6ebc215b7889e282076fa',
+                  'hash_10_VER_78dcbdd3aa89a5414bdc6ce4f89fa2bc',
+                  'hash_10_VER_9bdb75198240df09dc3686f9e452c2d5',
+                  'hash_10_VER_dfbe2db442e6cd07d8297dfa5c7cd3da'
+               ],
+            },
+         ],
+      },
    ],
    inputs => {
       'Get W' => {
@@ -423,6 +629,37 @@
             STAT_CPU_softirq      => 'hash_07_VER_b7055f7e8e745ab6c0c7bbd85f7aff03',
             STAT_CPU_steal        => 'hash_07_VER_5686b4b2d255e674f46932ae60da92af',
             STAT_CPU_guest        => 'hash_07_VER_367fbfbb15a0bbd73fae5366d02e0c9b',
+         },
+      },
+      'Get Disk Stats' => {
+         type_id      => 1,
+         hash         => 'hash_03_VER_da6fa9ee8283a483d4dea777fd69c629',
+         input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
+                       . '--host <hostname> --type diskstats --items <items> '
+                       . '--device <device>',
+         prompt_title => 1,
+         inputs => [
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_280cd9c759c52b2477b972334210f920',
+               name        => 'hostname'
+            },
+            {  allow_nulls => '',
+               hash        => 'hash_07_VER_e89872554729dcd0695528adec190dd2',
+               name        => 'device',
+               override    => 1,
+            },
+         ],
+         outputs => {
+            DISK_reads              => 'hash_07_VER_00e4dd20a4e29c673a4471b2ee173ac9',
+            DISK_reads_merged       => 'hash_07_VER_8af205c19a7439e83cee53059096b8e3',
+            DISK_sectors_read       => 'hash_07_VER_9c5a554f4d62343e5aaaf9f0d784ada0',
+            DISK_time_spent_reading => 'hash_07_VER_e8fd959febe8cdd5b20b8282ba340f19',
+            DISK_writes             => 'hash_07_VER_1384e83ff216c0377a5f213f9a88c6fa',
+            DISK_writes_merged      => 'hash_07_VER_c9cb7f45fa6ad943c377efb3ba2e661d',
+            DISK_sectors_written    => 'hash_07_VER_43f100a2f54d5b18c3cdc5e8b8a02293',
+            DISK_time_spent_writing => 'hash_07_VER_e1886d79cfa3c526c899de03db6e07ee',
+            DISK_io_time            => 'hash_07_VER_cad0f7e9d765ba4e9341de72c0366575',
+            DISK_io_time_weighted   => 'hash_07_VER_d7ebd195f6d9048b8e1e84114e8a0b6d',
          },
       },
       'Get Memory' => {
