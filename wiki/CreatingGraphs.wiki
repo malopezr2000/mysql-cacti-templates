@@ -462,3 +462,52 @@ If we put it all together, we'll get the full graph definition:
          ],
       },
 }}}
+
+That's it! The hard work is over!
+
+= Fix Your Hashes =
+
+After you're done with the above steps, you have everything you need to create templates. But one small thing remains: you need to resolve the duplication you created by copy/pasting hash values all over the place.  There's a tool to do this.  Run it like this:
+
+{{{
+$ tools/unique-hashes.pl definitions/gnu_linux_definitions.pl > temp.pl
+}}}
+
+Now examine the generated file `temp.pl` and make sure it looks OK.  What I usually do is `vimdiff` that file and the original definitions file.  Among other things, I'm looking to make sure that I always pasted my hashes *below* where I copied them from.  *Hashes of the definition elements that pre-dated your work should never be changed!*  If they are, they can mess up people's Cacti installations.  The `diff` or `vimdiff` should reveal that new lines were added, but no old lines were changed.  After you verify that, you can replace the original file with the `temp.pl` file.
+
+= Generate Templates =
+
+Now you're ready to generate templates from your definition file!  Here's how:
+
+{{{
+$ tools/make-template.pl --script <data input script> <definition file> > template.xml
+}}}
+
+Now the generated template file should be ready to import and use! If you have any errors, bring that up on the mailing list and let's talk and make this document better!
+
+= Real-Life Examples =
+
+TODO
+
+  * Pick some new things to graph.  For example, let's say I want to graph Handler statistics.
+  * Open scripts/ss_get_mysql_stats.php and add the new variables.  See r171 for an example of what to change.
+
+
+= Optional Template Elements =
+
+Skip this unless you're an advanced user.
+
+You can define these as children of the top level in the template definition:
+
+  * gprints -- Custom sprintf formats.  You don't need to modify these.
+  * rras -- these are just some custom RRA definitions so you can keep more than the usual amount of data.
+  * cdefs -- these are custom CDEF sections, which generally don't need to be modified.
+
+If you don't define these, built-in defaults are used.  They're kept in the tools/make-template.pl script.
+
+= Suggestions =
+
+Here are some suggestions for meaningful, good-quality graphs.
+
+  # Don't mix things with different units onto a single graph.  Just because some values are generally about the same kind of thing doesn't mean they belong together on a graph!  For example, if you have data about the number of disk reads performed, and data about the number of bytes read -- don't mix them.  One has a unit of bytes, and the other has a unit of reads.  If you graph them together they'll scale and skew badly.
+  # Pick colors carefully.  Again, I prefer to use http://www.colourlover.com/palettes/top.
