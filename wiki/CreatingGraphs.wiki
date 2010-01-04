@@ -323,63 +323,142 @@ That should look familiar to you from the work you've done already.  The name is
 
 Although I've shown newly generated hashes here, don't worry about it.  Copy/paste the hashes from the other input definition.  As long as you paste *below*, generating new hashes is easy.
 
-= Old Content =
+= Defining the Graph =
 
-*Everything below here is old content, to be merged into the new content above.*
+Now that you have the definition of the input that you're going to graph, you need to specify the graph itself -- how that data should be presented visually.
 
-You can base your new graph off the existing ones.  For the MySQL graphs, everything you need is in definitions/mysql_definitions.pl.
+Again, begin by copy/pasting another definition, but copy above, paste below.  To keep it brief, this time I'm not going to the origin of the copy/paste -- I'll only show the final result.  Actually, here's the result, with a few things snipped for brevity:
 
-This file is read in as a big variable by tools/make_template.pl.  It consists of the following sections, which will be combined to form a template for Cacti:
+{{{
+      {  name       => 'Disk Sectors Read/Written',
+         base_value => '1024',
+         hash       => 'hash_00_VER_9fad7377daacfd611dae46b14cc4f67e',
+         override   => { 'title' => 1 },
+         dt         => {
+            hash       => 'hash_01_VER_67811065b100a543ddeadf7464ae017c',
+            input      => 'Get Disk Stats',
+            ... snipped! ...
+         },
+         items => [
+            ... snipped! ...
+         ],
+      },
+}}}
 
-  * name and hash -- properties for the template.
-  * version -- a hash and string to indicate the template version.
-  * graphs -- a graph is a data template plus a collection of graph items.
-  * inputs -- this basically defines how the command-line script is called.
+Ignoring the snipped sections for right now, here's what that means:
 
-The version will really be turned into a GPRINT preset, which you can then view from the Cacti interface by going to Graph Management, then GPRINT Presets.  You will then see a GPRINT named something like "X MySQL Server Version t1.1.4:s1.1.4", which indicates that the installed version of the template was generated with version 1.1.4 of the template definition against version 1.1.4 of the related data-gathering script.
+  * *name* is pretty self-explanatory.  This name will be used in all the redundant places that Cacti wants it: in the graph template, in the graphs themselves, and so on, including the graph title.
+  * *base_value* is usually 1000 or 1024.  Use 1000 except for things where you'd expect a unit of 1024, such as when the things graphed are measured in bytes.  Here we're using 1024 because we're talking about sectors read and written, and sectors are a power-of-two of bytes.
+  * *hash* is just a hash.  Just copy/paste and let the uniquifying process take care of that.
+  * *override* does not need to be used for most graphs.  Specifying an element here is equivalent to checking "Use Per-Graph Value (Ignore this Value)" next to that item on the graph template page inside of Cacti.  It means that this item won't be taken straight from the template for each graph; when you create the graph you'll be prompted to supply a value for the item.  We need to use it for this graph because we want to modify the graph's title to include the device or partition we're graphing in this graph.  When you create a graph, you'll be prompted for the device to graph, and you'll be able to customize the graph title so you can see that device easily.
+  * *dt* defines things that are specific to the data template (remember, one graph template == one data template).  You need a hash (again, copy/paste for now), and you need to specify which input the data comes from.  Then, following this, you'll specify a varying number of sections, one for each item you want to graph from that input.
+  * *items* includes a varying number of sections, too -- also one per thing you want to graph.
 
-Optionally, you can define these:
+Here's what I've snipped out of those sections.  First, the sections that say what data to get out of the input:
 
-  * gprints -- Custom sprintf formats.  You don't need to modify these.
-  * rras -- these are just some custome RRA definitions so you can keep more than the usual amount of data.
-  * cdefs -- these are custom CDEF sections, which generally don't need to be modified.
+{{{
+            DISK_sectors_read             => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_80929ee708f7755d09443d3d930a29cc',
+            },
+            DISK_sectors_written          => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_f5d85616af1e03a679042978c938a7ee',
+            },
+}}}
 
-If you don't define these, built-in defaults are used.  They're kept in the tools/make-template.pl script.
+That's two items.  Each one basically says "graph this, and here's the type and hash for it."  The thing to graph needs to be one of the data items that comes from the input.  The hash you should leave copy/pasted for now.  The *data_source_type_id* can have a few different values.  These map directly to [http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html#IDS_ds_name_DST_dst_arguments RRDTool data types]:
 
-In addition, there's a magical word `MAGIC_VARS_DEFINITIONS` that you can put into the script file that'll be read with the --script option.  This will cause the entire following paragraph to be read in and included into the definition too.  This lets you specify a short_names array/hash that shortens the command-line output to avoid problems with Cacti's limited built-in buffer sizes.
+  * The value 1 means a GAUGE.
+  * The value 2 means a COUNTER (increasing, with overflow checks).
+  * The value 3 means DERIVE (no overflow checks).  Prefer DERIVE with a minimum value of 0 over COUNTER (see issue 41).
 
-The hardest part is keeping track of how all these things are related to each other.  I have simplified the relationships significantly: one data template per each graph template, etc.
+Generally, I use DERIVE or GAUGE.  Anything that's a steadily increasing counter is a DERIVE, as in the example above.
 
-A graph will really be input to Cacti as a graph template and a data template.
+Here's the next section I've stripped out of the code sample above.  This one contains the items that will appear on the graph itself:
 
-The graph item in the definitions/mysql_definitions.pl file has the following properties:
+{{{
+            {  item   => 'DISK_sectors_read',
+               color  => '542437',
+               task   => 'hash_09_VER_38f255216fd118d6d88a46d42357323c',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_7fe10cf273b9917b2bd9d4185c95c17d',
+                  'hash_10_VER_bf9926c2b2141684183bf54c53024c67',
+                  'hash_10_VER_93929e0d701da516c2c00b2a986f4afb',
+                  'hash_10_VER_61e3158871ff83b947fa61dd55bf0e62'
+               ],
+            },
+            {  item   => 'DISK_sectors_written',
+               color  => '53777A',
+               task   => 'hash_09_VER_b5085578cca9a7fa280edef3196bbf53',
+               type   => 'AREA',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_f1b8a498e6aa39016e875946005468ca',
+                  'hash_10_VER_53f05855224d069625ee58c490ed1fb3',
+                  'hash_10_VER_4ac5653988f3493af2e4fa9550546a86',
+                  'hash_10_VER_43ca42b3dcd41d7cf16e2ef109931a0c'
+               ],
+            },
+}}}
 
-  * base_value -- either 1024 or 1000 depending on whether the unit is an amount of data or not.  (Rule: don't mix things with different units on a single graph.  If you do, you get meaningless crap most of the time.)
-  * name -- the name of the graph.  Keep it short.
-  * hash -- the Cacti hash.  See CactiHashes.
-  * dt -- the data template.
-    * hash.
-    * Name of the data input.  This is the name of an item in the inputs section at the top level.
-    * items to get from the data input.  These are a hash reference.  The key is the name of the value to get from the data input (e.g. pool_size for the InnoDB Buffer Pool graph template).  The hash reference's children are the:
-      * type: 1 => GAUGE, 2 => COUNTER (increasing, with overflow checks), 3 => DERIVE (no overflow checks).  Prefer DERIVE with a min value of 0 over COUNTER (see issue 41).
-      * hash.
-  * items -- the array of graph items (lines and such).  Each item is a hash.  There are these properties:
-    * color -- a hex color code.  Try looking at http://www.colourlovers.com/palettes/top
-    * item -- the name of the data item to graph.
-    * type -- the RRD type, such as LINE1 or AREA or STACK.  Text items will automatically be added for each thing that is drawn on the graph.
-    * task -- a hash.
-    * hashes -- an array of hashes.  These are used for the items.  Depending on how many hashes are in the array, the graph will get varying bits of text below the picture.  The texts are Cur: Avg: Max: and you'll get them in that order, as many as you specify.  So if you only specify one hash, you'll just get Cur: on the graph.
-    * cdef -- the optional name of a CDEF.  'Negate' is going to be the most frequent one you'll see.  This flips something across the Y axis.
+You can see there's a one-to-one mapping between the items we're getting from the data source and the items we're putting onto the graph.  In some special cases this isn't true, but it generally is; more on that in a minute.  Each item has the following properties:
 
-The basic steps I use when developing templates are as follows.
+    * *item* is the name of the data item to graph, as above.
+    * *color* is a hex color code.  Try looking at http://www.colourlovers.com/palettes/top for some good ideas.  Picking good colors is much harder than it seems.
+    * *task* is a hash; just copy/paste for now.
+    * *type* is the RRD display type, such as LINE1 or AREA or STACK.
+    * *cdef* is the optional name of a CDEF.  'Negate' is going to be the most frequent one you'll see.  This flips something across the Y axis.  You can see I have part of the graph going up, and part of it going down, here.
+    * *hashes* is an array of hashes.  Each hash will result in a bit of the caption being added to the graph.  Depending on how many hashes are in the array, the graph will get varying bits of text below the picture.  If you want a standard graph that has the label, current, average, and maximum value, put four hashes here.  If you have only three, you'll get the label, current, and average; and so on.
 
-  * Pick some new things to graph.  For example, let's say I want to graph Handler statistics.
-  * Open scripts/ss_get_mysql_stats.php and add the new variables.  See r171 for an example of what to change.
-  * Open definitions/mysql_definitions.pl and copy/paste a graph's definition; add it to the end of the existing ones.
-  * Go through and edit the names, colors, data types, etc in the copy/pasted graph.
-  * Run tools/unique-hashes.pl definitions/mysql_definitions.pl and save the output over the existing definitions/mysql_definitions.pl to make sure all the hashes are unique.
-  * Open a terminal and go to /var/www/cacti/scripts.  'cat' the edited scripts/ss_get_mysql_stats.php file over the top of the existing one.
-  * Run tools/make-template.pl --script scripts/ss_get_mysql_stats.php definitions/mysql_definitions.pl and save the output in ~/mysql-definitions.xml
-  * Run "mysql cacti < ~/cacti.sql" to initialize the database.
-  * Open the web browser, import the templates into Cacti, edit the Localhost device to be an "X MySQL Server", and add/create graphs.  Wait for data to be gathered.
-  * Go to /var/www/cacti/scripts and run, for example, `php ss_get_mysql_stats.php --host localhost --items dn,ds,dw` and make sure you get some data.
+Back to the special case I mentioned.  Sometimes I'll draw an item with an AREA in a light color, and then I'll add a LINE1 with a darker color to give it a nice defined border.  In this case I'd add the item with the AREA as in the examples above.  After that I'd add the item again as a LINE1 and not give it any hashes (so it doesn't get text captions on the graph).  This is the only case I've ever used where there isn't a one-to-one correspondence between the items coming from the data input and the items displayed on the graph.
+
+If we put it all together, we'll get the full graph definition:
+
+{{{
+      {  name       => 'Disk Sectors Read/Written',
+         base_value => '1024',
+         hash       => 'hash_00_VER_9fad7377daacfd611dae46b14cc4f67e',
+         override   => { 'title' => 1 },
+         dt         => {
+            hash       => 'hash_01_VER_67811065b100a543ddeadf7464ae017c',
+            input      => 'Get Disk Stats',
+            DISK_sectors_read             => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_80929ee708f7755d09443d3d930a29cc',
+            },
+            DISK_sectors_written          => {
+               data_source_type_id => '3',
+               hash => 'hash_08_VER_f5d85616af1e03a679042978c938a7ee',
+            },
+         },
+         items => [
+            # Colors from
+            # http://www.colourlovers.com/palette/694737/Thought_Provoking
+            {  item   => 'DISK_sectors_read',
+               color  => '542437',
+               task   => 'hash_09_VER_38f255216fd118d6d88a46d42357323c',
+               type   => 'AREA',
+               hashes => [
+                  'hash_10_VER_7fe10cf273b9917b2bd9d4185c95c17d',
+                  'hash_10_VER_bf9926c2b2141684183bf54c53024c67',
+                  'hash_10_VER_93929e0d701da516c2c00b2a986f4afb',
+                  'hash_10_VER_61e3158871ff83b947fa61dd55bf0e62'
+               ],
+            },
+            {  item   => 'DISK_sectors_written',
+               color  => '53777A',
+               task   => 'hash_09_VER_b5085578cca9a7fa280edef3196bbf53',
+               type   => 'AREA',
+               cdef   => 'Negate',
+               hashes => [
+                  'hash_10_VER_f1b8a498e6aa39016e875946005468ca',
+                  'hash_10_VER_53f05855224d069625ee58c490ed1fb3',
+                  'hash_10_VER_4ac5653988f3493af2e4fa9550546a86',
+                  'hash_10_VER_43ca42b3dcd41d7cf16e2ef109931a0c'
+               ],
+            },
+         ],
+      },
+}}}
