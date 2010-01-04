@@ -183,5 +183,71 @@ is_deeply(
    'samples/apache-001.txt'
 );
 
+is_deeply(
+   diskstats_parse( array('device' => 'hda1'), file_get_contents('samples/diskstats-001.txt') ),
+   array(
+      'DISK_reads'              => '12043',
+      'DISK_reads_merged'       => '387',
+      'DISK_sectors_read'       => '300113',
+      'DISK_time_spent_reading' => '6472',
+      'DISK_writes'             => '12737',
+      'DISK_writes_merged'      => '21340',
+      'DISK_sectors_written'    => '272616',
+      'DISK_time_spent_writing' => '22360',
+      'DISK_io_ops_in_progress' => '0',
+      'DISK_io_time'            => '12368',
+      'DISK_io_time_weighted'   => '28832'
+   ),
+   'samples/diskstats-001.txt'
+);
+
+is_deeply(
+   diskstats_parse( array('device' => 'sda4'), file_get_contents('samples/diskstats-002.txt') ),
+   array(
+      'DISK_reads'              => '30566',
+      'DISK_reads_merged'       => '3341',
+      'DISK_sectors_read'       => '586664',
+      'DISK_time_spent_reading' => '370308',
+      'DISK_writes'             => '150943',
+      'DISK_writes_merged'      => '163833',
+      'DISK_sectors_written'    => '2518672',
+      'DISK_time_spent_writing' => '12081496',
+      'DISK_io_time'            => '347416',
+      'DISK_io_time_weighted'   => '12451664',
+      'DISK_io_ops_in_progress' => '0'
+   ),
+   'samples/diskstats-002.txt'
+);
+
+is_deeply(
+   diskstats_parse( array('device' => 'sda2'), file_get_contents('samples/diskstats-003.txt') ),
+   array(
+      'DISK_reads'              => '15425346',
+      'DISK_reads_merged'       => '0',
+      'DISK_sectors_read'       => '385290786',
+      'DISK_time_spent_reading' => '0',
+      'DISK_writes'             => '472909074',
+      'DISK_writes_merged'      => '0',
+      'DISK_sectors_written'    => '3783272616',
+      'DISK_time_spent_writing' => '0',
+      'DISK_io_time'            => '0',
+      'DISK_io_time_weighted'   => '0',
+      'DISK_io_ops_in_progress' => '0'
+   ),
+   'samples/diskstats-003.txt'
+);
+
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/diskstats-001.txt',
+      'type'    => 'diskstats',
+      'host'    => 'localhost',
+      'items'   => 'bj,bk,bl,bm,bn,bo,bp,bq,br,bs,bt',
+      'device'  => 'hda1'
+   )),
+   'bj:12043 bk:387 bl:300113 bm:6472 bn:12737 bo:21340 bp:272616 bq:22360 '
+      . 'br:0 bs:12368 bt:28832',
+   'main(samples/diskstats-001.txt)'
+);
 
 ?>

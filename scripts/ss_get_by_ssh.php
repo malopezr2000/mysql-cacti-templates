@@ -160,7 +160,7 @@ function extract_desired ( $options, $text ) {
 function validate_options($options) {
    debug($options);
    $opts = array('host', 'port', 'items', 'nocache', 'type', 'url', 'http-user',
-                 'file', 'http-password', 'server', 'port2', 'use-ssh');
+                 'file', 'http-password', 'server', 'port2', 'use-ssh', 'device');
    # Required command-line options
    foreach ( array('host', 'items', 'type') as $option ) {
       if ( !isset($options[$option]) || !$options[$option] ) {
@@ -188,6 +188,7 @@ option without a value after it, the option is ignored.  For options such as
 
 General options:
 
+   --device    The device name for diskstats
    --file      Read input from this file instead of getting via SSH command
    --host      Hostname to connect to (via SSH)
    --items     Comma-separated list of the items whose data you want
@@ -197,7 +198,7 @@ General options:
    --server    The server (DNS name or IP address) from which to fetch the
                desired data after SSHing.  Default is 'localhost' for HTTP stats
                and --host for memcached stats.
-   --type      One of apache, nginx, proc_stat, w, memory, memcached
+   --type      One of apache, nginx, proc_stat, w, memory, memcached, diskstats
                (more are TODO)
    --url       The url, such as /server-status, where server status lives
    --use-ssh   Whether to connect via SSH to gather info (default yes).
@@ -341,6 +342,18 @@ function ss_get_by_ssh( $options ) {
       'MEMC_evictions'         => 'bg',
       'MEMC_bytes_read'        => 'bh',
       'MEMC_bytes_written'     => 'bi',
+      # Diskstats stuff
+      'DISK_reads'              => 'bj',
+      'DISK_reads_merged'       => 'bk',
+      'DISK_sectors_read'       => 'bl',
+      'DISK_time_spent_reading' => 'bm',
+      'DISK_writes'             => 'bn',
+      'DISK_writes_merged'      => 'bo',
+      'DISK_sectors_written'    => 'bp',
+      'DISK_time_spent_writing' => 'bq',
+      'DISK_io_ops_in_progress' => 'br',
+      'DISK_io_time'            => 'bs',
+      'DISK_io_time_weighted'   => 'bt',
    );
 
    # Prepare and return the output.  The output we have right now is the whole
@@ -931,6 +944,71 @@ function memcached_parse ( $options, $output ) {
       }
    }
    return $result;
+}
+
+# ============================================================================
+# Get and parse stats from /proc/diskstats
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type diskstats --device sda4 --host 127.0.0.1 --items bj,bk,bl,bm,bn,bo,bp'
+# ============================================================================
+function diskstats_cachefile ( $options ) {
+   if ( !isset($options['device']) ) {
+      die("--device is required for --type diskstats");
+   }
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   $sanitized_dev
+       = str_replace(array(":", "/"), array("", "_"), $options['device']);
+   return "${sanitized_host}_diskstats_${sanitized_dev}";
+}
+
+function diskstats_cmdline ( $options ) {
+   return "cat /proc/diskstats";
+}
+
+function diskstats_parse ( $options, $output ) {
+   if ( !isset($options['device']) ) {
+      die("--device is required for --type diskstats");
+   }
+   foreach ( explode("\n", $output) as $line ) {
+      if ( preg_match_all('/\S+/', $line, $words) ) {
+         $words = $words[0];
+         if ( count($words) > 2 && $words[2] === $options['device'] ) {
+            if ( count($words) > 10 ) {
+               return array(
+                  'DISK_reads'              => $words[3],
+                  'DISK_reads_merged'       => $words[4],
+                  'DISK_sectors_read'       => $words[5],
+                  'DISK_time_spent_reading' => $words[6],
+                  'DISK_writes'             => $words[7],
+                  'DISK_writes_merged'      => $words[8],
+                  'DISK_sectors_written'    => $words[9],
+                  'DISK_time_spent_writing' => $words[10],
+                  'DISK_io_ops_in_progress' => $words[11],
+                  'DISK_io_time'            => $words[12],
+                  'DISK_io_time_weighted'   => $words[13],
+               );
+            }
+            else { # Early 2.6 kernels had only 4 fields for partitions.
+               return array(
+                  'DISK_reads'              => $words[3],
+                  'DISK_reads_merged'       => 0,
+                  'DISK_sectors_read'       => $words[4],
+                  'DISK_time_spent_reading' => 0,
+                  'DISK_writes'             => $words[5],
+                  'DISK_writes_merged'      => 0,
+                  'DISK_sectors_written'    => $words[6],
+                  'DISK_time_spent_writing' => 0,
+                  'DISK_io_ops_in_progress' => 0,
+                  'DISK_io_time'            => 0,
+                  'DISK_io_time_weighted'   => 0,
+               );
+            }
+         }
+      }
+   }
+   debug("Looks like we did not find $options[device] in the output");
+   return array();
 }
 
 ?>
