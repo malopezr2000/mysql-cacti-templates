@@ -287,6 +287,7 @@ You need to copy and paste the text, and just update it to make a new input defi
          input_string => '<path_php_binary> -q <path_cacti>/scripts/ss_get_by_ssh.php '
                        . '--host <hostname> --type diskstats --items <items> '
                        . '--device <device>',
+         prompt_title => 1,
          inputs => [
             {  allow_nulls => '',
                hash        => 'hash_07_VER_280cd9c759c52b2477b972334210f920',
@@ -294,7 +295,7 @@ You need to copy and paste the text, and just update it to make a new input defi
             },
             {  allow_nulls => '',
                hash        => 'hash_07_VER_e89872554729dcd0695528adec190dd2',
-               name        => 'device'
+               name        => 'device',
                override    => 1,
             },
          ],
@@ -321,9 +322,10 @@ The only things really special here are because disk statistics have to know wha
 
   # You need to add a command-line option for `--device`.
   # You need to tell Cacti that this command-line option can't be left null: `allow_nulls => '',`.
-  # You need to tell Cacti to ask the user for the device every time the data template is applied to a graph: `override    => 1,`.
+  # You need to tell Cacti to ask the user for the device every time the data template is applied to a graph: `override    => 1,`.  This is equivalent to checking the checkbox "Use Per-Graph Value (Ignore this Value)" on the data template in the Cacti interface.
+  # You need to tell Cacti to prompt the user to customize the graph title when creating graphs: `prompt_title => 1,`.
 
-The result of that will be that Cacti will permit data entry for --device, it will require it, and it will ask for it to be provided for every graph.  (Yes, it's complicated.)
+The result is that Cacti will permit data entry for --device, it will require it, and it will ask for it to be provided for every graph.  (Yes, it's complicated.)
 
 = Defining the Graph =
 
@@ -491,9 +493,7 @@ Now the generated template file should be ready to import and use! If you have a
 
 TODO
 
-  * Pick some new things to graph.  For example, let's say I want to graph Handler statistics.
-  * Open scripts/ss_get_mysql_stats.php and add the new variables.  See r171 for an example of what to change.
-
+  * See r171 for an example of how to add something new to the MySQL graphs.  In this case, this shows how to add graphs for the Handler variables.
 
 = Optional Template Elements =
 
