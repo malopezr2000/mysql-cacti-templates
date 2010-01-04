@@ -491,8 +491,9 @@ Now the generated template file should be ready to import and use! If you have a
 
 = Real-Life Examples =
 
-TODO
+Here are some real examples of how to add graphs:
 
+  * See r390 for the example I worked through above.
   * See r171 for an example of how to add something new to the MySQL graphs.  In this case, this shows how to add graphs for the Handler variables.
 
 = Optional Template Elements =
