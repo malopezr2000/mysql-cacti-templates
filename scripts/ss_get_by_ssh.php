@@ -386,42 +386,51 @@ function ss_get_by_ssh( $options ) {
 function check_cache ( $cache_dir, $poll_time, $filename, $options ) {
    $cache_file = "$cache_dir/${filename}_cacti_stats.txt";
    debug("Cache file: $cache_file");
-   $fp = fopen($cache_file, 'a+');
-   $locked = flock($fp, 1); # LOCK_SH
-   if ( $locked ) {
-      if ( filesize($cache_file) > 0
-         && filectime($cache_file) + ($poll_time/2) > time()
-         && ($arr = file($cache_file))
-      ) {# The cache file is good to use.
-         debug("Using the cache file");
-         fclose($fp);
-         return array(null, $arr[0]);
-      }
-      else {
-         debug("The cache file seems too small or stale");
-         # Escalate the lock to exclusive, so we can write to it.
-         if ( flock($fp, 2) ) { # LOCK_EX
-            # We might have blocked while waiting for that LOCK_EX, and
-            # another process ran and updated it.  Let's see if we can just
-            # return the data now:
-            if ( filesize($cache_file) > 0
-               && filectime($cache_file) + ($poll_time/2) > time()
-               && ($arr = file($cache_file))
-            ) { # The cache file is good to use.
-               debug("Using the cache file");
-               fclose($fp);
-               return array(null, $arr[0]);
+   if ( $fp = fopen($cache_file, 'a+') ) {
+      $locked = flock($fp, 1); # LOCK_SH
+      if ( $locked ) {
+         if ( filesize($cache_file) > 0
+            && filectime($cache_file) + ($poll_time/2) > time()
+            && ($arr = file($cache_file))
+         ) {# The cache file is good to use.
+            debug("Using the cache file");
+            fclose($fp);
+            return array(null, $arr[0]);
+         }
+         else {
+            debug("The cache file seems too small or stale");
+            # Escalate the lock to exclusive, so we can write to it.
+            if ( flock($fp, 2) ) { # LOCK_EX
+               # We might have blocked while waiting for that LOCK_EX, and
+               # another process ran and updated it.  Let's see if we can just
+               # return the data now:
+               if ( filesize($cache_file) > 0
+                  && filectime($cache_file) + ($poll_time/2) > time()
+                  && ($arr = file($cache_file))
+               ) { # The cache file is good to use.
+                  debug("Using the cache file");
+                  fclose($fp);
+                  return array(null, $arr[0]);
+               }
+               ftruncate($fp, 0); # Now it's ready for writing later.
             }
-            ftruncate($fp, 0); # Now it's ready for writing later.
          }
       }
-   }
-   else {
-      debug("Couldn't lock the cache file, ignoring it.");
-      $fp = null;
+      else {
+         debug("Couldn't lock the cache file, ignoring it.");
+         $fp = null;
+      }
    }
 
    return array($fp, null);
+}
+
+# ============================================================================
+# Simple function to replicate PHP 5 behaviour
+# ============================================================================
+function microtime_float() {
+   list( $usec, $sec ) = explode( " ", microtime() );
+   return ( (float) $usec + (float) $sec );
 }
 
 # ============================================================================
@@ -442,8 +451,11 @@ function get_command_result($cmd, $options) {
    debug($ssh);
    $final_cmd = $use_ssh ? "$ssh '$cmd'" : $cmd;
    debug($final_cmd);
+   $start = microtime_float();
    $result = `$final_cmd`; # XXX this is the ssh command.
-   debug($result);
+   $end = microtime_float();
+   debug(array("Time taken to exec: ", $end - $start));
+   debug(array("result of $final_cmd", $result));
    return $result;
 }
 
@@ -496,20 +508,6 @@ function increment(&$arr, $key, $howmuch) {
    }
    else {
       $arr[$key] = $howmuch;
-   }
-}
-
-# ============================================================================
-# Divide $left by $right as accurately as possible with reasonable effort.
-# ============================================================================
-function big_divide ($left, $right) {
-   if ( function_exists("bcdiv") ) {
-      debug(array('bcdiv', $left, $right, 6));
-      return rtrim(bcdiv( $left, $right, 6 ), '0');
-   }
-   else {
-      debug(array('sprintf', $left, $right));
-      return rtrim(sprintf(".0f", $left / $right), '0');
    }
 }
 

@@ -269,40 +269,45 @@ function ss_get_mysql_stats( $options ) {
    # First, check the cache.
    $fp = null;
    if ( !isset($options['nocache']) ) {
-      $fp = fopen($cache_file, 'a+');
-      $locked = flock($fp, 1); # LOCK_SH
-      if ( $locked ) {
-         if ( filesize($cache_file) > 0
-            && filectime($cache_file) + ($poll_time/2) > time()
-            && ($arr = file($cache_file))
-         ) {# The cache file is good to use.
-            debug("Using the cache file");
-            fclose($fp);
-            return $arr[0];
-         }
-         else {
-            debug("The cache file seems too small or stale");
-            # Escalate the lock to exclusive, so we can write to it.
-            if ( flock($fp, 2) ) { # LOCK_EX
-               # We might have blocked while waiting for that LOCK_EX, and
-               # another process ran and updated it.  Let's see if we can just
-               # return the data now:
-               if ( filesize($cache_file) > 0
-                  && filectime($cache_file) + ($poll_time/2) > time()
-                  && ($arr = file($cache_file))
-               ) {# The cache file is good to use.
-                  debug("Using the cache file");
-                  fclose($fp);
-                  return $arr[0];
+      if ( $fp = fopen($cache_file, 'a+') ) {
+         $locked = flock($fp, 1); # LOCK_SH
+         if ( $locked ) {
+            if ( filesize($cache_file) > 0
+               && filectime($cache_file) + ($poll_time/2) > time()
+               && ($arr = file($cache_file))
+            ) {# The cache file is good to use.
+               debug("Using the cache file");
+               fclose($fp);
+               return $arr[0];
+            }
+            else {
+               debug("The cache file seems too small or stale");
+               # Escalate the lock to exclusive, so we can write to it.
+               if ( flock($fp, 2) ) { # LOCK_EX
+                  # We might have blocked while waiting for that LOCK_EX, and
+                  # another process ran and updated it.  Let's see if we can just
+                  # return the data now:
+                  if ( filesize($cache_file) > 0
+                     && filectime($cache_file) + ($poll_time/2) > time()
+                     && ($arr = file($cache_file))
+                  ) {# The cache file is good to use.
+                     debug("Using the cache file");
+                     fclose($fp);
+                     return $arr[0];
+                  }
+                  ftruncate($fp, 0); # Now it's ready for writing later.
                }
-               ftruncate($fp, 0); # Now it's ready for writing later.
             }
          }
+         else {
+            debug("Couldn't lock the cache file, ignoring it.");
+            $fp = null;
+         }
       }
-      else {
-         debug("Couldn't lock the cache file, ignoring it.");
-         $fp = null;
-      }
+   }
+   else {
+      $fp = null;
+      debug("Couldn't open the cache file");
    }
 
    # Set up variables.
