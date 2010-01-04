@@ -223,23 +223,16 @@ I'll explain more later, as I go through the steps of creating a new set of grap
 Before we go on, though, you need to understand about hashes.  If you open up the definition file, you'll see some things that look like this:
 
 {{{
-         items => [
-            {  item   => 'STAT_interrupts',
-               color  => 'BF4E15',
                task   => 'hash_09_VER_e2a72b5aa0b06ad05dcd368ae0a131cf',
-               type   => 'AREA',
+               ... snipped ....
                hashes => [
                   'hash_10_VER_3eae0c8f769939bb30c407d4edcee0c0',
                   'hash_10_VER_25aaadab40c1c8e12c45ce61693099b7',
                   'hash_10_VER_43f90f7f26a7c6b3ca41c7219afaa50c',
                   'hash_10_VER_df9555d08c88c6c0336fe37ffe2ad74a'
-               ],
-            },
-         ],
-      },
 }}}
 
-Those are hashes.  You're going to have to create unique hashes so Cacti doesn't get all confused.  You're going to need a lot of them, too!  Don't worry about it.  Just follow these simple steps and you'll be fine:
+Those hex digits are hashes.  You're going to have to create unique hashes so Cacti doesn't get all confused.  You're going to need a lot of them, too!  Don't worry about it.  Just follow these simple steps and you'll be fine:
 
   # Always create your template definitions by copying and pasting whatever you're working on.  If you're creating a new input, copy and paste an old one.
   # Always copy and paste downwards in the file.  Never take something from the file and copy/paste it higher up in the file.
@@ -302,6 +295,7 @@ You need to copy and paste the text, and just update it to make a new input defi
             {  allow_nulls => '',
                hash        => 'hash_07_VER_e89872554729dcd0695528adec190dd2',
                name        => 'device'
+               override    => 1,
             },
          ],
          outputs => {
@@ -319,9 +313,17 @@ You need to copy and paste the text, and just update it to make a new input defi
       },
 }}}
 
-That should look familiar to you from the work you've done already.  The name is "Get Disk Stats".  The outputs are what you chose in your first test case.  The only thing really special here is that you need to add a command-line option for `--device`, because again, disk statistics have to know what device they're graphing.
+That should look familiar to you from the work you've done already.  The name is "Get Disk Stats".  The outputs are what you chose in your first test case.
 
 Although I've shown newly generated hashes here, don't worry about it.  Copy/paste the hashes from the other input definition.  As long as you paste *below*, generating new hashes is easy.
+
+The only things really special here are because disk statistics have to know what device they're graphing:
+
+  # You need to add a command-line option for `--device`.
+  # You need to tell Cacti that this command-line option can't be left null: `allow_nulls => '',`.
+  # You need to tell Cacti to ask the user for the device every time the data template is applied to a graph: `override    => 1,`.
+
+The result of that will be that Cacti will permit data entry for --device, it will require it, and it will ask for it to be provided for every graph.  (Yes, it's complicated.)
 
 = Defining the Graph =
 
