@@ -935,7 +935,9 @@ foreach my $g ( @{ $t->{graphs} } ) {
    # The <ds> data source element.
    el('name', "$name_prefix$g->{name} DT");
    es('ds');
-   el('t_name', '');
+   # This set to "on" is the same as checking "Use per-graph..." next to the
+   # title.
+   el('t_name', $i->{prompt_title} ? 'on' : '');
    el('name', "|host_description| - $g->{name}");
    # Must generate a unique input ID hash for each DT, hence mash_hash.
    el('data_input_id', mash_hash($i->{hash}, $d->{hash}));
@@ -974,7 +976,11 @@ foreach my $g ( @{ $t->{graphs} } ) {
       el('data_input_field_id', mash_hash($input->{hash}, $d->{hash}));
       # If --mpds <foo> was given, --foo is not optional to the script.  But
       # this one is OPPOSITE the one below, the dirty rascals.
-      el('t_value', ($opts{mpds}->{$input->{name}}) ? 'on' : '');
+      el('t_value',
+         (  $opts{mpds}->{$input->{name}}
+            || $input->{override}
+            || ( $input->{name} eq 'title' && $i->{prompt_title} )
+         ) ? 'on' : '');
       el('value', '');
       ee(sprintf('item_%03d', $cnt));
       $cnt++;
