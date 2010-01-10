@@ -18,6 +18,8 @@ See the following screenshot for an example:
 
 http://sites.google.com/site/bettercactitemplates/Home/add_unix_disk_graph.png
 
+You should append "sda" in every textbox shown in that screenshot, if you want to monitor /dev/sda.  Use the device name as it appears in /proc/diskstats.
+
 = Context Switches =
 
 This graph shows the number of context switches performed by the server.
