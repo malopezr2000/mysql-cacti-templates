@@ -785,6 +785,7 @@ sub crunch {
    1 while ( length($text) > $len && $text =~ s/(?<![_ ])[aeiou]// );
    1 while ( length($text) > $len && $text =~ s/(.)\1+/$1/ );
    1 while ( length($text) > $len && $text =~ s/(_.)[^_](._)/$1$2/ );
+   1 while ( length($text) > $len && $text =~ s/_// );
    $text = reverse $text;
    die "Can't shorten $text enough" if length($text) > $len;
    return $text;
