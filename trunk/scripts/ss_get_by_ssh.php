@@ -438,6 +438,7 @@ function microtime_float() {
 # ============================================================================
 function get_command_result($cmd, $options) {
    global $debug, $ssh_user, $ssh_port, $ssh_iden, $ssh_tout, $use_ssh;
+   $use_ssh = isset($options['use-ssh']) ? $options['use-ssh'] : $use_ssh;
 
    # If there is a --file, we just use that.
    if ( isset($options['file']) ) {
