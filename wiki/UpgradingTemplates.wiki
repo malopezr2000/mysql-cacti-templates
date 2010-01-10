@@ -21,6 +21,10 @@ $version = "1.1.4";
 
 Each step in the following list assumes that you have upgraded to the previous version already.
 
+= Version 1.1.6 =
+
+To upgrade from version 1.1.5, you need to copy the new ss_get_mysql_stats.php and ss_get_by_ssh.php files into your Cacti scripts directory.  No graphs or templates were changed, but there are new templates for OpenVZ and new graphs for disk I/O statistics.  If you want these, you need to re-import the templates and update the attached templates for your hosts.
+
 = Version 1.1.5 =
 
 To upgrade from version 1.1.4, you need to copy the new ss_get_mysql_stats.php and ss_get_by_ssh.php files into your Cacti scripts directory, and re-import the new version of the templates.  All of the templates were changed.  You do not need to re-edit devices, because there are no new graphs.  However, the RRA definitions are changed to use DERIVE instead of COUNTER, and the RRA files need to be rebuilt for that to take effect.  This is optional, but is a nice improvement because it will prevent spikes from making the graphs unreadable.  To rebuild the RRA files with DERIVE, run the following code in your RRA directory, which is probably something like `/var/lib/cacti/rra/`:
