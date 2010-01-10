@@ -8,8 +8,9 @@
     * [MySQLTemplates MySQL Templates]
     * [SSHBasedTemplates SSH-Based Templates]
       * [ApacheTemplates Apache Templates]
-      * [NginxTemplates Nginx Templates]
       * [MemcachedTemplates Memcached Templates]
+      * [NginxTemplates Nginx Templates]
+      * [OpenVzTemplates OpenVZ Templates]
       * [UnixTemplates Unix Templates]
   * Creating Your Own Templates
     * [CreatingGraphs Creating Graphs]
