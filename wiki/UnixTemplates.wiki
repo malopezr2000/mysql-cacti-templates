@@ -66,14 +66,22 @@ http://sites.google.com/site/bettercactitemplates/Home/unix_number_of_users.png
 
 This graph shows how many read and write operations were completed, and how many reads and writes were merged.
 
+http://sites.google.com/site/bettercactitemplates/Home/disk_operations.png
+
 = Disk Sectors Read/Written =
 
 This graph shows how many disk sectors were read and written.
+
+http://sites.google.com/site/bettercactitemplates/Home/disk_sectors_read_written.png
 
 = Disk Read/Write Time (ms) =
 
 This graph shows how much time was spent reading and writing.
 
+http://sites.google.com/site/bettercactitemplates/Home/disk_read_write_time.png
+
 = Disk Elapsed IO Time (ms) =
 
 This graph shows how much time was spent in disk I/O overall, and how much weighted time was spent doing disk I/O.  The latter is a useful indication of I/O backlog.
+
+http://sites.google.com/site/bettercactitemplates/Home/disk_elapsed_io_time.png
