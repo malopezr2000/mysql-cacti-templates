@@ -1,0 +1,52 @@
+#summary Cacti templates for graphing OpenVZ
+
+<wiki:toc max_depth="1" />
+
+= Overview =
+
+These templates use ss_get_by_ssh.php to connect to a server via SSH and extract statistics from the OpenVZ container, by concatenating the contents of /proc/user_beancounters to standard output.  This means you don't need to install any special tools.  Standard Unix command-line tools are all you need.
+
+= Installation =
+
+Once the [SSHBasedTemplates SSH setup] is working, everything should be ready.  Simply test one of your hosts like this.  You may need to change some of the example values below, such as the cacti username and the hostname you're connecting to.
+
+{{{
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type openvz --host 127.0.0.1 --items c0,c1'
+}}}
+
+= OpenVZ Kernel Memory =
+
+Graph example is TODO.
+
+= OpenVZ Pages =
+
+Graph example is TODO.
+
+= OpenVZ Sockets =
+
+Graph example is TODO.
+
+= OpenVZ Processes =
+
+Graph example is TODO.
+
+= OpenVZ Files =
+
+Graph example is TODO.
+
+= OpenVZ Signals =
+
+Graph example is TODO.
+
+= OpenVZ Buffers =
+
+Graph example is TODO.
+
+= OpenVZ Dentry/Inode Cache =
+
+Graph example is TODO.
+
+= OpenVZ NETFILTER Entries =
+
+
+Graph example is TODO.
