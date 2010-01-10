@@ -10,7 +10,13 @@ Right now the scripts are written and tested for GNU/Linux, but it is possible t
 
 = Installation =
 
-No special installation is necessary.  Once the [SSHBasedTemplates SSH setup] is working, everything should just work.
+No special installation is necessary for most of the graphs.  Once the [SSHBasedTemplates SSH setup] is working, everything should just work.
+
+*The disk I/O graphs are special*.  Each graph requires that you specify the device you want to graph.  For /dev/sda, for example, you should specify "sda".  Do not create the graphs through the normal host template method.  Rather, add the graphs to the host manually, one at a time, by clicking "Create Graph" and selecting the desired graph template.  Edit not only the device name in the command line, but the name of the graph and data input.  Append the name of the device.  This will make the items visually distinctive.
+
+See the following screenshot for an example:
+
+http://sites.google.com/site/bettercactitemplates/Home/add_unix_disk_graph.png
 
 = Context Switches =
 
