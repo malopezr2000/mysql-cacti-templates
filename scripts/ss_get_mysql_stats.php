@@ -61,7 +61,7 @@ $debug_log = FALSE; # If $debug_log is a filename, it'll be used.
 # ============================================================================
 # You should not need to change anything below this line.
 # ============================================================================
-$version = "1.1.5";
+$version = "1.1.6";
 
 # ============================================================================
 # Include settings from an external config file (issue 39).
