@@ -53,3 +53,19 @@ http://sites.google.com/site/bettercactitemplates/Home/unix_memory.png
 This graph shows how many users were logged into the system, as reported by the "w" command.
 
 http://sites.google.com/site/bettercactitemplates/Home/unix_number_of_users.png
+
+= Disk Operations =
+
+This graph shows how many read and write operations were completed, and how many reads and writes were merged.
+
+= Disk Sectors Read/Written =
+
+This graph shows how many disk sectors were read and written.
+
+= Disk Read/Write Time (ms) =
+
+This graph shows how much time was spent reading and writing.
+
+= Disk Elapsed IO Time (ms) =
+
+This graph shows how much time was spent in disk I/O overall, and how much weighted time was spent doing disk I/O.  The latter is a useful indication of I/O backlog.
