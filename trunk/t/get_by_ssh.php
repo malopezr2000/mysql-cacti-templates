@@ -250,4 +250,62 @@ is(
    'main(samples/diskstats-001.txt)'
 );
 
+is_deeply(
+   openvz_parse( array(), file_get_contents('samples/openvz-001.txt') ),
+   array(
+      'OPVZ_kmemsize_held'        => '8906701',
+      'OPVZ_kmemsize_failcnt'     => '0',
+      'OPVZ_lockedpages_held'     => '0',
+      'OPVZ_lockedpages_failcnt'  => '0',
+      'OPVZ_privvmpages_held'     => '39695',
+      'OPVZ_privvmpages_failcnt'  => '0',
+      'OPVZ_shmpages_held'        => '688',
+      'OPVZ_shmpages_failcnt'     => '0',
+      'OPVZ_numproc_held'         => '32',
+      'OPVZ_numproc_failcnt'      => '0',
+      'OPVZ_physpages_held'       => '11101',
+      'OPVZ_physpages_failcnt'    => '0',
+      'OPVZ_vmguarpages_held'     => '0',
+      'OPVZ_vmguarpages_failcnt'  => '0',
+      'OPVZ_oomguarpages_held'    => '11101',
+      'OPVZ_oomguarpages_failcnt' => '0',
+      'OPVZ_numtcpsock_held'      => '6',
+      'OPVZ_numtcpsock_failcnt'   => '0',
+      'OPVZ_numflock_held'        => '6',
+      'OPVZ_numflock_failcnt'     => '0',
+      'OPVZ_numpty_held'          => '1',
+      'OPVZ_numpty_failcnt'       => '0',
+      'OPVZ_numsiginfo_held'      => '0',
+      'OPVZ_numsiginfo_failcnt'   => '0',
+      'OPVZ_tcpsndbuf_held'       => '338656',
+      'OPVZ_tcpsndbuf_failcnt'    => '0',
+      'OPVZ_tcprcvbuf_held'       => '98304',
+      'OPVZ_tcprcvbuf_failcnt'    => '0',
+      'OPVZ_othersockbuf_held'    => '9280',
+      'OPVZ_othersockbuf_failcnt' => '0',
+      'OPVZ_dgramrcvbuf_held'     => '0',
+      'OPVZ_dgramrcvbuf_failcnt'  => '0',
+      'OPVZ_numothersock_held'    => '9',
+      'OPVZ_numothersock_failcnt' => '0',
+      'OPVZ_dcachesize_held'      => '0',
+      'OPVZ_dcachesize_failcnt'   => '0',
+      'OPVZ_numfile_held'         => '788',
+      'OPVZ_numfile_failcnt'      => '0',
+      'OPVZ_numiptent_held'       => '10',
+      'OPVZ_numiptent_failcnt'    => '0',
+   ),
+   'samples/openvz-001.txt'
+);
+
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/openvz-001.txt',
+      'type'    => 'openvz',
+      'host'    => 'localhost',
+      'items'   => 'bu,bv,bw,bx,by,bz,c0',
+   )),
+   'bu:8906701 bv:0 bw:0 bx:0 by:39695 bz:0 c0:688',
+   'main(samples/openvz-001.txt)'
+);
+
 ?>

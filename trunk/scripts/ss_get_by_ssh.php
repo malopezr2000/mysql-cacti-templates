@@ -198,8 +198,8 @@ General options:
    --server    The server (DNS name or IP address) from which to fetch the
                desired data after SSHing.  Default is 'localhost' for HTTP stats
                and --host for memcached stats.
-   --type      One of apache, nginx, proc_stat, w, memory, memcached, diskstats
-               (more are TODO)
+   --type      One of apache, nginx, proc_stat, w, memory, memcached, diskstats,
+               openvz (more are TODO)
    --url       The url, such as /server-status, where server status lives
    --use-ssh   Whether to connect via SSH to gather info (default yes).
    --http-user The HTTP authentication user
@@ -354,6 +354,47 @@ function ss_get_by_ssh( $options ) {
       'DISK_io_ops_in_progress' => 'br',
       'DISK_io_time'            => 'bs',
       'DISK_io_time_weighted'   => 'bt',
+      # OpenVZ (/proc/user_beancounters) stuff.
+      'OPVZ_kmemsize_held'        => 'bu',
+      'OPVZ_kmemsize_failcnt'     => 'bv',
+      'OPVZ_lockedpages_held'     => 'bw',
+      'OPVZ_lockedpages_failcnt'  => 'bx',
+      'OPVZ_privvmpages_held'     => 'by',
+      'OPVZ_privvmpages_failcnt'  => 'bz',
+      'OPVZ_shmpages_held'        => 'c0',
+      'OPVZ_shmpages_failcnt'     => 'c1',
+      'OPVZ_numproc_held'         => 'c2',
+      'OPVZ_numproc_failcnt'      => 'c3',
+      'OPVZ_physpages_held'       => 'c4',
+      'OPVZ_physpages_failcnt'    => 'c5',
+      'OPVZ_vmguarpages_held'     => 'c6',
+      'OPVZ_vmguarpages_failcnt'  => 'c7',
+      'OPVZ_oomguarpages_held'    => 'c8',
+      'OPVZ_oomguarpages_failcnt' => 'c9',
+      'OPVZ_numtcpsock_held'      => 'ca',
+      'OPVZ_numtcpsock_failcnt'   => 'cb',
+      'OPVZ_numflock_held'        => 'cc',
+      'OPVZ_numflock_failcnt'     => 'cd',
+      'OPVZ_numpty_held'          => 'ce',
+      'OPVZ_numpty_failcnt'       => 'cf',
+      'OPVZ_numsiginfo_held'      => 'cg',
+      'OPVZ_numsiginfo_failcnt'   => 'ch',
+      'OPVZ_tcpsndbuf_held'       => 'ci',
+      'OPVZ_tcpsndbuf_failcnt'    => 'cj',
+      'OPVZ_tcprcvbuf_held'       => 'ck',
+      'OPVZ_tcprcvbuf_failcnt'    => 'cl',
+      'OPVZ_othersockbuf_held'    => 'cm',
+      'OPVZ_othersockbuf_failcnt' => 'cn',
+      'OPVZ_dgramrcvbuf_held'     => 'co',
+      'OPVZ_dgramrcvbuf_failcnt'  => 'cp',
+      'OPVZ_numothersock_held'    => 'cq',
+      'OPVZ_numothersock_failcnt' => 'cr',
+      'OPVZ_dcachesize_held'      => 'cs',
+      'OPVZ_dcachesize_failcnt'   => 'ct',
+      'OPVZ_numfile_held'         => 'cu',
+      'OPVZ_numfile_failcnt'      => 'cv',
+      'OPVZ_numiptent_held'       => 'cw',
+      'OPVZ_numiptent_failcnt'    => 'cx',
    );
 
    # Prepare and return the output.  The output we have right now is the whole
@@ -1008,6 +1049,61 @@ function diskstats_parse ( $options, $output ) {
    }
    debug("Looks like we did not find $options[device] in the output");
    return array();
+}
+
+# ============================================================================
+# Get and parse stats from /proc/user_beancounters for openvz graphs
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type openvz --host 127.0.0.1 --items bu,bv,bw,bx,by,bz,c0'
+# ============================================================================
+function openvz_cachefile ( $options ) {
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   return "${sanitized_host}_openvz";
+}
+
+function openvz_cmdline ( $options ) {
+   return "cat /proc/user_beancounters";
+}
+
+function openvz_parse ( $options, $output ) {
+   $headers = array();
+   $result  = array();
+   foreach ( explode("\n", $output) as $line ) {
+      if ( preg_match_all('/\S+/', $line, $words) ) {
+         $words = $words[0];
+         if ( $words[0] === 'Version:' || $words[0] === 'dummy' ) {
+            # An intro line or a dummy line
+            continue;
+         }
+         else if ( $words[0] === 'uid' ) {
+            # It's the header row.  Get the headers into the header array,
+            # except for the UID header, which we don't need, and the resource
+            # header, which just defines the leftmost header that's in every
+            # subsequent line but isn't itself a statistic.
+            array_shift($words);
+            array_shift($words);
+            $headers = $words;
+            continue;
+         }
+         elseif ( strpos(strrev($words[0]), ':') === 0 ) {
+            # This is a line that starts with something like "200:" and we want
+            # to toss the first word in that line.  It's the UID of the
+            # container.
+            array_shift($words);
+         }
+         $row_hdr = array_shift($words);
+         for ( $i = 0; $i < count($words); ++$i ) {
+            $col_hdr = $headers[$i];
+            if ( $col_hdr !== 'held' && $col_hdr !== 'failcnt' ) {
+               continue; # Those are the only ones we're interested in.
+            }
+            $key = "OPVZ_${row_hdr}_${col_hdr}";
+            $result[$key] = $words[$i];
+         }
+      }
+   }
+   return $result;
 }
 
 ?>

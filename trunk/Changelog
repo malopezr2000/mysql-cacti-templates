@@ -1,5 +1,6 @@
 Changes for templates:
 
+  * Added OpenVZ graphs (--type openvz) (issue 95).
   * Added IO usage graphs (--type diskstats) (issue 97).
   * Added extra error-reporting (issue 110).
   * The $debug $debug_log options couldn't be set in the .cnf file (issue 110).
