@@ -1,5 +1,7 @@
 Changes for templates:
 
+2010-01-10: version 1.1.6
+
   * Added OpenVZ graphs (--type openvz) (issue 95).
   * Added IO usage graphs (--type diskstats) (issue 97).
   * Added extra error-reporting (issue 110).
