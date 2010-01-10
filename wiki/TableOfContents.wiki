@@ -14,6 +14,7 @@
   * Creating Your Own Templates
     * [CreatingGraphs Creating Graphs]
     * [CactiHashes Cacti Hashes]
+    * [HelperTools Helper Tools]
   * Developer Documentation
     * [UpdatingExamples Updating Examples]
     * [MakingReleases Making Releases]
