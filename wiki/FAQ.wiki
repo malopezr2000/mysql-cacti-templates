@@ -1,5 +1,13 @@
 #summary Frequently Asked Questions
 
+Q. My graphs have NaN on them.  What is wrong?
+
+  # A. Please read and follow the directions at http://www.cacti.net/downloads/docs/html/debugging.html.
+
+Q. My Cacti error log has a bunch of lines like "WARNING: Result from CMD not valid. Partial Result: U"  What's wrong?
+
+  # A. Please read and follow the directions at http://www.cacti.net/downloads/docs/html/debugging.html.
+
 Q. How do I install?
 
   # A. Please read the README file for instructions on installation, etc.
