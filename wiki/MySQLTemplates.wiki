@@ -191,6 +191,10 @@ This graph shows the various Handler counters, which record how many operations 
 
 http://sites.google.com/site/bettercactitemplates/Home/MySQL_Handlers.png
 
+Here is another graph, generated from an active production server.
+
+http://sites.google.com/site/bettercactitemplates/Home/MySQL_Handlers_2.png
+
 = MySQL Network Traffic =
 
 This graph shows network traffic to and from the MySQL Server, in bytes.
