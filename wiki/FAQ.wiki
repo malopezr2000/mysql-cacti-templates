@@ -8,17 +8,17 @@ Q. My Cacti error log has a bunch of lines like "WARNING: Result from CMD not va
 
   # A. Please read and follow the directions at http://www.cacti.net/downloads/docs/html/debugging.html.
 
+Q. Running poller.php or ss_get_mysql_stats.php shows the correct output, but I see nothing in the graphs for MySQL in Cacti.  Why?
+
+  # A. If you ran either of those commands before Cacti had a chance to, the cache_file ss_get_mysql_stats.php uses may have the wrong ownership, check the Cacti owner has access to $cache_dir/$host-mysql_cacti_stats.txt (/tmp/$host-mysql_cacti_stats.txt).  Also check the ownership on the PHP script itself; does the Cacti user have permission to execute it?  Quite a few issues have turned out to be due to people installing/running as root from the command line, not realizing that Cacti runs as a different user.
+
 Q. How do I install?
 
-  # A. Please read the README file for instructions on installation, etc.
+  # A. Please read InstallingTemplates for instructions on installation, etc.
 
 Q. The output is truncated when I use Spine.  Why?
 
   # A. This is a Cacti bug (see Issue 2).  Use cmd.php for now.
-
-Q. Running poller.php or ss_get_mysql_stats.php shows the correct output, but I see nothing in the graphs for MySQL in Cacti.  Why?
-
-  # A. If you ran either of those commands before Cacti had a chance to, the cache_file ss_get_mysql_stats.php uses may have the wrong ownership, check the Cacti owner has access to $cache_dir/$host-mysql_cacti_stats.txt (/tmp/$host-mysql_cacti_stats.txt).  Also check the ownership on the PHP script itself; does the Cacti user have permission to execute it?  Quite a few issues have turned out to be due to people installing/running as root from the command line, not realizing that Cacti runs as a different user.
 
 Q. I get a blank page when I try to import the templates.  Why?
 
