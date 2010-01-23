@@ -128,24 +128,34 @@ http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Tables_In_Use.png
 
 = InnoDB Transaction Activity =
 
-This graph shows information about transactions within InnoDB: transactions created, open, active time, lock wait time, MVCC read views, and the length of the history list.
-
-  * The number of transactions created is sort of a baseline for your application's behavior.  The absolute number is not that important, but changes in it are.
-  * Open transactions is a counter 
+This graph shows information about transactions within InnoDB: transactions created, open, active time, lock wait time, MVCC read views, and the length of the history list.  This graph has been deprecated, and its information is moved to other graphs, such as InnoDB Active/Locked Transactions, and InnoDB Transactions.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_006.png
 
+= InnoDB Transactions =
+
+This graph shows information about transactions within InnoDB.
+
+  * Total transactions ever created is the internal transaction counter.
+  * The current transactions are all transactions, no matter what status (ACTIVE, LOCK WAIT, not started, etc).
+  * The length of the history list shows how old the oldest unpurged transaction is.  If this grows large, you might have transactions that are staying open a very long time.  This means InnoDB can't purge old row versions.  In PostgreSQL terms, it can't VACUUM.  It will get bloated and slow as a result.  Commit your transactions as quickly as you can.
+  * The number of read views open shows how many transactions have a consistent snapshot of the database's contents, which is achieved by MVCC.
+
+Some of the things on this graph really belong on the Active/Locked graph, where they would make more sense, but I don't want to break backwards compatibility by doing that.  The current transactions and the number of transactions with read views open would be more sensible on that graph.  Cross reference that graph to make sense of these metrics.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Transactions.png
+
 = MyISAM Indexes =
 
-This graph shows information about how many logical and physical reads and writes took place to MyISAM indexes.
+This graph shows information about how many logical and physical reads and writes took place to MyISAM indexes.  Probably the most important one is the physical reads.  Contrary to the popular wisdom, the ratio between logical and physical reads is utterly meaningless and is a red herring that wastes a lot of time and money.  Instead, you should look at the absolute number of physical reads per second, and compare it to what your disks are capable of.  (RRDTool normalizes everything to units of seconds, so this graph's absolute value is the number you're looking for.)
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_021.png
+http://sites.google.com/site/bettercactitemplates/Home/MyISAM_Indexes.png
 
 = MySQL Binary/Relay logs =
 
-This graph shows information about server binary and relay logs: the binary log cache usage, cache misses, and space used by the binary and relay logs.
+This graph shows information about the space used by the server binary and relay logs.  The variations in the sizes are when the logs are purged, probably due to expire_logs_days being set.  If this suddenly grows large, look for problems in purging, which might be caused by a configuration change, or by someone manually deleting a file and causing the automatic purge to stop working.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_013.png
+http://sites.google.com/site/bettercactitemplates/Home/Binary_Relay_Logs.png
 
 = MySQL Command Counters =
 
