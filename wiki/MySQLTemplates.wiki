@@ -36,6 +36,14 @@ This graph shows the hash index's cells total and cells used.  There isn't reall
 
 http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Adaptive_Hash_Index.png
 
+= InnoDB Buffer Pool =
+
+This graph shows the current status of the InnoDB buffer pool: the size, free pages, used (database) pages, and dirty (modified) pages.  Keep an eye on the dirty pages.  If too much of the buffer pool fills with dirty pages and InnoDB starts to flush aggressively to reduce that number, you could see cyclical behavior.  This might be correlated with intense disk activity and/or periods of reduced throughput.  Recent versions of the InnoDB plugin, the Percona patches, and XtraDB have various solutions for this problem, should you experience it.
+
+The example graph shows what happens when InnoDB restarts: the buffer pool empties and then fills again.  You can see the corresponding activity in the InnoDB Checkpoint Age graph example below.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Buffer_Pool.png
+
 = InnoDB Buffer Pool Activity =
 
 This graph shows activity inside the buffer pool: pages created, read, and written.  You can consider it roughly equivalent to the Handler graphs.  If you see a sudden change in the graph, you should try to trace it to some change in your application.
@@ -44,13 +52,15 @@ http://sites.google.com/site/bettercactitemplates/Home/graph_image_016.png
 
 = InnoDB Buffer Pool Status =
 
-This graph shows the current status of the InnoDB buffer pool: the size, free pages, used (database) pages, and dirty (modified) pages.  Keep an eye on the dirty pages.  If too much of the buffer pool fills with dirty pages and InnoDB starts to flush aggressively to reduce that number, you could see cyclical behavior.  This might be correlated with intense disk activity and/or periods of reduced throughput.  Recent versions of the InnoDB plugin, the Percona patches, and XtraDB have various solutions for this problem, should you experience it.
+This graph is from an old version of the templates, and is replaced by InnoDB Buffer Pool.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_022.png
 
 = InnoDB Checkpoint Age =
 
 This graph shows the InnoDB checkpoint age, which is the same thing as the number of uncheckpointed bytes, and thus the amount of recovery that'll have to be performed if there's a crash.  If the uncheckpointed bytes begin to approach the combined size of the InnoDB log files, your system might need larger log files.  In addition, a lot of un-checkpointed data might indicate that you'll have a long and painful recovery if there's a crash.  If you are writing a tremendous amount of data to the log files, and thus need large log files for performance, you might want to take a look at the Percona enhancements to recovery performance, to reduce downtime in the event of a crash.
+
+The example is from the same server and time period as the InnoDB Buffer Pool graph.
 
 http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Checkpoint_Age.png
 
@@ -110,7 +120,7 @@ http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Memory_Allocation.
 
 = InnoDB Row Operations =
 
-This graph shows row operations InnoDB has performed: reads, deletes, inserts, and updates.  These should be roughly equivalent to Handler_ statistics, with the exception that they can show internal operations not reflected in the Handler_ statistics.  These might include foreign key operations, for example.
+This graph shows row operations InnoDB has performed: reads, deletes, inserts, and updates.  These should be roughly equivalent to Handler statistics, with the exception that they can show internal operations not reflected in the Handler statistics.  These might include foreign key operations, for example.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_002.png
 
@@ -159,25 +169,25 @@ http://sites.google.com/site/bettercactitemplates/Home/Binary_Relay_Logs.png
 
 = MySQL Command Counters =
 
-This graph shows counters for various MySQL commands.  These are derived from the Com_ counters from SHOW STATUS.
+This graph shows counters for various MySQL commands.  These are derived from the Com_ counters from SHOW STATUS.  If there is a change in the graph, it indicates that something changed in the application.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_010.png
 
 = MySQL Connections =
 
-This graph shows information about the connection parameters and counters inside MySQL: connections permitted, connections used, connections aborted, clients aborted, current connections, and connections created.
+This graph shows information about the connection parameters and counters inside MySQL: connections permitted, connections used, connections aborted, clients aborted, current connections, and connections created.  Probably the most interesting are the aborted clients and connections, which might indicate a malfunctioning application that disconnects ungracefully, an idle connection timing out, network problems, bad authentication attempts, or similar.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_020.png
 
 = MySQL Files and Tables =
 
-This graph shows status of MySQL's table cache and file handles: the size of the cache, and how many open files and tables there are.
+This graph shows status of MySQL's table cache and file handles: the size of the cache, and how many open files and tables there are.  This graph is not likely to be exciting.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_004.png
 
 = MySQL Handlers =
 
-This graph shows the various Handler counters, which record how many operations MySQL has done through the storage engine API.
+This graph shows the various Handler counters, which record how many operations MySQL has done through the storage engine API.  Changes in indexing will probably show up clearly here: a query that used to do a table scan but now has a good index to use will cause different Handler calls to be used, for example.  If you see sudden changes, it probably correlates with schema changes or a different mixture of queries.  The example graph shows a large spike of Handler_read_rnd_next, which probably means something was doing a lot of table scans.  (I generated that graph synthetically by running a table-scan query in an infinite loop for a while.)
 
 http://sites.google.com/site/bettercactitemplates/Home/MySQL_Handlers.png
 
@@ -189,7 +199,7 @@ http://sites.google.com/site/bettercactitemplates/Home/graph_image_023.png
 
 = MySQL Processlist =
 
-The MySQL Processlist shows the number (count) of queries from SHOW PROCESSLIST in given statuses.  Some of the statuses are lumped together into the "other" category.
+The MySQL Processlist shows the number (count) of queries from SHOW PROCESSLIST in given statuses.  Some of the statuses are lumped together into the "other" category.  This is basically a "scoreboard" type of graph.  In most cases, you should see mostly Other, or a few of the statuses like "Sending data".  Queries in Locked status are the hallmark of a lot of MyISAM table locking.  Any mixture of statuses is possible, and you should investigate sudden and systemic changes.
 
 http://sites.google.com/site/bettercactitemplates/Home/MySQL_Processlist.png
 
@@ -220,30 +230,30 @@ http://sites.google.com/site/bettercactitemplates/Home/graph_image_015.png
 
 = MySQL Select Types =
 
-This graph shows information on how many of each type of select the MySQL server has performed: full join, full range join, range, range check, and scan.
+This graph shows information on how many of each type of select the MySQL server has performed: full join, full range join, range, range check, and scan.  Like the Handler graphs, these show different types of execution plans, so any changes should be investigated.  You should strive to have zero Select_full_join queries!  The graph shows some of those.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_019.png
 
 = MySQL Sorts =
 
-This graph shows information about MySQL sort operations: rows sorted, merge passes, and number of sorts triggered by range and scan queries.
+This graph shows information about MySQL sort operations: rows sorted, merge passes, and number of sorts triggered by range and scan queries.  Over-analyzing this data and trying to tweak sort buffer sizes is the hallmark of an inexperienced database administrator who will soon be wondering why the server is slow.  However, the graphs may react favorably (get smaller) in response to query optimization, increasing your feeling of satisfaction and giving you something to show your boss.  If the graphs react unfavorably (grow), check your EXPLAIN plans.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_007.png
 
 = MySQL Table Locks =
 
-This graph shows information about table-level lock operations inside MySQL: locks waited, locks granted without waiting, and slow queries.
+This graph shows information about table-level lock operations inside MySQL: locks waited, locks granted without waiting, and slow queries.  Locks that have to wait are generally caused by MyISAM tables.  Even InnoDB tables will cause locks to be acquired, but they will generally be released right away and no waiting will occur.
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_011.png
 
 = MySQL Temporary Objects =
 
-This graph shows information about temporary objects created by the MySQL server: temporary tables, temporary files, and temporary tables created on disk instead of in memory.
+This graph shows information about temporary objects created by the MySQL server: temporary tables, temporary files, and temporary tables created on disk instead of in memory.  Like sort data, this is easy to over-analyze.  The most serious one is the temp tables created on disk.  Dealing with these is complex, but is covered well in [http://www.amazon.com/High-Performance-MySQL-Optimization-Replication/dp/0596101716?tag=xaprb-20 High Performance MySQL].
 
 http://sites.google.com/site/bettercactitemplates/Home/graph_image_025.png
 
 = MySQL Transaction Handler =
 
-This graph shows the transactional operations that took place at the MySQL server level.
+This graph shows the transactional operations that took place at the MySQL server level.  If you see a lot of BEGIN and COMMIT, that might be an indication that you're using a dumb ORM or connection software that inserts spurious queries that you don't know about, and adds latency to your application.
 
 http://sites.google.com/site/bettercactitemplates/Home/MySQL_Transaction_Handlers.png
