@@ -1512,7 +1512,7 @@
                hash => 'hash_08_VER_dc4885299416ee40c40c96b36f1a0511',
             },
             unflushed_log => {
-               data_source_type_id => '3',
+               data_source_type_id => '1',
                hash => 'hash_08_VER_dbfd089a2e1f44392fcfa1c3499f1013',
             },
          },
