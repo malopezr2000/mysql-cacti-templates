@@ -112,7 +112,7 @@ If you need a more complex configuration setup, such as connecting to a differen
 
 = Testing the Setup =
 
-Finally, I'll test the script to see if it can connect and retrieve values.  It is important to do this as the same user the crontab runs under, with an empty environment, just as the crontab does.  Otherwise the results will not necessarily indicate anything about whether Cacti's polling will succeed or fail!  The sample call to the script that follows is a good example.  Make sure you specify the correct username; here I am using www-data.
+Finally, I'll test the script to see if it can connect and retrieve values.  It is important to do this as the same user the crontab runs under, with an empty environment, just as the crontab does.  Otherwise the results will not necessarily indicate anything about whether Cacti's polling will succeed or fail!  The sample call to the script that follows is a good example.  Make sure you specify the correct username; here I am using www-data.  If the resource you're graphing runs on a non-standard port, use the --port2 option.
 
 {{{
 debian:~# su - www-data -c 'env -i php /usr/share/cacti/site/scripts/ss_get_by_ssh.php --type memory --host 192.168.1.107 --items au,av'
