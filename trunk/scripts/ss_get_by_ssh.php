@@ -1134,7 +1134,7 @@ function redis_cmdline ( $options ) {
    global $redis_port;
    $srv = isset($options['server']) ? $options['server'] : $options['host'];
    $prt = isset($options['port2'])  ? $options['port2']  : $redis_port;
-   return "echo INFO | nc $srv $prt";
+   return "echo INFO | nc -q1 $srv $prt";
 }
 
 function redis_parse ( $options, $output ) {
