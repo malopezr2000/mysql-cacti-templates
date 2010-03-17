@@ -53,6 +53,7 @@ $status_url    = '/server-status';        # Where Apache status lives
 $http_user     = '';
 $http_pass     = '';
 $memcache_port = 11211;                   # Which port memcached listens on
+$redis_port    = 6379;                    # Which port redis listens on
 
 # ============================================================================
 # You should not need to change anything below this line.
@@ -199,7 +200,7 @@ General options:
                desired data after SSHing.  Default is 'localhost' for HTTP stats
                and --host for memcached stats.
    --type      One of apache, nginx, proc_stat, w, memory, memcached, diskstats,
-               openvz (more are TODO)
+               openvz, redis (more are TODO)
    --url       The url, such as /server-status, where server status lives
    --use-ssh   Whether to connect via SSH to gather info (default yes).
    --http-user The HTTP authentication user
@@ -395,6 +396,13 @@ function ss_get_by_ssh( $options ) {
       'OPVZ_numfile_failcnt'      => 'cv',
       'OPVZ_numiptent_held'       => 'cw',
       'OPVZ_numiptent_failcnt'    => 'cx',
+      # Stuff from redis
+      'REDIS_connected_clients'          => 'cy',
+      'REDIS_connected_slaves'           => 'cz',
+      'REDIS_used_memory'                => 'd0',
+      'REDIS_changes_since_last_save'    => 'd1',
+      'REDIS_total_connections_received' => 'd2',
+      'REDIS_total_commands_processed'   => 'd3',
    );
 
    # Prepare and return the output.  The output we have right now is the whole
@@ -1101,6 +1109,48 @@ function openvz_parse ( $options, $output ) {
             $key = "OPVZ_${row_hdr}_${col_hdr}";
             $result[$key] = $words[$i];
          }
+      }
+   }
+   return $result;
+}
+
+# ============================================================================
+# Get and parse stats from redis, using nc (netcat).
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type redis --host 127.0.0.1 --items cy,cz,d2,d3
+# ============================================================================
+function redis_cachefile ( $options ) {
+   global $status_server, $redis_port;
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   $sanitized_server
+       = str_replace(array(":", "/"), array("", "_"),
+         isset($options['server']) ? $options['server'] : $status_server);
+   $port = isset($options['port2']) ? $options['port2'] : $redis_port;
+   return "${sanitized_host}_redis_${sanitized_server}_$port";
+}
+
+function redis_cmdline ( $options ) {
+   global $redis_port;
+   $srv = isset($options['server']) ? $options['server'] : $options['host'];
+   $prt = isset($options['port2'])  ? $options['port2']  : $redis_port;
+   return "echo INFO | nc $srv $prt";
+}
+
+function redis_parse ( $options, $output ) {
+   $result = array();
+   $wanted = array(
+      'connected_clients',
+      'connected_slaves',
+      'used_memory',
+      'changes_since_last_save',
+      'total_connections_received',
+      'total_commands_processed'
+   );
+   foreach ( explode("\n", $output) as $line ) {
+      $words = explode(':', $line);
+      if ( count($words) && in_array($words[0], $wanted) ) {
+         $result["REDIS_$words[0]"] = trim($words[1]);
       }
    }
    return $result;
