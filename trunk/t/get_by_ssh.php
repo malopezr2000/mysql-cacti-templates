@@ -308,4 +308,28 @@ is(
    'main(samples/openvz-001.txt)'
 );
 
+is_deeply(
+   redis_parse( null, file_get_contents('samples/redis-001.txt') ),
+   array(
+      'REDIS_connected_clients'          => '119',
+      'REDIS_connected_slaves'           => '911',
+      'REDIS_used_memory'                => '412372',
+      'REDIS_changes_since_last_save'    => '4321',
+      'REDIS_total_connections_received' => '3333',
+      'REDIS_total_commands_processed'   => '5',
+   ),
+   'samples/redis-001.txt'
+);
+
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/redis-001.txt',
+      'type'    => 'redis',
+      'host'    => 'localhost',
+      'items'   => 'cy,cz,d0,d1,d2,d3',
+   )),
+   'cy:119 cz:911 d0:412372 d1:4321 d2:3333 d3:5',
+   'main(samples/redis-001.txt)'
+);
+
 ?>
