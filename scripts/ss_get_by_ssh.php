@@ -194,8 +194,9 @@ General options:
    --host      Hostname to connect to (via SSH)
    --items     Comma-separated list of the items whose data you want
    --nocache   Do not cache results in a file
-   --port      Port to connect to (via SSH)
-   --port2     Port to connect to after SSHing, such as memcached port
+   --port      SSH port to connect to (SSH port, not application port!)
+   --port2     Port on which the application listens, such as memcached port or
+               redis port or apache port.
    --server    The server (DNS name or IP address) from which to fetch the
                desired data after SSHing.  Default is 'localhost' for HTTP stats
                and --host for memcached stats.
@@ -241,6 +242,7 @@ function ss_get_by_ssh( $options ) {
    $caching_func = "$options[type]_cachefile";
    $cmdline_func = "$options[type]_cmdline";
    $parsing_func = "$options[type]_parse";
+   $getting_func = "$options[type]_get";
    debug("Functions: '$caching_func', '$cmdline_func', '$parsing_func'");
    if ( !function_exists($cmdline_func) ) {
       die("The parsing function '$cmdline_func' does not exist");
@@ -269,10 +271,18 @@ function ss_get_by_ssh( $options ) {
       debug("Caching is disabled.");
    }
 
-   # Get the command-line to fetch the data, then fetch and parse the data.
-   $cmd = call_user_func($cmdline_func, $options);
-   debug($cmd);
-   $output = get_command_result($cmd, $options);
+   # There might be a custom function that overrides the SSH fetch.
+   if ( !isset($options['file']) && function_exists($getting_func) ) {
+      debug("$getting_func() is defined, will call it");
+      $output = call_user_func($getting_func, $options);
+   }
+   else {
+      # Get the command-line to fetch the data, then fetch and parse the data.
+      debug("No getting_func(), will use normal code path");
+      $cmd = call_user_func($cmdline_func, $options);
+      debug($cmd);
+      $output = get_command_result($cmd, $options);
+   }
    debug($output);
    $result = call_user_func($parsing_func, $options, $output);
 
@@ -1130,11 +1140,15 @@ function redis_cachefile ( $options ) {
    return "${sanitized_host}_redis_${sanitized_server}_$port";
 }
 
+# The function redis_get is defined below to use a TCP socket directly, so
+# really the command-line won't be called.  The problem is that nc is so
+# different in different systems.  We really need the -C option, but some nc
+# don't have -C.
 function redis_cmdline ( $options ) {
    global $redis_port;
    $srv = isset($options['server']) ? $options['server'] : $options['host'];
    $prt = isset($options['port2'])  ? $options['port2']  : $redis_port;
-   return "echo INFO | nc -q1 $srv $prt";
+   return "echo INFO | nc -C -q1 $srv $prt";
 }
 
 function redis_parse ( $options, $output ) {
@@ -1154,6 +1168,33 @@ function redis_parse ( $options, $output ) {
       }
    }
    return $result;
+}
+
+function redis_get ( $options ) {
+   global $redis_port;
+   $port = isset($options['port2'])  ? $options['port2'] : $redis_port;
+   $sock = fsockopen($options['host'], $port, $errno, $errstr);
+   if ( !$sock ) {
+      debug("Cannot open socket to $options[host]:$port: "
+         . ($errno  ? " err $errno"  : "")
+         . ($errmsg ? " msg $errmsg" : ""));
+      return;
+   }
+   $res = fwrite($sock, "INFO\r\n");
+   if ( !$res ) {
+      debug("Can't write to socket");
+      return;
+   }
+   $data = fread($sock, 4096); # should be WAY more than enough for INFO
+   if ( !$data ) {
+      debug("Cannot read from socket");
+      return;
+   }
+   $res = fclose($sock);
+   if ( !$res ) {
+      debug("Can't close socket");
+   }
+   return $data;
 }
 
 ?>
