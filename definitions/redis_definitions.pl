@@ -168,6 +168,10 @@
                hash        => 'hash_07_VER_4ac2e9c33e6d098e3b735d252d4fd84e',
                name        => 'hostname'
             },
+            {  allow_nulls => 'on',
+               hash        => 'hash_07_VER_4ac2e9c33e6d098e3b735d252d4fd84f',
+               name        => 'port2'
+            },
          ],
          outputs => {
             REDIS_connected_clients          => 'hash_07_VER_aeca8ba12e90190900f1da95a6e954ae',
