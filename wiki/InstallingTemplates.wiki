@@ -107,8 +107,8 @@ If you don't want to store the configuration options directly into the PHP scrip
 
 {{{
 <?php
-mysql_user = "root";
-mysql_pass = "s3cret";
+$mysql_user = "root";
+$mysql_pass = "s3cret";
 ?>
 }}}
 
