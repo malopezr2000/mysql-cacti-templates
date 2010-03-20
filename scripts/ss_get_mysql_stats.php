@@ -322,6 +322,8 @@ function ss_get_mysql_stats( $options ) {
       'innodb_tables_in_use'  => null,
       'innodb_lock_structs'   => null,
       'innodb_lock_wait_secs' => null,
+      'innodb_sem_waits'      => null,
+      'innodb_sem_wait_time_ms'=> null,
       # Values for the 'state' column from SHOW PROCESSLIST (converted to
       # lowercase, with spaces replaced by underscores)
       'State_closing_tables'       => null,
@@ -668,6 +670,8 @@ function ss_get_mysql_stats( $options ) {
       'lock_system_memory'      => 'eb',
       'recovery_system_memory'  => 'ec',
       'thread_hash_memory'      => 'ed',
+      'innodb_sem_waits'        => 'ee',
+      'innodb_sem_wait_time_ms' => 'ef',
    );
 
    # Return the output.
@@ -752,6 +756,8 @@ function get_innodb_array($text) {
       'lock_system_memory'        => null,
       'recovery_system_memory'    => null,
       'thread_hash_memory'        => null,
+      'innodb_sem_waits'          => null,
+      'innodb_sem_wait_time_ms'   => null,
    );
    $txn_seen = FALSE;
    foreach ( explode("\n", $text) as $line ) {
@@ -772,6 +778,12 @@ function get_innodb_array($text) {
          $results['spin_waits'][] = to_int($row[8]);
          $results['os_waits'][]   = to_int($row[5]);
          $results['os_waits'][]   = to_int($row[11]);
+      }
+      elseif (strpos($line, 'seconds the semaphore:') > 0) {
+         # --Thread 907205 has waited at handler/ha_innodb.cc line 7156 for 1.00 seconds the semaphore:
+         increment($results, 'innodb_sem_waits', 1);
+         increment($results,
+            'innodb_sem_wait_time_ms', to_int($row[9]) * 1000);
       }
 
       # TRANSACTIONS
@@ -976,7 +988,13 @@ function get_innodb_array($text) {
          # Modified db pages       160602
          $results['modified_pages'] = to_int($row[3]);
       }
-      elseif (strpos($line, "Pages read") === 0  ) {
+      elseif (strpos($line, "Pages read ahead") === 0 ) {
+         # Must do this BEFORE the next test, otherwise it'll get fooled by this
+         # line from the new plugin (see samples/innodb-015.txt):
+         # Pages read ahead 0.00/s, evicted without access 0.06/s
+         # TODO: No-op for now, see issue 134.
+      }
+      elseif (strpos($line, "Pages read") === 0 ) {
          # Pages read 15240822, created 1770238, written 21705836
          $results['pages_read']    = to_int($row[2]);
          $results['pages_created'] = to_int($row[4]);
