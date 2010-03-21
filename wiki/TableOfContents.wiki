@@ -13,7 +13,7 @@
       * [OpenVzTemplates OpenVZ Templates]
       * [UnixTemplates Unix Templates]
   * Creating Your Own Templates
-    * [AddingGraphs Adding A Graph To An Existing Template]
+    * [AddingGraphs Adding To An Existing Template]
     * [CreatingGraphs Creating Completely New Templates]
     * [CactiHashes Cacti Hashes]
     * [HelperTools Helper Tools]
