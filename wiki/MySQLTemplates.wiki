@@ -145,6 +145,18 @@ This graph shows InnoDB's total memory allocation, and how much of that is in th
 
 http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Memory_Allocation.png
 
+= InnoDB Row Lock Time =
+
+This graph is new in version 1.1.7 of the graphs.  It shows the amount of time, in milliseconds, that InnoDB has waited to grant row locks.  This comes from the Innodb_row_lock_time status variable, which is only available in MySQL 5 and newer.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Row_Lock_Time.png
+
+= InnoDB Row Lock Waits =
+
+This graph is new in version 1.1.7 of the graphs.  It shows the number of times that InnoDB has waited to grant row locks.  This comes from the Innodb_row_lock_waits status variable, which is only available in MySQL 5 and newer.
+
+http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Row_Lock_Waits.png
+
 = InnoDB Row Operations =
 
 This graph shows row operations InnoDB has performed: reads, deletes, inserts, and updates.  These should be roughly equivalent to Handler statistics, with the exception that they can show internal operations not reflected in the Handler statistics.  These might include foreign key operations, for example.
