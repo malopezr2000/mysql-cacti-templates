@@ -12,6 +12,6 @@ Here's what to do:
   # Add a new graph definition in the definitions/ Perl file.
   # Add the new data items to the end of the definitions/ Perl file, in the input.
   # Make the hashes unique.
-  # Test the graphs.
+  # Test the graphs.  Don't forget to upgrade the PHP script!
   # Update the Changelog.
   # Commit, and reference the issue number in this fashion: "Added new graphs... (fixes issue NNN)"
