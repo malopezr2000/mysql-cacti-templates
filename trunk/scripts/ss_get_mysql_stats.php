@@ -357,11 +357,6 @@ function ss_get_mysql_stats( $options ) {
       $status[$row[0]] = $row[1];
    }
 
-   # Make table_open_cache backwards-compatible (issue 63).
-   if ( array_key_exists('table_open_cache', $status) ) {
-      $status['table_cache'] = $status['table_open_cache'];
-   }
-
    # Get SHOW SLAVE STATUS, and add it to the $status array.
    if ( $chk_options['slave'] ) {
       $result = run_query("SHOW SLAVE STATUS", $conn);
@@ -494,6 +489,20 @@ function ss_get_mysql_stats( $options ) {
          $status[$key] = $istatus_vals[$key];
       }
    }
+
+   # Make table_open_cache backwards-compatible (issue 63).
+   if ( array_key_exists('table_open_cache', $status) ) {
+      $status['table_cache'] = $status['table_open_cache'];
+   }
+
+   # Compute how much of the key buffer is used and unflushed (issue 127).
+   $status['Key_buf_bytes_used']
+      = big_sub($status['key_buffer_size'],
+         big_multiply($status['Key_blocks_unused'],
+         $status['key_cache_block_size']));
+   $status['Key_buf_bytes_unflushed']
+      = big_multiply($status['Key_blocks_not_flushed'],
+         $status['key_cache_block_size']);
 
    if ( array_key_exists('unflushed_log', $status)
          && $status['unflushed_log']
@@ -672,6 +681,9 @@ function ss_get_mysql_stats( $options ) {
       'thread_hash_memory'      => 'ed',
       'innodb_sem_waits'        => 'ee',
       'innodb_sem_wait_time_ms' => 'ef',
+      'Key_buf_bytes_unflushed' => 'eg',
+      'Key_buf_bytes_used'      => 'eh',
+      'key_buffer_size'         => 'ei',
    );
 
    # Return the output.

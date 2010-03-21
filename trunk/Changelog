@@ -1,5 +1,6 @@
 Changes for templates:
 
+  * Added graphs for the MyISAM key buffer memory consumption (issue 127).
   * The loadavg/users graphs failed when only 1 user was logged in (issue 131).
   * The Apache and Nginx graphs couldn't use the --port2 option (issue 129).
   * The InnoDB Log graph's unflushed_log should be GAUGE not COUNTER (issue 10).
