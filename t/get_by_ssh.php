@@ -106,6 +106,15 @@ is_deeply(
    'samples/w-002.txt'
 );
 
+is_deeply(
+   w_parse( null, file_get_contents('samples/w-003.txt') ),
+   array(
+      'STAT_loadavg' => '0.00',
+      'STAT_numusers' => '1',
+   ),
+   'samples/w-003.txt'
+);
+
 is(
    ss_get_by_ssh( array(
       'file'    => 'samples/w-001.txt',
