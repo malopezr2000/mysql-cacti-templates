@@ -8,7 +8,9 @@ These templates use ss_get_by_ssh.php to connect to a server via SSH and extract
 
 = Installation =
 
-Once the [SSHBasedTemplates SSH setup] is working, everything should be ready.  Simply import the OpenVZ template and apply it to your host, then add the graphs.
+Once the [SSHBasedTemplates SSH setup] is working, import the OpenVZ template and apply it to your host, then add the graphs.
+
+Depending on your version of OpenVZ or Virtuozzo, the file /proc/user_beancounters might not be accessible to ordinary users.  This means you either need to SSH as root, or use a program such as [http://www.labradordata.ca/home/35 beanc] to read the file.  If you choose the latter approach, you should change the $openvz_cmd configuration variable.
 
 You can test one of your hosts like this.  You may need to change some of the example values below, such as the cacti username and the hostname you're connecting to.
 
