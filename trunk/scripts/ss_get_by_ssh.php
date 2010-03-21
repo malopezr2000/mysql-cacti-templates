@@ -835,7 +835,8 @@ function apache_cachefile ( $options ) {
    $sanitized_server
        = str_replace(array(":", "/"), array("", "_"),
          isset($options['server']) ? $options['server'] : $status_server);
-   return "${sanitized_host}_apache_${sanitized_server}";
+   $port = isset($options['port2']) ? $options['port2'] : '';
+   return "${sanitized_host}_apache_${sanitized_server}_$port";
 }
 
 function apache_cmdline ( $options ) {
@@ -844,8 +845,9 @@ function apache_cmdline ( $options ) {
    $url = isset($options['url'])    ? $options['url']    : $status_url;
    $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
    $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
+   $port = isset($options['port2']) ? ":$options[port2]" : '';
    $auth = ($user ? "--http-user=$user" : '') . ' ' . ($pass ? "--http-password=$pass" : '');
-   return "wget $auth -U Cacti/1.0 -q -O - -T 5 \"http://$srv$url?auto\"";
+   return "wget $auth -U Cacti/1.0 -q -O - -T 5 \"http://$srv$port$url?auto\"";
 }
 
 function apache_parse ( $options, $output ) {
@@ -920,7 +922,8 @@ function nginx_cachefile ( $options ) {
    $sanitized_server
        = str_replace(array(":", "/"), array("", "_"),
          isset($options['server']) ? $options['server'] : $status_server);
-   return "${sanitized_host}_nginx_${sanitized_server}";
+   $port = isset($options['port2']) ? $options['port2'] : '';
+   return "${sanitized_host}_nginx_${sanitized_server}_$port";
 }
 
 function nginx_cmdline ( $options ) {
@@ -929,8 +932,9 @@ function nginx_cmdline ( $options ) {
    $url = isset($options['url'])    ? $options['url']    : $status_url;
    $user = isset($options['http-user'])     ? $options['http-user']     : $http_user;
    $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
+   $port = isset($options['port2']) ? ":$options[port2]" : '';
    $auth = ($user ? "--http-user=$user" : '') . ' ' . ($pass ? "--http-password=$pass" : '');
-   return "wget $auth -U Cacti/1.0 -q -O - -T 5 \"http://$srv$url?auto\"";
+   return "wget $auth -U Cacti/1.0 -q -O - -T 5 \"http://$srv$url$port?auto\"";
 }
 
 function nginx_parse ( $options, $output ) {

@@ -1,5 +1,6 @@
 Changes for templates:
 
+  * The Apache and Nginx graphs couldn't use the --port2 option (issue 129).
   * The InnoDB Log graph's unflushed_log should be GAUGE not COUNTER (issue 10).
   * Added graphs for InnoDB semaphore waits (issue 124).
   * Added Redis graphs (issue 90).
