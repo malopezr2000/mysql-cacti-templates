@@ -1,0 +1,17 @@
+#summary How to add graphs to an existing template
+
+This document shows you how to add graphs to an existing template.  Much of the technical background is covered in the wiki page on [CreatingGraphs adding completely new templates], so you can treat this wiki page as a quick-reference.
+
+Here's what to do:
+
+  # Make sure there is an open issue report, so the work is identified and tracked.
+  # Do whatever's necessary to return the data items from the script.
+  # Add the data items to the magic array.
+  # Write tests as appropriate.
+  # Ensure all existing tests still pass.
+  # Add a new graph definition in the definitions/ Perl file.
+  # Add the new data items to the end of the definitions/ Perl file, in the input.
+  # Make the hashes unique.
+  # Test the graphs.
+  # Update the Changelog.
+  # Commit, and reference the issue number in this fashion: "Added new graphs... (fixes issue NNN)"
