@@ -11,6 +11,7 @@
       * [MemcachedTemplates Memcached Templates]
       * [NginxTemplates Nginx Templates]
       * [OpenVzTemplates OpenVZ Templates]
+      * [RedisTemplates Redis Templates]
       * [UnixTemplates Unix Templates]
   * Creating Your Own Templates
     * [AddingGraphs Adding To An Existing Template]
