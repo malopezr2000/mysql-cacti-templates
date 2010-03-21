@@ -188,6 +188,12 @@ This graph shows information about how many logical and physical reads and write
 
 http://sites.google.com/site/bettercactitemplates/Home/MyISAM_Indexes.png
 
+= MyISAM Key Cache =
+
+This graph is new in release 1.1.7.  It shows the size of the key buffer, how much of it is used, and how much is unflushed.  Memory that isn't used might not really be allocated; the key buffer isn't allocated to its full size.
+
+http://sites.google.com/site/bettercactitemplates/Home/MyISAM_Key_Cache.png
+
 = MySQL Binary/Relay logs =
 
 This graph shows information about the space used by the server binary and relay logs.  The variations in the sizes are when the logs are purged, probably due to expire_logs_days being set.  If this suddenly grows large, look for problems in purging, which might be caused by a configuration change, or by someone manually deleting a file and causing the automatic purge to stop working.
