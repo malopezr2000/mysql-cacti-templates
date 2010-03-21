@@ -15,3 +15,4 @@ Here's what to do:
   # Test the graphs.  Don't forget to upgrade the PHP script!
   # Update the Changelog.
   # Commit, and reference the issue number in this fashion: "Added new graphs... (fixes issue NNN)"
+  # Update the wiki documentation.  Add new samples and explanatory text.
