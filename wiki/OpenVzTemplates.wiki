@@ -6,6 +6,8 @@
 
 These templates use ss_get_by_ssh.php to connect to a server via SSH and extract statistics from the OpenVZ container, by concatenating the contents of /proc/user_beancounters to standard output.  This means you don't need to install any special tools.  Standard Unix command-line tools are all you need.
 
+This document should be correct and complete as of version 1.1.6 of the graphs.  Please use the issue tracker or the mailing list to report any errors or omissions.  If you have any sample graphs that are better than those shown, please contribute!
+
 = Installation =
 
 Once the [SSHBasedTemplates SSH setup] is working, import the OpenVZ template and apply it to your host, then add the graphs.
