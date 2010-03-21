@@ -8,6 +8,8 @@ These templates use ss_get_by_ssh.php to connect to a server via SSH and extract
 
 Right now the scripts are written and tested for GNU/Linux, but it is possible that they will work on other Unix-like operating systems.  It should certainly be easy to modify them if not, so if you find any problems, please submit bug reports or discuss on the mailing list.
 
+This document should be correct and complete as of version 1.1.6 of the graphs.  Please use the issue tracker or the mailing list to report any errors or omissions.  If you have any sample graphs that are better than those shown, please contribute!
+
 = Installation =
 
 No special installation is necessary for most of the graphs.  Once the [SSHBasedTemplates SSH setup] is working, everything should just work.
