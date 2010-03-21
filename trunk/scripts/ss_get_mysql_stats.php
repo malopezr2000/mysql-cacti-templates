@@ -43,6 +43,7 @@ if ( !array_key_exists('SCRIPT_FILENAME', $_SERVER)
 $mysql_user = 'cactiuser';
 $mysql_pass = 'cactiuser';
 $mysql_port = 3306;
+$mysql_ssl  = FALSE;   # Whether to use SSL to connect to MySQL.
 
 $heartbeat  = '';      # db.tbl in case you use mk-heartbeat from Maatkit.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
@@ -187,6 +188,7 @@ Usage: php ss_get_mysql_stats.php --host <host> --items <item,...> [OPTION]
    --heartbeat MySQL heartbeat table; defaults to '$heartbeat' (see mk-heartbeat)
    --nocache   Do not cache results in a file
    --port      MySQL port; defaults to $mysql_port if not given
+   --mysql_ssl Add the MYSQL_CLIENT_SSL flag to mysql_connect() call
 
 EOF;
    die($usage);
@@ -239,7 +241,7 @@ function parse_cmdline( $args ) {
 function ss_get_mysql_stats( $options ) {
    # Process connection options and connect to MySQL.
    global $debug, $mysql_user, $mysql_pass, $heartbeat, $cache_dir, $poll_time,
-          $chk_options, $mysql_port;
+          $chk_options, $mysql_port, $mysql_ssl;
 
    # Connect to MySQL.
    $user = isset($options['user']) ? $options['user'] : $mysql_user;
@@ -255,7 +257,12 @@ function ss_get_mysql_stats( $options ) {
       debug("The MySQL extension is not loaded");
       die("The MySQL extension is not loaded");
    }
-   $conn = mysql_connect($host_str, $user, $pass);
+   if ( $mysql_ssl || (isset($options['mysql_ssl']) && $options['mysql_ssl']) ) {
+      $conn = mysql_connect($host_str, $user, $pass, true, MYSQL_CLIENT_SSL);
+   }
+   else {
+      $conn = mysql_connect($host_str, $user, $pass);
+   }
    if ( !$conn ) {
       die("MySQL: " . mysql_error());
    }
