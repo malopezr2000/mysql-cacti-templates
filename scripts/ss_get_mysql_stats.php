@@ -684,6 +684,8 @@ function ss_get_mysql_stats( $options ) {
       'Key_buf_bytes_unflushed' => 'eg',
       'Key_buf_bytes_used'      => 'eh',
       'key_buffer_size'         => 'ei',
+      'Innodb_row_lock_time'    => 'ej',
+      'Innodb_row_lock_waits'   => 'ek',
    );
 
    # Return the output.
