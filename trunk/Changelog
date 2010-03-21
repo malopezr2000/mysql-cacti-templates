@@ -3,6 +3,7 @@ Changes for templates:
   * The InnoDB Log graph's unflushed_log should be GAUGE not COUNTER (issue 10).
   * Added graphs for InnoDB semaphore waits (issue 124).
   * Added Redis graphs (issue 90).
+  * Added --openvz_cmd configuration and command-line option (issue 130).
 
 2010-01-10: version 1.1.6
 

@@ -54,6 +54,8 @@ $http_user     = '';
 $http_pass     = '';
 $memcache_port = 11211;                   # Which port memcached listens on
 $redis_port    = 6379;                    # Which port redis listens on
+                                          # How to get openvz stats
+$openvz_cmd    = 'cat /proc/user_beancounters';
 
 # ============================================================================
 # You should not need to change anything below this line.
@@ -189,24 +191,24 @@ option without a value after it, the option is ignored.  For options such as
 
 General options:
 
-   --device    The device name for diskstats
-   --file      Read input from this file instead of getting via SSH command
-   --host      Hostname to connect to (via SSH)
-   --items     Comma-separated list of the items whose data you want
-   --nocache   Do not cache results in a file
-   --port      SSH port to connect to (SSH port, not application port!)
-   --port2     Port on which the application listens, such as memcached port or
-               redis port or apache port.
-   --server    The server (DNS name or IP address) from which to fetch the
-               desired data after SSHing.  Default is 'localhost' for HTTP stats
-               and --host for memcached stats.
-   --type      One of apache, nginx, proc_stat, w, memory, memcached, diskstats,
-               openvz, redis (more are TODO)
-   --url       The url, such as /server-status, where server status lives
-   --use-ssh   Whether to connect via SSH to gather info (default yes).
-   --http-user The HTTP authentication user
-   --http-password
-               The HTTP authentication password
+   --device          The device name for diskstats
+   --file            Get input from this file instead of via SSH command
+   --host            Hostname to connect to (via SSH)
+   --items           Comma-separated list of the items whose data you want
+   --nocache         Do not cache results in a file
+   --port            SSH port to connect to (SSH port, not application port!)
+   --port2           Port on which the application listens, such as memcached
+                     port, redis port, or apache port.
+   --server          The server (DNS name or IP address) from which to fetch the
+                     desired data after SSHing.  Default is 'localhost' for HTTP
+                     stats and --host for memcached stats.
+   --type            One of apache, nginx, proc_stat, w, memory, memcached,
+                     diskstats, openvz, redis (more are TODO)
+   --url             The url, such as /server-status, where server status lives
+   --use-ssh         Whether to connect via SSH to gather info (default yes).
+   --http-user       The HTTP authentication user
+   --http-password   The HTTP authentication password
+   --openvz_cmd      The command to use when fetching OpenVZ statistics
 
 EOF;
    die($usage);
@@ -1081,7 +1083,11 @@ function openvz_cachefile ( $options ) {
 }
 
 function openvz_cmdline ( $options ) {
-   return "cat /proc/user_beancounters";
+   global $openvz_cmd;
+   $meth = isset($options['openvz_cmd'])
+         ? $options['openvz_cmd']
+         : $openvz_cmd;
+   return $meth;
 }
 
 function openvz_parse ( $options, $output ) {
