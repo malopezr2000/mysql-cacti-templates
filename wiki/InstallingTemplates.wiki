@@ -112,7 +112,7 @@ $mysql_pass = "s3cret";
 ?>
 }}}
 
-Notice the opening and closing PHP tags.
+Notice the opening and closing PHP tags.  Be careful not to add any extra lines or whitespace at the beginning or end of the configuration file, because [http://groups.google.com/group/better-cacti-templates/browse_thread/thread/3955c36bdcf45786 that will conflict with the output from the script] and can cause problems.
 
 This method still has the disadvantage that it works only if you use the same global configuration for every monitored resource.  If you need to specify a username and password for each host or each graph, it won't work.
 
