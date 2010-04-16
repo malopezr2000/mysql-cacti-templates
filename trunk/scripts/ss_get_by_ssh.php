@@ -203,7 +203,7 @@ General options:
                      desired data after SSHing.  Default is 'localhost' for HTTP
                      stats and --host for memcached stats.
    --type            One of apache, nginx, proc_stat, w, memory, memcached,
-                     diskstats, openvz, redis (more are TODO)
+                     diskstats, openvz, redis, jmx (more are TODO)
    --url             The url, such as /server-status, where server status lives
    --use-ssh         Whether to connect via SSH to gather info (default yes).
    --http-user       The HTTP authentication user
@@ -415,6 +415,15 @@ function ss_get_by_ssh( $options ) {
       'REDIS_changes_since_last_save'    => 'd1',
       'REDIS_total_connections_received' => 'd2',
       'REDIS_total_commands_processed'   => 'd3',
+      # Stuff from jmx
+      'JMX_heapmemoryusage_used'        => 'd4',
+      'JMX_heapmemoryusage_committed'   => 'd5',
+      'JMX_heapmemoryusage_max'         => 'd6',
+      'JMX_nonheapmemoryusage_used'     => 'd7',
+      'JMX_nonheapmemoryusage_committed'    => 'd8',
+      'JMX_nonheapmemoryusage_max'      => 'd9',
+      'JMX_openfiledescriptorcount'     => 'da',
+      'JMX_maxfiledescriptorcount'      => 'db',
    );
 
    # Prepare and return the output.  The output we have right now is the whole
@@ -1205,6 +1214,40 @@ function redis_get ( $options ) {
       debug("Can't close socket");
    }
    return $data;
+}
+
+function jmx_parse ( $options, $output ) {
+   $result = array();
+   $wanted = array(
+       'heapmemoryusage_used',
+       'heapmemoryusage_committed',
+       'heapmemoryusage_max',
+       'nonheapmemoryusage_used',
+       'nonheapmemoryusage_committed',
+       'nonheapmemoryusage_max',
+       'openfiledescriptorcount',
+       'maxfiledescriptorcount',
+   );
+   foreach ( explode("\n", $output) as $line ) {
+      $words = explode(':', $line);
+      if ( count($words) && in_array($words[0], $wanted) ) {
+         $result["JMX_$words[0]"] = trim($words[1]);
+      }
+   }
+   return $result;
+}
+
+function jmx_cachefile ( $options ) {
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   $sanitized_port2
+       = str_replace(array(":", "/"), array("", "_"), $options['port2']);
+   return "${sanitized_host}_jmx_${sanitized_port2}";
+}
+
+function jmx_cmdline ( $options ) {
+   $port = isset($options['port2']) ? "$options[port2]" : '9012';
+   return "ant -Djmx.server.port=$port -e -q -f jmx-monitor.xml";
 }
 
 ?>

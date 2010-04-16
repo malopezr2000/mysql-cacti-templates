@@ -341,4 +341,30 @@ is(
    'main(samples/redis-001.txt)'
 );
 
+is_deeply(
+    jmx_parse(null, file_get_contents('samples/jmx-001.txt')),
+    array(
+        'JMX_heapmemoryusage_used' => '52685256',
+        'JMX_heapmemoryusage_committed' => '205979648',
+        'JMX_heapmemoryusage_max' => '1864171520',
+        'JMX_nonheapmemoryusage_used' => '55160928',
+        'JMX_nonheapmemoryusage_committed' => '61603840',
+        'JMX_nonheapmemoryusage_max' => '318767104',
+        'JMX_openfiledescriptorcount' => '60',
+        'JMX_maxfiledescriptorcount' => '1024',
+    ),
+    'samples/jmx-001.txt'
+);
+
+is(
+    ss_get_by_ssh(array(
+        'file'  => 'samples/jmx-001.txt',
+        'type'  => 'jmx',
+        'host'  => 'localhost',
+        'items' => 'd4,d5,d6,d7,d8,d9,da,db',
+    )),
+    'd4:52685256 d5:205979648 d6:1864171520 d7:55160928 d8:61603840 d9:318767104 da:60 db:1024',
+    'main(samples/jmx-001.txt)'
+);
+
 ?>
