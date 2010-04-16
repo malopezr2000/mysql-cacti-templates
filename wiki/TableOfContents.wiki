@@ -13,6 +13,7 @@
       * [OpenVzTemplates OpenVZ Templates]
       * [RedisTemplates Redis Templates]
       * [UnixTemplates Unix Templates]
+      * [JMXTemplates JMX Templates]
   * Creating Your Own Templates
     * [AddingGraphs Adding To An Existing Template]
     * [CreatingGraphs Creating Completely New Templates]
