@@ -1,0 +1,37 @@
+#summary Cacti templates for graphing JMX
+
+<wiki:toc max_depth="1" />
+
+= Overview =
+
+(New from 1.1.7)
+
+These templates use ss_get_by_ssh.php to connect to a server via SSH and extract statistics from the JMX server.
+
+= Installation =
+
+First you should the Java runtime information through JMX. For a normal Java program, you can get more information from [http://java.sun.com/j2se/1.5.0/docs/guide/management/agent.html Monitoring and Management Using JMX], if you are using Tomcat, you can read [http://tomcat.apache.org/tomcat-6.0-doc/monitoring.html Monitoring and Managing Tomcat]. A simple example as follows:
+
+{{{
+$ java -jar -Dcom.sun.management.jmxremote \
+-Dcom.sun.management.jmxremote.port=9012 \
+-Dcom.sun.management.jmxremote.ssl=false \
+-Dcom.sun.magement.jmxremote.authenticate=false \
+/path/to/Notepad.jar
+}}}
+
+(TODO: there should be a better way to only export this information to localhost, currently you need config the firewall to block visits from outside)
+
+Then you should install ant, download [http://mysql-cacti-templates.googlecode.com/svn/trunk/tools/jmx-monitor.xml jmx-monitor.xml] to your `$HOME` dir, then download catalina-ant-jmx.jar (this file is part of [http://tomcat.apache.org/download-60.cgi tomcat]) to your `$HOME/.ant/lib`.
+
+now you can test with following commands:
+{{{
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type jmx --host 127.0.0.1 --items d4,d5'
+}}}
+
+== JMX File Descriptor ==
+
+
+== JMX Heap Memory Usage ==
+
+== JMX Non-Heap Memory Usage ==
