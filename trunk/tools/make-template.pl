@@ -822,7 +822,9 @@ foreach my $g ( @{ $t->{graphs} } ) {
    foreach my $key ( keys %{$g->{dt}} ) {
       my $val = $g->{dt}->{$key};
       next unless ref $val eq 'HASH';
-      if ( !$t->{inputs}->{$g->{dt}->{input}}->{outputs}->{$key} ) {
+      if ( !$t->{inputs}->{$g->{dt}->{input}}) {
+         push @key_not_in_script, $g->{dt}->{input};	    
+      } elsif ( !$t->{inputs}->{$g->{dt}->{input}}->{outputs}->{$key} ) {
          push @key_not_in_script, $key;
       }
       if ( !$key_used_in_it{$key} ) {
