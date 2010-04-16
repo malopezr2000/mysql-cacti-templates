@@ -29,9 +29,19 @@ now you can test with following commands:
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type jmx --host 127.0.0.1 --items d4,d5'
 }}}
 
-== JMX File Descriptor ==
+= JMX File Descriptor =
+This graph shows the file descriptor used by this process.
+
+http://mysql-cacti-templates.googlecode.com/svn/data/jmx-file-descriptor.png
 
 
-== JMX Heap Memory Usage ==
+= JMX Heap Memory Usage =
+This graph shows the heap memory usage used by this process.
 
-== JMX Non-Heap Memory Usage ==
+http://mysql-cacti-templates.googlecode.com/svn/data/jmx-heap-memory-usage.png
+
+
+= JMX Non-Heap Memory Usage =
+This graph shows the non-heap memory usage used by this process.
+
+http://mysql-cacti-templates.googlecode.com/svn/data/jmx-nonheap-memory-usage.png
