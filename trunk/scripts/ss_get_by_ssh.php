@@ -1216,17 +1216,22 @@ function redis_get ( $options ) {
    return $data;
 }
 
+# ============================================================================
+# Get and parse stats from JMX.
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type jmx --host 127.0.0.1 --items d4,d5,d6,d7,d8,d9,da,db
+# ============================================================================
 function jmx_parse ( $options, $output ) {
    $result = array();
    $wanted = array(
-       'heapmemoryusage_used',
-       'heapmemoryusage_committed',
-       'heapmemoryusage_max',
-       'nonheapmemoryusage_used',
-       'nonheapmemoryusage_committed',
-       'nonheapmemoryusage_max',
-       'openfiledescriptorcount',
-       'maxfiledescriptorcount',
+      'heapmemoryusage_used',
+      'heapmemoryusage_committed',
+      'heapmemoryusage_max',
+      'nonheapmemoryusage_used',
+      'nonheapmemoryusage_committed',
+      'nonheapmemoryusage_max',
+      'openfiledescriptorcount',
+      'maxfiledescriptorcount',
    );
    foreach ( explode("\n", $output) as $line ) {
       $words = explode(':', $line);
@@ -1239,9 +1244,9 @@ function jmx_parse ( $options, $output ) {
 
 function jmx_cachefile ( $options ) {
    $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+      = str_replace(array(":", "/"), array("", "_"), $options['host']);
    $sanitized_port2
-       = str_replace(array(":", "/"), array("", "_"), $options['port2']);
+      = str_replace(array(":", "/"), array("", "_"), $options['port2']);
    return "${sanitized_host}_jmx_${sanitized_port2}";
 }
 
