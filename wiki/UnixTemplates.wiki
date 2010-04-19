@@ -18,7 +18,7 @@ No special installation is necessary for most of the graphs.  Once the [SSHBased
 
 See the following screenshot for an example:
 
-http://sites.google.com/site/bettercactitemplates/Home/add_unix_disk_graph.png
+http://mysql-cacti-templates.googlecode.com/svn/data/add_unix_disk_graph.png
 
 You should append "sda" in every textbox shown in that screenshot, if you want to monitor /dev/sda.  Use the device name as it appears in /proc/diskstats.
 
@@ -26,64 +26,64 @@ You should append "sda" in every textbox shown in that screenshot, if you want t
 
 This graph shows the number of context switches performed by the server.
 
-http://sites.google.com/site/bettercactitemplates/Home/unix_context_switches.png
+http://mysql-cacti-templates.googlecode.com/svn/data/unix_context_switches.png
 
 = CPU Usage =
 
 This graph shows CPU usage as derived from the /proc filesystem.  The example shows a server with two CPUs.  The values will increase by 100 with each added CPU.
 
-http://sites.google.com/site/bettercactitemplates/Home/unix_cpu_usage.png
+http://mysql-cacti-templates.googlecode.com/svn/data/unix_cpu_usage.png
 
 = Forks =
 
 This graph shows the number of new processes created by the system.
 
-http://sites.google.com/site/bettercactitemplates/Home/unix_forks.png
+http://mysql-cacti-templates.googlecode.com/svn/data/unix_forks.png
 
 = Interrupts =
 
 This graph shows how many interrupts the system handles.
 
-http://sites.google.com/site/bettercactitemplates/Home/unix_interrupts.png
+http://mysql-cacti-templates.googlecode.com/svn/data/unix_interrupts.png
 
 = Load Average =
 
 This graph shows system load average.  If you're used to looking at a "pretty" load average graph, you might think this one has less information.  Not so!  The standard graph that comes with Cacti is very silly: it shows the same information averaged over three time intervals, which is useless and redundant.  RRDtool can average the number for you just fine.
 
-http://sites.google.com/site/bettercactitemplates/Home/unix_load_average.png
+http://mysql-cacti-templates.googlecode.com/svn/data/unix_load_average.png
 
 = Memory =
 
 This graph shows the system's memory usage, as reported by the "free" command.
 
-http://sites.google.com/site/bettercactitemplates/Home/unix_memory.png
+http://mysql-cacti-templates.googlecode.com/svn/data/unix_memory.png
 
 = Number of Users =
 
 This graph shows how many users were logged into the system, as reported by the "w" command.
 
-http://sites.google.com/site/bettercactitemplates/Home/unix_number_of_users.png
+http://mysql-cacti-templates.googlecode.com/svn/data/unix_number_of_users.png
 
 = Disk Operations =
 
 This graph shows how many read and write operations were completed, and how many reads and writes were merged.
 
-http://sites.google.com/site/bettercactitemplates/Home/disk_operations.png
+http://mysql-cacti-templates.googlecode.com/svn/data/disk_operations.png
 
 = Disk Sectors Read/Written =
 
 This graph shows how many disk sectors were read and written.
 
-http://sites.google.com/site/bettercactitemplates/Home/disk_sectors_read_written.png
+http://mysql-cacti-templates.googlecode.com/svn/data/disk_sectors_read_written.png
 
 = Disk Read/Write Time (ms) =
 
 This graph shows how much time was spent reading and writing.
 
-http://sites.google.com/site/bettercactitemplates/Home/disk_read_write_time.png
+http://mysql-cacti-templates.googlecode.com/svn/data/disk_read_write_time.png
 
 = Disk Elapsed IO Time (ms) =
 
 This graph shows how much time was spent in disk I/O overall, and how much weighted time was spent doing disk I/O.  The latter is a useful indication of I/O backlog.
 
-http://sites.google.com/site/bettercactitemplates/Home/disk_elapsed_io_time.png
+http://mysql-cacti-templates.googlecode.com/svn/data/disk_elapsed_io_time.png

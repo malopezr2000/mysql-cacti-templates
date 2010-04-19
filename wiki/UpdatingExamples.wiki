@@ -1,3 +1,5 @@
 #summary How to update the example graphs
 
-The example graphs (such as [MySQLTemplates]) are hosted on http://sites.google.com/site/bettercactitemplates/.  Ask on the mailing list if you want access to edit that site, and it will be given freely.
+The example graphs (such as [MySQLTemplates]) are kept in /data in the SVN
+source.  Ask on the mailing list if you want SVN access, and it will be given
+freely.

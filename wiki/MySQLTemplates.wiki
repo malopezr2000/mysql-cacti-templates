@@ -55,13 +55,13 @@ This template shows InnoDB transaction counts:
   * An active transaction is a transaction that's currently open.  It's possible for transactions to be in "not started" status, which really means that this connection to MySQL doesn't actually have a transaction open.  A transaction is active between BEGIN and COMMIT.  It's also active whilst a query is running, although it might commit immediately due to auto-commit, if applicable.  This graph really just shows how much transactional activity is happening on the database.
   * A locked transaction is in LOCK WAIT status.  This usually means it's waiting for a row lock, but in some cases could be a table lock or an auto-increment lock.  If you start to see lock waits, you need to check SHOW INNODB STATUS and search for the string "LOCK WAIT" to examine what's waiting.  Lock waits can come from several sources, including too much contention on busy tables, queries accessing data through scans on different indexes, or bad query patterns such as SELECT .. FOR UPDATE.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Active_Locked_Transactions.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Active_Locked_Transactions.png
 
 = InnoDB Adaptive Hash Index =
 
 This graph shows the hash index's cells total and cells used.  There isn't really anything actionable about this graph: the adaptive hash index isn't designed to be user-tunable, although you can disable it.  However, should something go wrong with performance, this graph might provide diagnostic information.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Adaptive_Hash_Index.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Adaptive_Hash_Index.png
 
 = InnoDB Buffer Pool =
 
@@ -69,19 +69,19 @@ This graph shows the current status of the InnoDB buffer pool: the size, free pa
 
 The example graph shows what happens when InnoDB restarts: the buffer pool empties and then fills again.  You can see the corresponding activity in the InnoDB Checkpoint Age graph example below.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Buffer_Pool.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Buffer_Pool.png
 
 = InnoDB Buffer Pool Activity =
 
 This graph shows activity inside the buffer pool: pages created, read, and written.  You can consider it roughly equivalent to the Handler graphs.  If you see a sudden change in the graph, you should try to trace it to some change in your application.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_016.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_016.png
 
 = InnoDB Buffer Pool Status =
 
 This graph is from an old version of the templates, and is replaced by InnoDB Buffer Pool.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_022.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_022.png
 
 = InnoDB Checkpoint Age =
 
@@ -89,97 +89,97 @@ This graph shows the InnoDB checkpoint age, which is the same thing as the numbe
 
 The example is from the same server and time period as the InnoDB Buffer Pool graph.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Checkpoint_Age.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Checkpoint_Age.png
 
 = InnoDB Current Lock Waits =
 
 This graph shows the total number of seconds that InnoDB transactions have been waiting for locks.  This is related to the InnoDB Locked Transactions graph above, except that it's the sum of the lock wait time.  You might have only one transaction in LOCK WAIT status, but it might be waiting a very long time if innodb_lock_wait_timeout is set to a large value.  So if you see a large value on this graph, you should investigate for LOCK WAIT transactions, just as described above.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Current_Lock_Waits.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Current_Lock_Waits.png
 
 = InnoDB Insert Buffer =
 
 This graph shows information about InnoDB's insert buffer: inserts, merge operations, and merged records.  This is not generally actionable, because the insert buffer is not user-configurable.  However, you can use it to diagnose certain kinds of performance problems, such as furious disk activity after you stop the server from processing queries, or during particular types of queries that force the insert buffer to be merged into the indexes.  (The insert buffer is sort of a delayed way of updating non-unique secondary indexes.)  If the insert buffer is causing problems, the Percona version of MySQL might help, because it has some configuration parameters for the buffer.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_012.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_012.png
 
 = InnoDB Insert Buffer Usage =
 
 This graph shows the total cells in the insert buffer, and the used and free cells.  This is diagnostic only, as in the previous graph.  You can use it to see the buffer usage, and thus correlate with server activity that might be hard to explain otherwise.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Insert_Buffer_Usage.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Insert_Buffer_Usage.png
 
 = InnoDB Internal Hash Memory Usage =
 
 This graph shows how much memory InnoDB uses for various internal hash structures: the adaptive hash index, page hash, dictionary cache, filesystem, locks, recovery system, and thread hash.  This is available only in Percona-enhanced versions of InnoDB, and these structures are generally not configurable.  However, you might use it to diagnose some kinds of performance problems, such as much greater than expected memory usage.  In standard InnoDB, the internal data dictionary tends to consume large amounts of memory when you have many tables, for example.  The Percona version of InnoDB lets you control that with some features that are similar to MySQL's table cache.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Internal_Hash_Memory_Usage.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Internal_Hash_Memory_Usage.png
 
 = InnoDB I/O Activity =
 
 This graph shows InnoDB's I/O activity: file reads and writes, log writes, and fsync() calls.  This might help diagnose the source of I/O activity on the system.  Some of this can be influenced with InnoDB settings, especially innodb_flush_log_at_trx_commit.  There are more tunables in the Percona version of InnoDB, XtraDB, and the InnoDB plugin.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_003.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_003.png
 
 = InnoDB I/O Pending =
 
 This graph shows InnoDB's pending synchronous and asynchronous I/O operations in various parts of the engine.  Pending I/O is not ideal; ideally you'd like InnoDB's background thread(s) to keep up with writes, and you'd like the buffer pool large enough that reads are not an issue.  If you see a lot of pending I/O, you might need more RAM, a bigger buffer pool (or use O_DIRECT to avoid double-buffering), or a faster disk subsystem.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_005.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_005.png
 
 = InnoDB Lock Structures =
 
 This graph shows how many lock structures InnoDB has internally.  This should correlate roughly to the number of row locks transactions are currently holding, and might be useful to help diagnose increased lock contention.  There is no hard rule about what's a good or bad number of locks, but in case many transactions are waiting for locks, obviously fewer is better.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Lock_Structures.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Lock_Structures.png
 
 = InnoDB Log Activity =
 
 This graph shows InnoDB log activity: the log buffer size, bytes written, flushed, and unflushed.  The example graph is illustrating issue 10, which really needs to be fixed.  After that, you might be able to use this graph to find problems with your log buffer size, or with a disk system that's not fast enough.  If transactions need to write to the log buffer and it's either not big enough or is currently being flushed, they'll stall.  You don't want that.  You can also influence this buffer's activity through innodb_flush_logs_at_trx_commit.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_024.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_024.png
 
 = InnoDB Memory Allocation =
 
 This graph shows InnoDB's total memory allocation, and how much of that is in the additional pool (as opposed to the buffer pool).  If a lot of memory is in the additional memory pool, you might suspect problems with the internal data dictionary cache; see above for more on this.  Unfortunately, in standard InnoDB it's a bit hard to know where the memory really goes.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Memory_Allocation.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Memory_Allocation.png
 
 = InnoDB Row Lock Time =
 
 This graph is new in version 1.1.7 of the graphs.  It shows the amount of time, in milliseconds, that InnoDB has waited to grant row locks.  This comes from the Innodb_row_lock_time status variable, which is only available in MySQL 5 and newer.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Row_Lock_Time.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Row_Lock_Time.png
 
 = InnoDB Row Lock Waits =
 
 This graph is new in version 1.1.7 of the graphs.  It shows the number of times that InnoDB has waited to grant row locks.  This comes from the Innodb_row_lock_waits status variable, which is only available in MySQL 5 and newer.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Row_Lock_Waits.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Row_Lock_Waits.png
 
 = InnoDB Row Operations =
 
 This graph shows row operations InnoDB has performed: reads, deletes, inserts, and updates.  These should be roughly equivalent to Handler statistics, with the exception that they can show internal operations not reflected in the Handler statistics.  These might include foreign key operations, for example.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_002.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_002.png
 
 = InnoDB Semaphores =
 
 This graph shows information on InnoDB semaphore activity: the number of spin rounds, spin waits, and OS waits.  You might see these graphs spike during times of high concurrency or contention.  These graphs basically indicate different types of activity involved in obtaining row locks or mutexes, both of which are causes of poor scaling in standard InnoDB.  XtraDB, the InnoDB plugin, and the Percona-patched MySQL are much improved in this regard.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_017.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_017.png
 
 = InnoDB Tables In Use =
 
 This graph shows how many tables InnoDB has in use and how many are locked.  If there are spikes in these graphs, you'll probably also see spikes in LOCK WAIT and other signs of contention amongst queries.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Tables_In_Use.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Tables_In_Use.png
 
 = InnoDB Transaction Activity =
 
 This graph shows information about transactions within InnoDB: transactions created, open, active time, lock wait time, MVCC read views, and the length of the history list.  This graph has been deprecated, and its information is moved to other graphs, such as InnoDB Active/Locked Transactions, and InnoDB Transactions.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_006.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_006.png
 
 = InnoDB Transactions =
 
@@ -192,77 +192,77 @@ This graph shows information about transactions within InnoDB.
 
 Some of the things on this graph really belong on the Active/Locked graph, where they would make more sense, but I don't want to break backwards compatibility by doing that.  The current transactions and the number of transactions with read views open would be more sensible on that graph.  Cross reference that graph to make sense of these metrics.
 
-http://sites.google.com/site/bettercactitemplates/Home/InnoDB_Transactions.png
+http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Transactions.png
 
 = MyISAM Indexes =
 
 This graph shows information about how many logical and physical reads and writes took place to MyISAM indexes.  Probably the most important one is the physical reads.  Contrary to the popular wisdom, the ratio between logical and physical reads is utterly meaningless and is a red herring that wastes a lot of time and money.  Instead, you should look at the absolute number of physical reads per second, and compare it to what your disks are capable of.  (RRDTool normalizes everything to units of seconds, so this graph's absolute value is the number you're looking for.)
 
-http://sites.google.com/site/bettercactitemplates/Home/MyISAM_Indexes.png
+http://mysql-cacti-templates.googlecode.com/svn/data/MyISAM_Indexes.png
 
 = MyISAM Key Cache =
 
 This graph is new in release 1.1.7.  It shows the size of the key buffer, how much of it is used, and how much is unflushed.  Memory that isn't used might not really be allocated; the key buffer isn't allocated to its full size.
 
-http://sites.google.com/site/bettercactitemplates/Home/MyISAM_Key_Cache.png
+http://mysql-cacti-templates.googlecode.com/svn/data/MyISAM_Key_Cache.png
 
 = MySQL Binary/Relay logs =
 
 This graph shows information about the space used by the server binary and relay logs.  The variations in the sizes are when the logs are purged, probably due to expire_logs_days being set.  If this suddenly grows large, look for problems in purging, which might be caused by a configuration change, or by someone manually deleting a file and causing the automatic purge to stop working.
 
-http://sites.google.com/site/bettercactitemplates/Home/Binary_Relay_Logs.png
+http://mysql-cacti-templates.googlecode.com/svn/data/Binary_Relay_Logs.png
 
 = MySQL Command Counters =
 
 This graph shows counters for various MySQL commands.  These are derived from the Com_ counters from SHOW STATUS.  If there is a change in the graph, it indicates that something changed in the application.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_010.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_010.png
 
 = MySQL Connections =
 
 This graph shows information about the connection parameters and counters inside MySQL: connections permitted, connections used, connections aborted, clients aborted, current connections, and connections created.  Probably the most interesting are the aborted clients and connections, which might indicate a malfunctioning application that disconnects ungracefully, an idle connection timing out, network problems, bad authentication attempts, or similar.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_020.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_020.png
 
 = MySQL Files and Tables =
 
 This graph shows status of MySQL's table cache and file handles: the size of the cache, and how many open files and tables there are.  This graph is not likely to be exciting.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_004.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_004.png
 
 = MySQL Handlers =
 
 This graph shows the various Handler counters, which record how many operations MySQL has done through the storage engine API.  Changes in indexing will probably show up clearly here: a query that used to do a table scan but now has a good index to use will cause different Handler calls to be used, for example.  If you see sudden changes, it probably correlates with schema changes or a different mixture of queries.  The example graph shows a large spike of Handler_read_rnd_next, which probably means something was doing a lot of table scans.  (I generated that graph synthetically by running a table-scan query in an infinite loop for a while.)
 
-http://sites.google.com/site/bettercactitemplates/Home/MySQL_Handlers.png
+http://mysql-cacti-templates.googlecode.com/svn/data/MySQL_Handlers.png
 
 Here is another graph, generated from an active production server.
 
-http://sites.google.com/site/bettercactitemplates/Home/MySQL_Handlers_2.png
+http://mysql-cacti-templates.googlecode.com/svn/data/MySQL_Handlers_2.png
 
 = MySQL Network Traffic =
 
 This graph shows network traffic to and from the MySQL Server, in bytes.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_023.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_023.png
 
 = MySQL Processlist =
 
 The MySQL Processlist shows the number (count) of queries from SHOW PROCESSLIST in given statuses.  Some of the statuses are lumped together into the "other" category.  This is basically a "scoreboard" type of graph.  In most cases, you should see mostly Other, or a few of the statuses like "Sending data".  Queries in Locked status are the hallmark of a lot of MyISAM table locking.  Any mixture of statuses is possible, and you should investigate sudden and systemic changes.
 
-http://sites.google.com/site/bettercactitemplates/Home/MySQL_Processlist.png
+http://mysql-cacti-templates.googlecode.com/svn/data/MySQL_Processlist.png
 
 = MySQL Query Cache =
 
 This graph shows information about the query cache inside MySQL: the number of queries in the cache, inserted, queries not cached, queries pruned due to low memory, and cache hits.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_014.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_014.png
 
 = MySQL Query Cache Memory =
 
 This graph shows information on the query cache's memory usage: total size, free memory, total blocks and free blocks.  Blocks are not of a uniform size, despite the name.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_026.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_026.png
 
 = MySQL Replication Status =
 
@@ -275,34 +275,34 @@ When replication is running, there is an AREA of the same size as the replicatio
 
 The graph also shows open temporary tables and retried transactions.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_015.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_015.png
 
 = MySQL Select Types =
 
 This graph shows information on how many of each type of select the MySQL server has performed: full join, full range join, range, range check, and scan.  Like the Handler graphs, these show different types of execution plans, so any changes should be investigated.  You should strive to have zero Select_full_join queries!  The graph shows some of those.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_019.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_019.png
 
 = MySQL Sorts =
 
 This graph shows information about MySQL sort operations: rows sorted, merge passes, and number of sorts triggered by range and scan queries.  Over-analyzing this data and trying to tweak sort buffer sizes is the hallmark of an inexperienced database administrator who will soon be wondering why the server is slow.  However, the graphs may react favorably (get smaller) in response to query optimization, increasing your feeling of satisfaction and giving you something to show your boss.  If the graphs react unfavorably (grow), check your EXPLAIN plans.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_007.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_007.png
 
 = MySQL Table Locks =
 
 This graph shows information about table-level lock operations inside MySQL: locks waited, locks granted without waiting, and slow queries.  Locks that have to wait are generally caused by MyISAM tables.  Even InnoDB tables will cause locks to be acquired, but they will generally be released right away and no waiting will occur.
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_011.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_011.png
 
 = MySQL Temporary Objects =
 
 This graph shows information about temporary objects created by the MySQL server: temporary tables, temporary files, and temporary tables created on disk instead of in memory.  Like sort data, this is easy to over-analyze.  The most serious one is the temp tables created on disk.  Dealing with these is complex, but is covered well in [http://www.amazon.com/High-Performance-MySQL-Optimization-Replication/dp/0596101716?tag=xaprb-20 High Performance MySQL].
 
-http://sites.google.com/site/bettercactitemplates/Home/graph_image_025.png
+http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_025.png
 
 = MySQL Transaction Handler =
 
 This graph shows the transactional operations that took place at the MySQL server level.  If you see a lot of BEGIN and COMMIT, that might be an indication that you're using a dumb ORM or connection software that inserts spurious queries that you don't know about, and adds latency to your application.
 
-http://sites.google.com/site/bettercactitemplates/Home/MySQL_Transaction_Handlers.png
+http://mysql-cacti-templates.googlecode.com/svn/data/MySQL_Transaction_Handlers.png

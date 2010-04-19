@@ -141,11 +141,11 @@ Generating custom graphs is covered in CustomizingTemplates.
 
 Here's how to make specific graphs accept command-line arguments.  From the Console tab, click into Data Templates.  Find the desired Data Template and click it so you can edit it.  I'll use 'X MySQL Binary/Relay Logs DT' as an example.  Now, check the checkboxes so the desired command-line options use per-data-source values.  This means that the global template's value doesn't override the individual graph's values; the individual graphs must specify their own values.  For example, I've attached a screenshot here of setting the checkboxes so that username and password are per-data-source:
 
-http://sites.google.com/site/bettercactitemplates/Home/use-per-data-source-value.png
+http://mysql-cacti-templates.googlecode.com/svn/data/use-per-data-source-value.png
 
 Next find the data source by clicking into Data Sources.  Now that you've specified that this data source should use per-data-source values for the username and password, there are text boxes to fill in.  Here's a screenshot:
 
-http://sites.google.com/site/bettercactitemplates/Home/fill-in-data-source-values.png
+http://mysql-cacti-templates.googlecode.com/svn/data/fill-in-data-source-values.png
 
 Cacti will now pass the given arguments to the PHP script when it executes.  Here's a snippet from the Cacti log, showing this in action:
 

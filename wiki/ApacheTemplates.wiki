@@ -24,28 +24,28 @@ Finally, test one of your hosts like this.  You may need to change some of the e
 
 This graph shows the bytes sent by Apache.
 
-http://sites.google.com/site/bettercactitemplates/Home/apache_bytes.png
+http://mysql-cacti-templates.googlecode.com/svn/data/apache_bytes.png
 
 = CPU Load =
 
 This graph shows Apache's CPU usage.
 
-http://sites.google.com/site/bettercactitemplates/Home/apache_cpu_load.png
+http://mysql-cacti-templates.googlecode.com/svn/data/apache_cpu_load.png
 
 = Requests =
 
 This graph shows how many requests Apache has handled.
 
-http://sites.google.com/site/bettercactitemplates/Home/apache_requests.png
+http://mysql-cacti-templates.googlecode.com/svn/data/apache_requests.png
 
 = Scoreboard =
 
 This graph shows how many Apache processes are in each of a variety of statuses.
 
-http://sites.google.com/site/bettercactitemplates/Home/apache_scoreboard.png
+http://mysql-cacti-templates.googlecode.com/svn/data/apache_scoreboard.png
 
 = Workers =
 
 This graph shows how many worker processes are busy or idle at any given time.
 
-http://sites.google.com/site/bettercactitemplates/Home/apache_workers.png
+http://mysql-cacti-templates.googlecode.com/svn/data/apache_workers.png

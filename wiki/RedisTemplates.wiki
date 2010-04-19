@@ -20,16 +20,16 @@ You can test one of your hosts like this.  You may need to change some of the ex
 
 = Redis Commands =
 
-http://sites.google.com/site/bettercactitemplates/Home/Redis_Commands.png
+http://mysql-cacti-templates.googlecode.com/svn/data/Redis_Commands.png
 
 = Redis Connections =
 
-http://sites.google.com/site/bettercactitemplates/Home/Redis_Connections.png
+http://mysql-cacti-templates.googlecode.com/svn/data/Redis_Connections.png
 
 = Redis Memory =
 
-http://sites.google.com/site/bettercactitemplates/Home/Redis_Memory.png
+http://mysql-cacti-templates.googlecode.com/svn/data/Redis_Memory.png
 
 = Redis Unsaved Changes =
 
-http://sites.google.com/site/bettercactitemplates/Home/Redis_Unsaved_Changes.png
+http://mysql-cacti-templates.googlecode.com/svn/data/Redis_Unsaved_Changes.png

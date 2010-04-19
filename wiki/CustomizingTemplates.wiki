@@ -40,7 +40,7 @@ Be aware that the SSH-based templates use --port to specify the SSH port, and --
 
 If you import the resulting XML file, and then edit a host to bind it to the "X MySQL Server HT" host template, when you create the graphs you'll be prompted to fill in a value for the port, as in the following screenshot:
 
-http://sites.google.com/site/bettercactitemplates/Home/create-graphs-input-port.png
+http://mysql-cacti-templates.googlecode.com/svn/data/create-graphs-input-port.png
 
 =Specify a Different Graph Width or Height=
 

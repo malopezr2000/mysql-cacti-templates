@@ -33,16 +33,16 @@ Finally, test one of your hosts like this.  You may need to change some of the e
 
 This graph shows how many connections the server accepted and handled.
 
-http://sites.google.com/site/bettercactitemplates/Home/nginx_accepts_handled.png
+http://mysql-cacti-templates.googlecode.com/svn/data/nginx_accepts_handled.png
 
 = Requests =
 
 This graph shows how many requests the Nginx server received.
 
-http://sites.google.com/site/bettercactitemplates/Home/nginx_requests.png
+http://mysql-cacti-templates.googlecode.com/svn/data/nginx_requests.png
 
 = Scoreboard =
 
 This graph shows how many connections to the Nginx servers are in various states.
 
-http://sites.google.com/site/bettercactitemplates/Home/nginx_scoreboard.png
+http://mysql-cacti-templates.googlecode.com/svn/data/nginx_scoreboard.png
