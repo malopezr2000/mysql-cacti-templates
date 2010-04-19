@@ -8,11 +8,12 @@ VERSION=`head -n 5 Changelog | grep version | head -n 1 | cut -d ' ' -f 3`;
 DISTDIR=better-cacti-templates-$VERSION
 
 if test -d $DISTDIR ; then rm -rf $DISTDIR ; fi
-mkdir -p $DISTDIR/{scripts,templates,tools,definitions}
+mkdir -p $DISTDIR/{scripts,templates,tools,definitions,misc}
 cp -a Changelog COPYING README $DISTDIR
 cp -a tools/*.pl $DISTDIR/tools
 cp -a scripts/*.php $DISTDIR/scripts
 cp -a definitions/*.pl $DISTDIR/definitions
+cp -a misc/*.* $DISTDIR/misc
 
 # Build the template.xml files...
 for file in definitions/*.pl; do
