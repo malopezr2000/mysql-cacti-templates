@@ -8,12 +8,12 @@
     * [MySQLTemplates MySQL Templates]
     * [SSHBasedTemplates SSH-Based Templates]
       * [ApacheTemplates Apache Templates]
+      * [JMXTemplates JMX Templates]
       * [MemcachedTemplates Memcached Templates]
       * [NginxTemplates Nginx Templates]
       * [OpenVzTemplates OpenVZ Templates]
       * [RedisTemplates Redis Templates]
       * [UnixTemplates Unix Templates]
-      * [JMXTemplates JMX Templates]
   * Creating Your Own Templates
     * [AddingGraphs Adding To An Existing Template]
     * [CreatingGraphs Creating Completely New Templates]
