@@ -6,7 +6,7 @@
 
 These templates use ss_get_by_ssh.php to connect to a server and extract statistics from the Redis server with the [http://code.google.com/p/redis/wiki/InfoCommand INFO command].  The templates *do not use SSH*, but connect directly with TCP sockets to gather the information.  It is possible that the configuration or code involved in this functionality will change in the future.  If it does, UpgradingTemplates will have full instructions.
 
-This document should be correct and complete as of version 1.1.7 of the graphs.  Please use the issue tracker or the mailing list to report any errors or omissions.  If you have any sample graphs that are better than those shown, please contribute!
+These graphs were added in version 1.1.7.  This document should be correct and complete as of version 1.1.7.  Please use the issue tracker or the mailing list to report any errors or omissions.  If you have any sample graphs that are better than those shown, please contribute!
 
 = Installation =
 
