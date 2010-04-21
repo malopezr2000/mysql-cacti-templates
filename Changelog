@@ -11,6 +11,7 @@ Changes for templates:
   * Added --mysql_ssl configuration and command-line option (issue 103).
   * Added JMX graphs (--type jmx) (issue 139).
   * Big-integer math printf spec was missing a % character (issue 137).
+  * Partially accepted patches from Artur Kaszuba (more remaining in issue 120).
 
 2010-01-10: version 1.1.6
 
