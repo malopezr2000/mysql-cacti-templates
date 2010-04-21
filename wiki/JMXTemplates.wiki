@@ -5,8 +5,7 @@
 = Overview =
 
 These templates use ss_get_by_ssh.php to connect to a server via SSH and extract
-statistics from the JMX server.  The templates are not yet released, and are
-planned for version 1.1.7 of the templates.
+statistics from the JMX server.  These templates were added in version 1.1.7 of the graphs.
 
 This document should be correct and complete as of version 1.1.7 of the graphs.
 Please use the issue tracker or the mailing list to report any errors or
