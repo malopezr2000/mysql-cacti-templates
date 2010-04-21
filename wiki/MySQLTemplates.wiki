@@ -244,7 +244,7 @@ http://mysql-cacti-templates.googlecode.com/svn/data/MySQL_Handlers_2.png
 
 This graph shows network traffic to and from the MySQL Server, in bytes.
 
-http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_023.png
+http://mysql-cacti-templates.googlecode.com/svn/data/mysql_network_traffic.png
 
 = MySQL Processlist =
 
@@ -275,7 +275,7 @@ When replication is running, there is an AREA of the same size as the replicatio
 
 The graph also shows open temporary tables and retried transactions.
 
-http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_015.png
+http://mysql-cacti-templates.googlecode.com/svn/data/mysql_replication.png
 
 = MySQL Select Types =
 
