@@ -12,5 +12,6 @@ Here's how to create a release:
   # Upload the file.  Set it to Featured, and set the description to `Version XXX`.  Unset Featured on the old file.
   # Update [Changelog].
   # Update the instructions at UpgradingTemplates.
+  # Update each template's wiki page to include any changes and update the version number of the release.
   # Blog about the new release, such as [http://www.xaprb.com/blog/2009/10/25/version-1-1-4-of-improved-cacti-templates-released/ this blog post].
   # Send the release announcement to the mailing list.
