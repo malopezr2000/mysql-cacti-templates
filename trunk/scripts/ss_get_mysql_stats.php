@@ -1129,41 +1129,41 @@ function increment(&$arr, $key, $howmuch) {
 # ============================================================================
 # Multiply two big integers together as accurately as possible with reasonable
 # effort.  This is tested in t/mysql_stats.php and copied, without tests, to
-# ss_get_by_ssh.php.
+# ss_get_by_ssh.php.  $force is for testability.
 # ============================================================================
-function big_multiply ($left, $right) {
-   if ( function_exists("gmp_mul") ) {
+function big_multiply ($left, $right, $force = null) {
+   if ( function_exists("gmp_mul") && (is_null($force) || $force == 'gmp') ) {
       debug(array('gmp_mul', $left, $right));
       return gmp_strval( gmp_mul( $left, $right ));
    }
-   elseif ( function_exists("bcmul") ) {
+   elseif ( function_exists("bcmul") && (is_null($force) || $force == 'bc') ) {
       debug(array('bcmul', $left, $right));
       return bcmul( $left, $right );
    }
-   else {
+   else { # Or $force == 'something else'
       debug(array('sprintf', $left, $right));
-      return sprintf(".0f", $left * $right);
+      return sprintf("%.0f", $left * $right);
    }
 }
 
 # ============================================================================
 # Subtract two big integers as accurately as possible with reasonable effort.
 # This is tested in t/mysql_stats.php and copied, without tests, to
-# ss_get_by_ssh.php.
+# ss_get_by_ssh.php.  $force is for testability.
 # ============================================================================
-function big_sub ($left, $right) {
+function big_sub ($left, $right, $force = null) {
    debug(array($left, $right));
    if ( is_null($left)  ) { $left = 0; }
    if ( is_null($right) ) { $right = 0; }
-   if ( function_exists("gmp_sub") ) {
+   if ( function_exists("gmp_sub") && (is_null($force) || $force == 'gmp')) {
       debug(array('gmp_sub', $left, $right));
       return gmp_strval( gmp_sub( $left, $right ));
    }
-   elseif ( function_exists("bcsub") ) {
+   elseif ( function_exists("bcsub") && (is_null($force) || $force == 'bc')) {
       debug(array('bcsub', $left, $right));
       return bcsub( $left, $right );
    }
-   else {
+   else { # Or $force == 'something else'
       debug(array('to_int', $left, $right));
       return to_int($left - $right);
    }
@@ -1172,20 +1172,20 @@ function big_sub ($left, $right) {
 # ============================================================================
 # Add two big integers together as accurately as possible with reasonable
 # effort.  This is tested in t/mysql_stats.php and copied, without tests, to
-# ss_get_by_ssh.php.
+# ss_get_by_ssh.php.  $force is for testability.
 # ============================================================================
-function big_add ($left, $right) {
+function big_add ($left, $right, $force = null) {
    if ( is_null($left)  ) { $left = 0; }
    if ( is_null($right) ) { $right = 0; }
-   if ( function_exists("gmp_add") ) {
+   if ( function_exists("gmp_add") && (is_null($force) || $force == 'gmp')) {
       debug(array('gmp_add', $left, $right));
       return gmp_strval( gmp_add( $left, $right ));
    }
-   elseif ( function_exists("bcadd") ) {
+   elseif ( function_exists("bcadd") && (is_null($force) || $force == 'bc')) {
       debug(array('bcadd', $left, $right));
       return bcadd( $left, $right );
    }
-   else {
+   else { # Or $force == 'something else'
       debug(array('to_int', $left, $right));
       return to_int($left + $right);
    }
