@@ -203,7 +203,7 @@ General options:
                      desired data after SSHing.  Default is 'localhost' for HTTP
                      stats and --host for memcached stats.
    --type            One of apache, nginx, proc_stat, w, memory, memcached,
-                     diskstats, openvz, redis, jmx (more are TODO)
+                     diskstats, openvz, redis, jmx, mongodb (more are TODO)
    --url             The url, such as /server-status, where server status lives
    --use-ssh         Whether to connect via SSH to gather info (default yes).
    --http-user       The HTTP authentication user
@@ -424,6 +424,26 @@ function ss_get_by_ssh( $options ) {
       'JMX_non_heap_memory_max'          => 'd9',
       'JMX_open_file_descriptors'        => 'da',
       'JMX_max_file_descriptors'         => 'db',
+      # Stuff from mongodb
+      'MONGODB_connected_clients'        => 'dc',
+      'MONGODB_used_resident_memory'     => 'dd',
+      'MONGODB_used_mapped_memory'       => 'de',
+      'MONGODB_used_virtual_memory'      => 'df',
+      'MONGODB_index_accesses'           => 'dg',
+      'MONGODB_index_hits'               => 'dh',
+      'MONGODB_index_misses'             => 'di',
+      'MONGODB_index_resets'             => 'dj',
+      'MONGODB_back_flushes'             => 'dk',
+      'MONGODB_back_total_ms'            => 'dl',
+      'MONGODB_back_average_ms'          => 'dm',
+      'MONGODB_back_last_ms'             => 'dn',
+      'MONGODB_op_inserts'               => 'do',
+      'MONGODB_op_queries'               => 'dp',
+      'MONGODB_op_updates'               => 'dq',
+      'MONGODB_op_deletes'               => 'dr',
+      'MONGODB_op_getmores'              => 'ds',
+      'MONGODB_op_commands'              => 'dt',
+      'MONGODB_slave_lag'                => 'du',
    );
 
    # Prepare and return the output.  The output we have right now is the whole
@@ -1253,6 +1273,75 @@ function jmx_cachefile ( $options ) {
 function jmx_cmdline ( $options ) {
    $port = isset($options['port2']) ? "$options[port2]" : '9012';
    return "ant -Djmx.server.port=$port -e -q -f jmx-monitor.xml";
+}
+
+# ============================================================================
+# Get and parse stats from mongodb on a given port
+# You can test it like this, as root:
+# su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items dc,de,df,dg,dh,di,dj,dk,dl,dm,dn,do,dp,dq,dr,ds,dt,du
+# ============================================================================
+function mongodb_cachefile ( $options ) {
+   $sanitized_host
+       = str_replace(array(":", "/"), array("", "_"), $options['host']);
+   return "${sanitized_host}_" . $options['port2'] . "_mongodb";
+}
+
+function mongodb_cmdline ( $options ) {
+   return "echo \"db._adminCommand({serverStatus:1, repl:2})\" | mongo";
+}
+
+function mongodb_parse ( $options, $output ) {
+   $result = array();
+   $matches = array();
+
+   preg_match('/"current" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_connected_clients"] = $matches[1];
+
+   preg_match('/"resident" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_used_resident_memory"] = intval($matches[1]) * 1024 * 1024;
+   preg_match('/"mapped" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_used_mapped_memory"] = intval($matches[1]) * 1024 * 1024;
+   preg_match('/"virtual" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_used_virtual_memory"] = intval($matches[1]) * 1024 * 1024;
+
+   preg_match('/"accesses" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_index_accesses"] = $matches[1];
+   preg_match('/"hits" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_index_hits"] = $matches[1];
+   preg_match('/"misses" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_index_misses"] = $matches[1];
+   preg_match('/"resets" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_index_resets"] = $matches[1];
+
+   preg_match('/"flushes" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_back_flushes"] = $matches[1];
+   preg_match('/"total_ms" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_back_total_ms"] = $matches[1];
+   preg_match('/"average_ms" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_back_average_ms"] = $matches[1];
+   preg_match('/"last_ms" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_back_last_ms"] = $matches[1];
+
+   preg_match('/"insert" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_op_inserts"] = $matches[1];
+   preg_match('/"query" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_op_queries"] = $matches[1];
+   preg_match('/"update" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_op_updates"] = $matches[1];
+   preg_match('/"delete" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_op_deletes"] = $matches[1];
+   preg_match('/"getmore" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_op_getmores"] = $matches[1];
+   preg_match('/"command" : ([0-9]+)/', $output, $matches);
+   $result["MONGODB_op_commands"] = $matches[1];
+
+   if (preg_match('/"lagSeconds" : ([0-9]+)/', $output, $matches) == 0) {
+     $result["MONGODB_slave_lag"] = -1;
+   } else {
+     $result["MONGODB_slave_lag"] = $matches[1];
+   }
+
+   return $result;
 }
 
 ?>

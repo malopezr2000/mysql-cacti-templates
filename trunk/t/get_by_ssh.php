@@ -369,4 +369,41 @@ is(
    'main(samples/jmx-001.txt)'
 );
 
+is_deeply(
+   mongodb_parse( null, file_get_contents('samples/mongodb-001.txt') ),
+   array(
+      'MONGODB_connected_clients'         => '3',
+      'MONGODB_used_resident_memory'      => '16029581312',
+      'MONGODB_used_mapped_memory'        => '64981303296',
+      'MONGODB_used_virtual_memory'       => '65457356800',
+      'MONGODB_index_accesses'            => '1589814',
+      'MONGODB_index_hits'                => '1589814',
+      'MONGODB_index_misses'              => '0',
+      'MONGODB_index_resets'              => '0',
+      'MONGODB_back_flushes'              => '4883',
+      'MONGODB_back_total_ms'             => '2309034',
+      'MONGODB_back_average_ms'           => '472',
+      'MONGODB_back_last_ms'              => '36',
+      'MONGODB_op_inserts'                => '1584705',
+      'MONGODB_op_queries'                => '145518',
+      'MONGODB_op_updates'                => '2521129',
+      'MONGODB_op_deletes'                => '601',
+      'MONGODB_op_getmores'               => '2268817',
+      'MONGODB_op_commands'               => '17810',
+      'MONGODB_slave_lag'                 => '0',
+   ),
+   'samples/mongodb-001.txt'
+);
+
+is(
+   ss_get_by_ssh( array(
+      'file'    => 'samples/mongodb-001.txt',
+      'type'    => 'mongodb',
+      'host'    => 'localhost',
+      'items'   => 'dc,dd,de,df,dg,dh,di,dj,dk,dl,dm,dn,do,dp,dq,dr,ds,dt,du',
+   )),
+   'dc:3 dd:16029581312 de:64981303296 df:65457356800 dg:1589814 dh:1589814 di:0 dj:0 dk:4883 dl:2309034 dm:472 dn:36 do:1584705 dp:145518 dq:2521129 dr:601 ds:2268817 dt:17810 du:0',
+   'main(samples/mongodb-001.txt)'
+);
+
 ?>
