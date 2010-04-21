@@ -22,7 +22,7 @@
    name   => 'Redis Server',
    hash   => 'hash_02_VER_f3047229cf7d96bb613032d847a29113',
    version => {
-      version => '1.1.6',
+      version => '1.1.7',
       hash    => 'hash_06_VER_0f91ebe15204e0d45977627acaabd138',
    },
    graphs => [
