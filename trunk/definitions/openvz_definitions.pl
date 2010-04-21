@@ -22,7 +22,7 @@
    name   => 'OpenVZ Server',
    hash   => 'hash_02_VER_c17960b3ddc6b00eaacdbcee1f0e4c50',
    version => {
-      version => '1.1.6',
+      version => '1.1.7',
       hash    => 'hash_06_VER_8583b57ebeb95898fca2dbe4bbf74f11',
    },
    graphs => [
