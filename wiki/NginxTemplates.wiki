@@ -6,7 +6,7 @@
 
 These templates use ss_get_by_ssh.php to connect to a server via SSH and extract statistics from the Nginx server running there, by executing the "wget" program with the url "/server-status".  This means you don't need to install any special tools.  Standard Unix command-line tools are all you need.
 
-This document should be correct and complete as of version 1.1.6 of the graphs.  Please use the issue tracker or the mailing list to report any errors or omissions.  If you have any sample graphs that are better than those shown, please contribute!
+This document should be correct and complete as of version 1.1.7 of the graphs.  Please use the issue tracker or the mailing list to report any errors or omissions.  If you have any sample graphs that are better than those shown, please contribute!
 
 = Installation =
 
