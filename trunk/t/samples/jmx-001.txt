@@ -1,11 +1,11 @@
-heapmemoryusage_used: 52685256
-heapmemoryusage_committed: 205979648
-heapmemoryusage_max: 1864171520
-nonheapmemoryusage_used: 55160928
-nonheapmemoryusage_committed: 61603840
-nonheapmemoryusage_max: 318767104
-openfiledescriptorcount: 60
-maxfiledescriptorcount: 1024
+heap_memory_used: 52685256
+heap_memory_committed: 205979648
+heap_memory_max: 1864171520
+non_heap_memory_used: 55160928
+non_heap_memory_committed: 61603840
+non_heap_memory_max: 318767104
+open_file_descriptors: 60
+max_file_descriptors: 1024
 
 BUILD SUCCESSFUL
 Total time: 0 seconds

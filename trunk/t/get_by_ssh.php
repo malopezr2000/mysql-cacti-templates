@@ -344,14 +344,14 @@ is(
 is_deeply(
    jmx_parse( null, file_get_contents('samples/jmx-001.txt') ),
    array(
-      'JMX_heapmemoryusage_used'         => '52685256',
-      'JMX_heapmemoryusage_committed'    => '205979648',
-      'JMX_heapmemoryusage_max'          => '1864171520',
-      'JMX_nonheapmemoryusage_used'      => '55160928',
-      'JMX_nonheapmemoryusage_committed' => '61603840',
-      'JMX_nonheapmemoryusage_max'       => '318767104',
-      'JMX_openfiledescriptorcount'      => '60',
-      'JMX_maxfiledescriptorcount'       => '1024',
+      'JMX_heap_memory_used'          => '52685256',
+      'JMX_heap_memory_committed'     => '205979648',
+      'JMX_heap_memory_max'           => '1864171520',
+      'JMX_non_heap_memory_used'      => '55160928',
+      'JMX_non_heap_memory_committed' => '61603840',
+      'JMX_non_heap_memory_max'       => '318767104',
+      'JMX_open_file_descriptors'     => '60',
+      'JMX_max_file_descriptors'      => '1024',
    ),
    'samples/jmx-001.txt'
 );
