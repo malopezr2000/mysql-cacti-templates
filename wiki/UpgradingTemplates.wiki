@@ -21,6 +21,14 @@ $version = "1.1.4";
 
 Each step in the following list assumes that you have upgraded to the previous version already.
 
+= Version 1.1.7 =
+
+Version 1.1.7 is not yet released.
+
+To upgrade from version 1.1.6, you need to
+
+  * Rebuild all of your InnoDB Log Activity graphs to change unflushed_log to a GAUGE, to fix issue 10.  Follow a similar process as that described in the upgrade instructions for version 1.1.5.
+
 = Version 1.1.6 =
 
 To upgrade from version 1.1.5, you need to copy the new ss_get_mysql_stats.php and ss_get_by_ssh.php files into your Cacti scripts directory.  No graphs or templates were changed, but there are new templates for OpenVZ and new graphs for disk I/O statistics.  If you want these, you need to re-import the templates and update the attached templates for your hosts.
