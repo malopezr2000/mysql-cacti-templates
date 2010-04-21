@@ -31,21 +31,21 @@
          dt         => {
             hash  => 'hash_01_VER_8790c041d8bd2412b6e77642050f2104',
             input => 'Heap Memory Usage',
-            JMX_heapmemoryusage_used => {
+            JMX_heap_memory_used => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_cdc9a9e4dae51dbfe5ec95d0f9445d27'
             },
-            JMX_heapmemoryusage_committed => {
+            JMX_heap_memory_committed => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_36d3606b177b7c7c409a6c2917d40625'
             },
-            JMX_heapmemoryusage_max => {
+            JMX_heap_memory_max => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_2451b83739058d8c05a861c0c1d86a7a'
             },
          },
          items => [
-            {  item   => 'JMX_heapmemoryusage_max',
+            {  item   => 'JMX_heap_memory_max',
                color  => '4F7774',
                task   => 'hash_02_VER_24f6301c90cb2721de85e4481bcd08af',
                type   => 'AREA',
@@ -56,7 +56,7 @@
                   'hash_10_VER_8958122127b149f02da28f4d4b7f62ba'
                ],
             },
-            {  item   => 'JMX_heapmemoryusage_committed',
+            {  item   => 'JMX_heap_memory_committed',
                color  => 'FFDB87',
                task   => 'hash_02_VER_c3e7c60bd6bf464e92792ec335e801eb',
                type   => 'AREA',
@@ -67,7 +67,7 @@
                   'hash_10_VER_4bb13c2d64d6810e91b54d50c2f68860'
                ],
             },
-            {  item   => 'JMX_heapmemoryusage_used',
+            {  item   => 'JMX_heap_memory_used',
                color  => '850707',
                task   => 'hash_02_VER_64ec5ed91e2661c3dfccddac9b321b10',
                type   => 'AREA',
@@ -86,21 +86,21 @@
          dt         => {
             hash  => 'hash_01_VER_cceafeecdbfd3870b656ca90f363c6ca',
             input => 'Non-Heap Memory Usage',
-            JMX_nonheapmemoryusage_used => {
+            JMX_non_heap_memory_used => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_fc3fa2aa1288524d6e7510a83cc6b2f3'
             },
-            JMX_nonheapmemoryusage_committed => {
+            JMX_non_heap_memory_committed => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_1e8980d9a0b58626f5f5a7e176492f10'
             },
-            JMX_nonheapmemoryusage_max => {
+            JMX_non_heap_memory_max => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_52895f8b3ba59a1b4c27782273ea45f9'
             },
          },
          items => [
-            {  item   => 'JMX_nonheapmemoryusage_max',
+            {  item   => 'JMX_non_heap_memory_max',
                color  => '4F7774',
                task   => 'hash_02_VER_ddbfedd1335e728a3734c6601644aa27',
                type   => 'AREA',
@@ -111,7 +111,7 @@
                   'hash_10_VER_932b9cb12e491dfd507f30c2ffc4a57e'
                ],
             },
-            {  item   => 'JMX_nonheapmemoryusage_committed',
+            {  item   => 'JMX_non_heap_memory_committed',
                color  => 'FFDB87',
                task   => 'hash_02_VER_f5665100f5736ca4e6734c363289c2f3',
                type   => 'AREA',
@@ -122,7 +122,7 @@
                   'hash_10_VER_3088105383b953a2c763a3a1763122c5'
                ],
             },
-            {  item   => 'JMX_nonheapmemoryusage_used',
+            {  item   => 'JMX_non_heap_memory_used',
                color  => '850707',
                task   => 'hash_02_VER_35aae66d1e8c7f56d545c5fa118cb530',
                type   => 'AREA',
@@ -141,17 +141,17 @@
          dt         => {
             hash  => 'hash_01_VER_22c04338d3e02d5d4fd0c34dc3e66708',
             input => 'File Descriptor',
-            JMX_openfiledescriptorcount => {
+            JMX_open_file_descriptors => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_3e67b36ea631297157c891d96175a4c4'
             },
-            JMX_maxfiledescriptorcount => {
+            JMX_max_file_descriptors => {
                data_source_type_id => '1',
                hash => 'hash_08_VER_4c272fb8d5bb17e6991d4ead9c17b369'
             },
          },
          items => [
-            {  item   => 'JMX_maxfiledescriptorcount',
+            {  item   => 'JMX_max_file_descriptors',
                color  => '4F7774',
                task   => 'hash_02_VER_90e212ffb6aec7d09432f9517853faac',
                type   => 'AREA',
@@ -162,7 +162,7 @@
                   'hash_10_VER_1baf374810a6affd2284de35480a2275'
                ],
             },
-            {  item   => 'JMX_openfiledescriptorcount',
+            {  item   => 'JMX_open_file_descriptors',
                color  => '850707',
                task   => 'hash_02_VER_710fbdd16e9d25109119a355e346e2ab',
                type   => 'AREA',
@@ -190,11 +190,11 @@
             },
          ],
          outputs => {
-            JMX_heapmemoryusage_used =>
+            JMX_heap_memory_used =>
                'hash_07_VER_d3ff23086e6d53adf935de14b04f32bc',
-            JMX_heapmemoryusage_committed =>
+            JMX_heap_memory_committed =>
                'hash_07_VER_1c10f8ce987251079bba3a545d706892',
-            JMX_heapmemoryusage_max =>
+            JMX_heap_memory_max =>
                'hash_07_VER_594d7a7da75cc27f35168c02cc62f3e2',
          },
       },
@@ -211,11 +211,11 @@
             },
          ],
          outputs => {
-            JMX_nonheapmemoryusage_used =>
+            JMX_non_heap_memory_used =>
                'hash_07_VER_e7572a60d80d702f3f20432cfc421f9e',
-            JMX_nonheapmemoryusage_committed =>
+            JMX_non_heap_memory_committed =>
                'hash_07_VER_a18d9e71f8b894c8a34efcb4e0f7e5d5',
-            JMX_nonheapmemoryusage_max =>
+            JMX_non_heap_memory_max =>
                'hash_07_VER_d45e0587edc75f776db6b32720ada6fb',
          },
       },
@@ -232,9 +232,9 @@
             },
          ],
          outputs => {
-            JMX_openfiledescriptorcount =>
+            JMX_open_file_descriptors =>
                'hash_07_VER_c1c38e5ec6cb89b5cc3aa3d48f8e49b7',
-            JMX_maxfiledescriptorcount =>
+            JMX_max_file_descriptors =>
                'hash_07_VER_d8f96bdd0f3950c50ff9776789274c81',
          },
       },

@@ -416,14 +416,14 @@ function ss_get_by_ssh( $options ) {
       'REDIS_total_connections_received' => 'd2',
       'REDIS_total_commands_processed'   => 'd3',
       # Stuff from jmx
-      'JMX_heapmemoryusage_used'        => 'd4',
-      'JMX_heapmemoryusage_committed'   => 'd5',
-      'JMX_heapmemoryusage_max'         => 'd6',
-      'JMX_nonheapmemoryusage_used'     => 'd7',
-      'JMX_nonheapmemoryusage_committed'    => 'd8',
-      'JMX_nonheapmemoryusage_max'      => 'd9',
-      'JMX_openfiledescriptorcount'     => 'da',
-      'JMX_maxfiledescriptorcount'      => 'db',
+      'JMX_heap_memory_used'             => 'd4',
+      'JMX_heap_memory_committed'        => 'd5',
+      'JMX_heap_memory_max'              => 'd6',
+      'JMX_non_heap_memory_used'         => 'd7',
+      'JMX_non_heap_memory_committed'    => 'd8',
+      'JMX_non_heap_memory_max'          => 'd9',
+      'JMX_open_file_descriptors'        => 'da',
+      'JMX_max_file_descriptors'         => 'db',
    );
 
    # Prepare and return the output.  The output we have right now is the whole
@@ -1224,14 +1224,14 @@ function redis_get ( $options ) {
 function jmx_parse ( $options, $output ) {
    $result = array();
    $wanted = array(
-      'heapmemoryusage_used',
-      'heapmemoryusage_committed',
-      'heapmemoryusage_max',
-      'nonheapmemoryusage_used',
-      'nonheapmemoryusage_committed',
-      'nonheapmemoryusage_max',
-      'openfiledescriptorcount',
-      'maxfiledescriptorcount',
+      'heap_memory_used',
+      'heap_memory_committed',
+      'heap_memory_max',
+      'non_heap_memory_used',
+      'non_heap_memory_committed',
+      'non_heap_memory_max',
+      'open_file_descriptors',
+      'max_file_descriptors',
    );
    foreach ( explode("\n", $output) as $line ) {
       $words = explode(':', $line);

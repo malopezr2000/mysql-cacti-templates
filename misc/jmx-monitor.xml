@@ -47,14 +47,14 @@ limitations under the License.
 		    attribute="MaxFileDescriptorCount"
 		    resultproperty="MaxFileDescriptorCount"
 		    />
-	<echo>heapmemoryusage_used: ${HeapMemoryUsage.used}
-heapmemoryusage_committed: ${HeapMemoryUsage.committed}
-heapmemoryusage_max: ${HeapMemoryUsage.max}
-nonheapmemoryusage_used: ${NonHeapMemoryUsage.used}
-nonheapmemoryusage_committed: ${NonHeapMemoryUsage.committed}
-nonheapmemoryusage_max: ${NonHeapMemoryUsage.max}
-openfiledescriptorcount: ${OpenFileDescriptorCount}
-maxfiledescriptorcount: ${MaxFileDescriptorCount}
+	<echo>heap_memory_used: ${HeapMemoryUsage.used}
+heap_memory_committed: ${HeapMemoryUsage.committed}
+heap_memory_max: ${HeapMemoryUsage.max}
+non_heap_memory_used: ${NonHeapMemoryUsage.used}
+non_heap_memory_committed: ${NonHeapMemoryUsage.committed}
+non_heap_memory_max: ${NonHeapMemoryUsage.max}
+open_file_descriptors: ${OpenFileDescriptorCount}
+max_file_descriptors: ${MaxFileDescriptorCount}
 </echo>
     </target>
  
