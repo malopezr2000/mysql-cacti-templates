@@ -114,6 +114,10 @@ There is one final detail, which is necessary because this is a rather advanced 
 
 Now you can specify `--device sda1` or similar, and the code can access that through `$options['device']`, as you've seen in the examples above.
 
+== Adding a Custom Getter Function ==
+
+ss_get_by_ssh.php assumes you're going to write an XXX_cmdline() function that will return the commandline to be executed via SSH.  However, it's actually possible to bypass this functionality and provide your own code to execute directly, instead of fetching data over SSH.  To do this, create a function called XXX_get() that returns the data directly.  You can see an example of this in r424, where sockets are used to get Redis status directly instead of via SSH.
+
 = Specifying a Short-Name Mapping =
 
 You already created long, descriptive names for the data values you're going to graph.  Unfortunately, due to another Cacti limitation, these names can't be used safely everywhere.  In most Cacti templates, the script returns a key:value string to Cacti, like this:
