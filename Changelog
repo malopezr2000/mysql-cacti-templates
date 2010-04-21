@@ -9,7 +9,7 @@ Changes for templates:
   * Added Redis graphs (issue 90).
   * Added --openvz_cmd configuration and command-line option (issue 130).
   * Added --mysql_ssl configuration and command-line option (issue 103).
-  * Added JMX graphs (--type jmx) (issue 139)
+  * Added JMX graphs (--type jmx) (issue 139).
 
 2010-01-10: version 1.1.6
 
