@@ -23,11 +23,12 @@ Each step in the following list assumes that you have upgraded to the previous v
 
 = Version 1.1.7 =
 
-Version 1.1.7 is not yet released.
-
 To upgrade from version 1.1.6, you need to
 
-  * Rebuild all of your InnoDB Log Activity graphs to change unflushed_log to a GAUGE, to fix issue 10.  Follow a similar process as that described in the upgrade instructions for version 1.1.5.
+  * Copy the new ss_get_mysql_stats.php and ss_get_by_ssh.php files into your Cacti scripts directory.  There were changes to both of them.
+  * Re-import the new versions of the templates.
+  * Rebuild all of your InnoDB Log Activity RRD files to change the unflushed_log data item to a GAUGE, to fix issue 10.  Follow a similar process as that described in the upgrade instructions for version 1.1.5.
+  * Optionally add new graphs for MySQL, by refreshing the host template for all MySQL servers.
 
 = Version 1.1.6 =
 
