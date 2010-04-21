@@ -28,9 +28,21 @@ is(
 );
 
 is(
+   big_sub('74900191315', '1170664159', 'something else'),
+   '73729527156',
+   'big_sub 1170664159 74900191315 forced'
+);
+
+is(
    big_multiply('74900191315', '1170664159'),
    '87682969474713583616',
    'big_multiply 74900191315 and 1170664159'
+);
+
+is(
+   big_multiply('74900191315', '1170664159', 'something else'),
+   '87682969474713583616',
+   'big_multiply 74900191315 and 1170664159 forced'
 );
 
 is_deeply(
