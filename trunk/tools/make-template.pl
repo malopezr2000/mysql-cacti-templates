@@ -673,8 +673,8 @@ my %graph_types = (
    LEGEND => 10,
 );
 
-my @graph_texts = qw(UNUSED Cur: Avg: Max:);
-my @consolidations = qw(1 4 1 3);
+my @graph_texts = qw(UNUSED Cur: Avg: Max: Min:);
+my @consolidations = qw(1 4 1 3 2);
 
 # The properties of a graph.
 my @graph_props = qw( title image_format_id height width auto_scale
