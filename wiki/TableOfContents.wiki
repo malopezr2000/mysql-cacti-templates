@@ -10,6 +10,7 @@
       * [ApacheTemplates Apache Templates]
       * [JMXTemplates JMX Templates]
       * [MemcachedTemplates Memcached Templates]
+      * [MongoDBTemplates MongoDB Templates]
       * [NginxTemplates Nginx Templates]
       * [OpenVzTemplates OpenVZ Templates]
       * [RedisTemplates Redis Templates]
