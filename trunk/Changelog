@@ -1,8 +1,11 @@
 Changes for templates:
-2010-05-04: 
+2010-06-07: 
 
   * Added graphs for MongoDB (issue 136).
   * Added a minimum option to the template construction logic.
+  * Added memtotal for Memory (issue 146)
+  * Don't panic if some datas in DT but not in GT, for example, you need
+    create a threshold on the DT.
 
 2010-04-20: version 1.1.7
 

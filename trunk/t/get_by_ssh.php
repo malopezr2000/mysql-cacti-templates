@@ -60,7 +60,8 @@ is_deeply(
       'STAT_membuffer' => '1531904',
       'STAT_memshared' => '0',
       'STAT_memfree'   => '17928192',
-      'STAT_memused'   => '21389312'
+      'STAT_memused'   => '21389312',
+      'STAT_memtotal'  => '62955520',
    ),
    'samples/free-001.txt'
 );
@@ -72,7 +73,8 @@ is_deeply(
       'STAT_membuffer' => '131469312',
       'STAT_memshared' => '0',
       'STAT_memfree'   => '189325312',
-      'STAT_memused'   => '7568291328'
+      'STAT_memused'   => '7568291328',
+      'STAT_memtotal'  => '8977270272',
    ),
    'samples/free-002.txt (issue 102)'
 );

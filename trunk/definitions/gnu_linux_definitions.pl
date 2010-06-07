@@ -322,6 +322,10 @@
                data_source_type_id => '1',
                hash => 'hash_08_VER_ee2349d8f7b88a3407a6cd91d93d925c'
             },
+	    STAT_memtotal  => {
+               data_source_type_id => '1',
+               hash => 'hash_08_VER_b0f77cad230de2e6f778b1579ab13211'
+	    },
          },
          items => [
             {  item   => 'STAT_memused',
@@ -679,6 +683,7 @@
             STAT_membuffer => 'hash_07_VER_4941a2e704df750ed26816635e2b60e0',
             STAT_memshared => 'hash_07_VER_fac0993a72e5873c61ad51c864e23a3f',
             STAT_memfree   => 'hash_07_VER_23347c2c0ca8abf1b054324106a4b5b6',
+            STAT_memtotal  => 'hash_07_VER_a2ae90873473fc4b43f23734219f3620',
          },
       },
    },
