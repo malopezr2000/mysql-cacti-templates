@@ -333,6 +333,7 @@ function ss_get_by_ssh( $options ) {
       'STAT_memshared'         => 'aw',
       'STAT_memfree'           => 'ax',
       'STAT_memused'           => 'ay',
+      'STAT_memtotal'          => 'dv',
       # Stuff from Nginx
       'NGINX_active_connections' => 'az',
       'NGINX_server_accepts'     => 'b0',
@@ -444,6 +445,7 @@ function ss_get_by_ssh( $options ) {
       'MONGODB_op_getmores'              => 'ds',
       'MONGODB_op_commands'              => 'dt',
       'MONGODB_slave_lag'                => 'du',
+      # 'dv' used by STAT_memtotal
    );
 
    # Prepare and return the output.  The output we have right now is the whole
@@ -801,6 +803,7 @@ function memory_parse ( $options, $output ) {
       'STAT_memshared' => null,
       'STAT_memfree'   => null,
       'STAT_memused'   => null,
+      'STAT_memtotal'  => null,
    );
 
    foreach ( explode("\n", $output) as $line ) {
@@ -811,6 +814,7 @@ function memory_parse ( $options, $output ) {
             $result['STAT_membuffer'] = $words[5];
             $result['STAT_memshared'] = $words[4];
             $result['STAT_memfree']   = $words[3];
+            $result['STAT_memtotal']  = $words[1];
             $result['STAT_memused']   = sprintf('%.0f',
                $words[2] - $words[4] - $words[5] - $words[6]);
          }

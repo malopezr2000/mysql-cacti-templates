@@ -847,7 +847,7 @@ if ( @unused_php_keys && $opts{lint_check} ) {
    warn "Warning: the template doesn't use some keys defined in the script file: "
       . join(',', @unused_php_keys), "\n";
 }
-if ( @key_not_used_in_graph || @key_not_in_dt || @key_not_in_script ) {
+if ( @key_not_in_dt || @key_not_in_script ) {
    print STDERR "Keys in GT not in DT: " . join(',', @key_not_in_dt), "\n";
    print STDERR "Keys in DT not in DS: " . join(',', @key_not_in_script), "\n";
    print STDERR "Keys in DT not in GT: " . join(',', @key_not_used_in_graph), "\n";
