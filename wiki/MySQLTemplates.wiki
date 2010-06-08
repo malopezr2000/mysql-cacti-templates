@@ -131,6 +131,16 @@ http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_005.png
 
 This graph shows how many lock structures InnoDB has internally.  This should correlate roughly to the number of row locks transactions are currently holding, and might be useful to help diagnose increased lock contention.  There is no hard rule about what's a good or bad number of locks, but in case many transactions are waiting for locks, obviously fewer is better.
 
+The data comes from lines in SHOW INNODB STATUS such as the following:
+
+{{{
+         # 23 lock struct(s), heap size 3024, undo log entries 27
+         # LOCK WAIT 12 lock struct(s), heap size 3024, undo log entries 5
+         # LOCK WAIT 2 lock struct(s), heap size 368
+}}}
+
+It is the sum of all of the `N lock struct(s)` values.
+
 http://mysql-cacti-templates.googlecode.com/svn/data/InnoDB_Lock_Structures.png
 
 = InnoDB Log Activity =
