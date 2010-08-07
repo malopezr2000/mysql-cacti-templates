@@ -96,12 +96,12 @@ I should now be ready to use the PHP script to connect to this server over SSH. 
 
 {{{
 debian:~# cp mysql-cacti-templates/scripts/ss_get_by_ssh.php /usr/share/cacti/site/scripts/
-debian:~# cat > /usr/share/cacti/site/scripts/ss_get_by_ssh.php.cnf <<EOF
+debian:~# cat > /usr/share/cacti/site/scripts/ss_get_by_ssh.php.cnf
 <?php
-\$ssh_user   = 'cacti';
-\$ssh_iden   = '-i /etc/cacti/id_rsa';
+$ssh_user   = 'cacti';
+$ssh_iden   = '-i /etc/cacti/id_rsa';
 ?>
-EOF
+CTRL-D
 }}}
 
 Note: If you're not sure what this is: 
