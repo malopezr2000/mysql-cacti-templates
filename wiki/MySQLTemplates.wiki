@@ -45,6 +45,7 @@ The suggested user privileges mentioned above are sufficient for the common case
   * `SHOW /*!50000 ENGINE*/ INNODB STATUS`
     * This query requires the SUPER privilege.  It is required for all of the InnoDB graphs.
     * You can disable this query by editing the $chk_options array in the configuration.
+    * In MySQL 5.1.24 and greater, the required privilege is PROCESS, not SUPER.  See [http://bugs.mysql.com/bug.php?id=32710 MySQL bug 32710].
 
 If you disable significant portions of the functionality, such as the InnoDB graphs, then you might want to edit the Host Template to remove unwanted graphs.
 
