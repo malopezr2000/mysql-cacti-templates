@@ -195,6 +195,29 @@ is_deeply(
 );
 
 is_deeply(
+   apache_parse( null, file_get_contents('samples/apache-002.txt') ),
+   array(
+      'Requests'               => '368',
+      'Bytes_sent'             => 1151 * 1024,
+      'Idle_workers'           => '19',
+      'Busy_workers'           => '1',
+      'CPU_Load'               => '.0284617',
+      'Waiting_for_connection' => '19',
+      'Starting_up'            => 0,
+      'Reading_request'        => 0,
+      'Sending_reply'          => '1',
+      'Keepalive'              => 0,
+      'DNS_lookup'             => 0,
+      'Closing_connection'     => 0,
+      'Logging'                => 0,
+      'Gracefully_finishing'   => 0,
+      'Idle_cleanup'           => 0,
+      'Open_slot'              => '236',
+   ),
+   'samples/apache-001.txt'
+);
+
+is_deeply(
    diskstats_parse( array('device' => 'hda1'), file_get_contents('samples/diskstats-001.txt') ),
    array(
       'DISK_reads'              => '12043',
