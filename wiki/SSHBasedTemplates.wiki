@@ -15,7 +15,6 @@ The high-level process is as follows:
 After importing the desired template, which is covered in the template-specific documentation, the next thing to do is set up SSH keys for the poller process to use.  To do this, I need to know what user the Cacti poller runs as.  I can look in the cron job that runs the poller:
 
 {{{
-www-data@debian:~$ logout
 debian:~# grep -r cacti /etc/cron*
 /etc/cron.d/cacti:*/5 * * * * www-data php /usr/share/cacti/site/poller.php >/dev/null 2>/var/log/cacti/poller-error.log
 }}}
@@ -103,10 +102,6 @@ $ssh_iden   = '-i /etc/cacti/id_rsa';
 ?>
 CTRL-D
 }}}
-
-Note: If you're not sure what this is: 
-`$status_url    = '/server-status';`
-Check out [http://httpd.apache.org/docs/2.2/mod/mod_status.html mod_status].
 
 If you need a more complex configuration setup, such as connecting to a different SSH port on different servers, use the instructions at [CustomizingTemplates#Accept_Input_in_Each_Data_Source].
 
