@@ -16,6 +16,13 @@ Once the [SSHBasedTemplates SSH setup] is working, test one of your hosts like t
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items b6,b7'
 }}}
 
+you must install `nc` on the memcache server, and on Debian/Ubuntu, you need install `netcat-traditional` package, and switch `nc` to `/bin/nc.traditional` with following command (`netcat-openbsd` does not work)
+
+{{{
+# update-alternatives --config nc
+}}}
+
+
 = Additions and Evictions =
 
 This graph shows how many items were added and evicted.
