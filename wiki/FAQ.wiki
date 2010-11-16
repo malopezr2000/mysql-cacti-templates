@@ -20,6 +20,10 @@ Q. The output is truncated when I use Spine.  Why?
 
   # A. This is a Cacti bug (see Issue 2).  Use cmd.php for now.
 
+Q. When I run the PHP script on the command line, there is an extra blank line that makes the Cacti poller fail.  Where does the extra newline come from?
+
+  # A. Probably from some whitespace in your configuration file, before or after the PHP tags.  See the configuration file section on InstallingTemplates.
+
 Q. I get a blank page when I try to import the templates.  Why?
 
   # A. Check your webserver log.  PHP might have run out of memory.  If you see something like "Allowed memory size of 8388608 bytes exhausted (tried to allocate 10 bytes)" then you should increase memory_limit in your php.ini file and restart the webserver.  Check that you've changed the correct php.ini file.  If the problem persists, you might be changing the wrong one or doing it wrong.  Some users have reported that they need to add `ini_set('memory_limit', '64M');` to the top of include/global.php.
