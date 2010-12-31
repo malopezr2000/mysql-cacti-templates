@@ -517,4 +517,4 @@ If you don't define these, built-in defaults are used.  They're kept in the tool
 Here are some suggestions for meaningful, good-quality graphs.
 
   # Don't mix things with different units onto a single graph.  Just because some values are generally about the same kind of thing doesn't mean they belong together on a graph!  For example, if you have data about the number of disk reads performed, and data about the number of bytes read -- don't mix them.  One has a unit of bytes, and the other has a unit of reads.  If you graph them together they'll scale and skew badly.
-  # Pick colors carefully.  Again, I prefer to use http://www.colourlover.com/palettes/top.
+  # Pick colors carefully.  Again, I prefer to use http://www.colourlovers.com/palettes/top.
