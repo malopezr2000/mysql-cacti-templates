@@ -479,6 +479,7 @@ function ss_get_mysql_stats( $options ) {
             $key2 = sprintf("Query_time_tot_%02d",  $i);
             $status[$key1] = $row['count'];
             $status[$key2] = $row['time'];
+            $i++;
          }
       }
       else {
