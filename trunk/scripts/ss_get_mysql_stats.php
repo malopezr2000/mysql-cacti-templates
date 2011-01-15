@@ -49,10 +49,11 @@ $heartbeat  = '';      # db.tbl in case you use mk-heartbeat from Maatkit.
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300;     # Adjust to match your polling interval.
 $chk_options = array (
-   'innodb' => true,    # Do you want to check InnoDB statistics?
-   'master' => true,    # Do you want to check binary logging?
-   'slave'  => true,    # Do you want to check slave status?
-   'procs'  => true,    # Do you want to check SHOW PROCESSLIST?
+   'innodb'  => true,    # Do you want to check InnoDB statistics?
+   'master'  => true,    # Do you want to check binary logging?
+   'slave'   => true,    # Do you want to check slave status?
+   'procs'   => true,    # Do you want to check SHOW PROCESSLIST?
+   'get_qrt' => true,   # Get query response times from Percona Server?
 );
 
 $use_ss    = FALSE; # Whether to use the script server or not
@@ -462,6 +463,22 @@ function ss_get_mysql_stats( $options ) {
       $istatus_text = $result[0]['Status'];
       $istatus_vals = get_innodb_array($istatus_text);
 
+      # Get response time histogram from Percona Server if enabled.
+      if ( isset($options['enable_query_response_time_stats']) 
+           &&   ($options['enable_query_response_time_stats']))
+      {
+         $i = 0;
+         $result = run_query(
+            "SELECT * FROM INFORMATION_SCHEMA.QUERY_RESPONSE_TIME", $conn);
+         foreach ( $result as $row ) {
+            $key = sprintf("Query_time_hist_%2d", $i++);
+            $status[$key] = $row[2];
+            if ( $i == 15 ) {
+               break;
+            }
+         }
+      }
+
       # Override values from InnoDB parsing with values from SHOW STATUS,
       # because InnoDB status might not have everything and the SHOW STATUS is
       # to be preferred where possible.
@@ -693,6 +710,20 @@ function ss_get_mysql_stats( $options ) {
       'key_buffer_size'         => 'ei',
       'Innodb_row_lock_time'    => 'ej',
       'Innodb_row_lock_waits'   => 'ek',
+      'Query_time_hist_00'      => 'el',
+      'Query_time_hist_01'      => 'em',
+      'Query_time_hist_02'      => 'en',
+      'Query_time_hist_03'      => 'eo',
+      'Query_time_hist_04'      => 'ep',
+      'Query_time_hist_05'      => 'eq',
+      'Query_time_hist_06'      => 'er',
+      'Query_time_hist_07'      => 'es',
+      'Query_time_hist_08'      => 'et',
+      'Query_time_hist_09'      => 'eu',
+      'Query_time_hist_10'      => 'ev',
+      'Query_time_hist_11'      => 'ew',
+      'Query_time_hist_12'      => 'ex',
+      'Query_time_hist_13'      => 'ey',
    );
 
    # Return the output.
