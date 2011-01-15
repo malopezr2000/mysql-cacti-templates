@@ -31,18 +31,20 @@ is_deeply(
       'DISK_reads'              => '12043',
       'DISK_reads_merged'       => '387',
       'DISK_sectors_read'       => '300113',
-      'DISK_time_spent_reading' => '6.472',
+      'DISK_time_spent_reading' => '6472',
       'DISK_writes'             => '12737',
       'DISK_writes_merged'      => '21340',
       'DISK_sectors_written'    => '272616',
-      'DISK_time_spent_writing' => '22.36',
+      'DISK_time_spent_writing' => '22360',
       'DISK_io_ops_in_progress' => '0',
-      'DISK_io_time'            => '12.368',
-      'DISK_io_time_weighted'   => '28.832'
+      'DISK_io_time'            => '12368',
+      'DISK_io_time_weighted'   => '28832'
    ),
    'samples/diskstats-001.txt'
 );
 }}}
+
+Make sure that you plan to output integers, not floating-point numbers, for counters that will increase as time passes.  Later on you'll find that floating-point numbers cannot be stored into COUNTER and DERIVE values in RRD files.
 
 Once you have the test written, execute the test file and ensure the test fails!  If it doesn't fail, you have no reliable indicator that a passing test really means success:
 
@@ -381,7 +383,7 @@ That's two items.  Each one basically says "graph this, and here's the type and 
   * The value 2 means a COUNTER (increasing, with overflow checks).
   * The value 3 means DERIVE (no overflow checks).  Prefer DERIVE with a minimum value of 0 over COUNTER (see issue 41).
 
-Generally, I use DERIVE or GAUGE.  Anything that's a steadily increasing counter is a DERIVE, as in the example above.
+Generally, I use DERIVE or GAUGE.  Anything that's a steadily increasing counter is a DERIVE, as in the example above.  Remember that DERIVE (and COUNTER) cannot accept floating-point numbers, so make sure that the data is converted to integers somehow.
 
 Here's the next section I've stripped out of the code sample above.  This one contains the items that will appear on the graph itself:
 
