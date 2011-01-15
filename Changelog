@@ -2,6 +2,7 @@ Changes for templates:
 
 Unreleased:
 
+  * The url and port were reversed in the Nginx commandline (issue 149).
   * Added $nc_cmd to ss_get_by_ssh.php (issue 154, issue 152).
   * InnoDB Transactions and other graphs showed NaN instead of 0 (issue 159).
   * Added graphs for Percona Server response-time distribution (issue 158).
