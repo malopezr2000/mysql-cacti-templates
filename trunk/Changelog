@@ -2,6 +2,7 @@ Changes for templates:
 
 Unreleased:
 
+  * InnoDB Transactions and other graphs showed NaN instead of 0 (issue 159).
   * Added graphs for Percona Server response-time distribution (issue 158).
   * Added graphs for MongoDB (issue 136).
   * Added a minimum option to the template construction logic (issue 169).
