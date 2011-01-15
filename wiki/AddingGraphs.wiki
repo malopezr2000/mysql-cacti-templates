@@ -5,7 +5,7 @@ This document shows you how to add graphs to an existing template.  Much of the 
 Here's what to do:
 
   # Make sure there is an open issue report, so the work is identified and tracked.
-  # Do whatever's necessary to return the data items from the script.
+  # Do whatever's necessary to return the data items from the script (usually as integers, not floats, unless you're using GAUGE).
   # Add the data items to the magic array.
   # Write tests as appropriate.
   # Ensure all existing tests still pass.
