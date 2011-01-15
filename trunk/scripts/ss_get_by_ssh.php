@@ -968,7 +968,7 @@ function nginx_cmdline ( $options ) {
    $pass = isset($options['http-password']) ? $options['http-password'] : $http_pass;
    $port = isset($options['port2']) ? ":$options[port2]" : '';
    $auth = ($user ? "--http-user=$user" : '') . ' ' . ($pass ? "--http-password=$pass" : '');
-   return "wget $auth -U Cacti/1.0 -q -O - -T 5 \"http://$srv$url$url?auto\"";
+   return "wget $auth -U Cacti/1.0 -q -O - -T 5 \"http://$srv$port$url?auto\"";
 }
 
 function nginx_parse ( $options, $output ) {
