@@ -464,19 +464,25 @@ function ss_get_mysql_stats( $options ) {
       $istatus_vals = get_innodb_array($istatus_text);
 
       # Get response time histogram from Percona Server if enabled.
-      if ( isset($options['enable_query_response_time_stats']) 
-           &&   ($options['enable_query_response_time_stats']))
+      if ( isset($status['enable_query_response_time_stats']) 
+           &&   ($status['enable_query_response_time_stats']))
       {
+         debug('Getting query time histogram');
          $i = 0;
          $result = run_query(
             "SELECT * FROM INFORMATION_SCHEMA.QUERY_RESPONSE_TIME", $conn);
          foreach ( $result as $row ) {
-            $key = sprintf("Query_time_hist_%2d", $i++);
-            $status[$key] = $row[2];
-            if ( $i == 15 ) {
+            if ( $row['time'] == "TOO LONG" ) {
                break;
             }
+            $key1 = sprintf("Query_time_hist_%02d", $i);
+            $key2 = sprintf("Query_time_tot_%02d",  $i);
+            $status[$key1] = $row['count'];
+            $status[$key2] = $row['time'];
          }
+      }
+      else {
+         debug('Not getting time histogram because it is not enabled');
       }
 
       # Override values from InnoDB parsing with values from SHOW STATUS,
@@ -724,6 +730,20 @@ function ss_get_mysql_stats( $options ) {
       'Query_time_hist_11'      => 'ew',
       'Query_time_hist_12'      => 'ex',
       'Query_time_hist_13'      => 'ey',
+      'Query_time_total_00'     => 'ez',
+      'Query_time_total_01'     => 'fa',
+      'Query_time_total_02'     => 'fb',
+      'Query_time_total_03'     => 'fc',
+      'Query_time_total_04'     => 'fd',
+      'Query_time_total_05'     => 'fe',
+      'Query_time_total_06'     => 'ff',
+      'Query_time_total_07'     => 'fg',
+      'Query_time_total_08'     => 'fh',
+      'Query_time_total_09'     => 'fi',
+      'Query_time_total_10'     => 'fj',
+      'Query_time_total_11'     => 'fk',
+      'Query_time_total_12'     => 'fl',
+      'Query_time_total_13'     => 'fm',
    );
 
    # Return the output.
