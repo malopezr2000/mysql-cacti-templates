@@ -321,17 +321,17 @@ function ss_get_mysql_stats( $options ) {
    # Set up variables.
    $status = array( # Holds the result of SHOW STATUS, SHOW INNODB STATUS, etc
       # Define some indexes so they don't cause errors with += operations.
-      'relay_log_space'       => null,
-      'binary_log_space'      => null,
-      'current_transactions'  => null,
-      'locked_transactions'   => null,
-      'active_transactions'   => null,
-      'innodb_locked_tables'  => null,
-      'innodb_tables_in_use'  => null,
-      'innodb_lock_structs'   => null,
-      'innodb_lock_wait_secs' => null,
-      'innodb_sem_waits'      => null,
-      'innodb_sem_wait_time_ms'=> null,
+      'relay_log_space'          => null,
+      'binary_log_space'         => null,
+      'current_transactions'     => 0,
+      'locked_transactions'      => 0,
+      'active_transactions'      => 0,
+      'innodb_locked_tables'     => 0,
+      'innodb_tables_in_use'     => 0,
+      'innodb_lock_structs'      => 0,
+      'innodb_lock_wait_secs'    => 0,
+      'innodb_sem_waits'         => 0,
+      'innodb_sem_wait_time_ms'  => 0,
       # Values for the 'state' column from SHOW PROCESSLIST (converted to
       # lowercase, with spaces replaced by underscores)
       'State_closing_tables'       => null,
