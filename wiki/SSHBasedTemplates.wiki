@@ -75,7 +75,7 @@ Adding user `cacti' ...
 Once the user is created, I'm ready to copy the SSH key into its home directory:
 
 {{{
-debian:~# ssh-copy-id -i /etc/cacti/id_rsa cacti@192.168.1.107
+debian:~# ssh-copy-id -i /etc/cacti/id_rsa.pub cacti@192.168.1.107
 cacti@192.168.1.107's password: 
 Now try logging into the machine, with "ssh 'cacti@192.168.1.107'", and check in:
 
