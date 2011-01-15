@@ -275,6 +275,22 @@ This graph shows information on the query cache's memory usage: total size, free
 
 http://mysql-cacti-templates.googlecode.com/svn/data/graph_image_026.png
 
+= MySQL Query Response Time (Microseconds) =
+
+This graph displays a histogram of the [http://www.percona.com/docs/wiki/percona-server:features:response_time_distribution query response time distribution available in Percona Server].  Because the time units are user-configurable, exact unit labels are not displayed; rather, the graph simply shows the values.  There are 14 time units by default in Percona Server, so there are 13 entries on the graph (the 14th is non-numeric, so we omit it).
+
+The graph actually displays the amount of response time spent by the server on queries of various lengths.  See the Percona documentation for more.  The units are in microseconds on the graph, because RRDtool cannot store floating-point values.
+
+http://mysql-cacti-templates.googlecode.com/svn/data/mysql-query-response-time.png
+
+= MySQL Query Time Histogram (Count) =
+
+This graph displays a histogram of the [http://www.percona.com/docs/wiki/percona-server:features:response_time_distribution query response time distribution available in Percona Server].  Because the time units are user-configurable, exact unit labels are not displayed; rather, the graph simply shows the values.  There are 14 time units by default in Percona Server, so there are 13 entries on the graph (the 14th is non-numeric, so we omit it).
+
+The graph displays the number of queries that fell into each time division.  See the Percona documentation for more.
+
+http://mysql-cacti-templates.googlecode.com/svn/data/mysql-query-time-histogram.png
+
 = MySQL Replication Status =
 
 This graph displays the status of the replication thread.  There are two ways to measure the replication delay:
