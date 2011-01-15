@@ -40,6 +40,7 @@ $ssh_user   = 'cacti';                          # SSH username
 $ssh_port   = 22;                               # SSH port
 $ssh_iden   = '-i /var/www/cacti/.ssh/id_rsa';  # SSH identity
 $ssh_tout   = 10;                               # SSH connect timeout
+$nc_cmd     = 'nc -C -q1';                      # How to invoke netcat
 $cache_dir  = '/tmp';  # If set, this uses caching to avoid multiple calls.
 $poll_time  = 300; # Adjust to match your polling interval.
 $use_ss     = FALSE; # Whether to use the script server or not
@@ -1019,10 +1020,10 @@ function memcached_cachefile ( $options ) {
 }
 
 function memcached_cmdline ( $options ) {
-   global $memcache_port;
+   global $memcache_port, $nc_cmd;
    $srv = isset($options['server']) ? $options['server'] : $options['host'];
    $prt = isset($options['port2'])  ? $options['port2']  : $memcache_port;
-   return "echo \"stats\nquit\" | nc $srv $prt";
+   return "echo \"stats\nquit\" | $nc_cmd $srv $prt";
 }
 
 function memcached_parse ( $options, $output ) {
@@ -1188,10 +1189,10 @@ function redis_cachefile ( $options ) {
 # different in different systems.  We really need the -C option, but some nc
 # don't have -C.
 function redis_cmdline ( $options ) {
-   global $redis_port;
+   global $redis_port, $nc_cmd;
    $srv = isset($options['server']) ? $options['server'] : $options['host'];
    $prt = isset($options['port2'])  ? $options['port2']  : $redis_port;
-   return "echo INFO | nc -C -q1 $srv $prt";
+   return "echo INFO | $nc_cmd $srv $prt";
 }
 
 function redis_parse ( $options, $output ) {
