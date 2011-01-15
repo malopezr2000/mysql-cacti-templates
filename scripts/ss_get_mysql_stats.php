@@ -464,21 +464,22 @@ function ss_get_mysql_stats( $options ) {
       $istatus_vals = get_innodb_array($istatus_text);
 
       # Get response time histogram from Percona Server if enabled.
-      if ( isset($status['enable_query_response_time_stats']) 
-           &&   ($status['enable_query_response_time_stats']))
+      if ( $chk_options['get_qrt']
+           && isset($status['have_response_time_distribution']) 
+           &&      ($status['have_response_time_distribution'] == 'YES'))
       {
          debug('Getting query time histogram');
          $i = 0;
          $result = run_query(
-            "SELECT * FROM INFORMATION_SCHEMA.QUERY_RESPONSE_TIME", $conn);
+            "SELECT `count`, total * 1000000 AS total "
+               . "FROM INFORMATION_SCHEMA.QUERY_RESPONSE_TIME "
+               . "WHERE `time` <> 'TOO LONG'",
+            $conn);
          foreach ( $result as $row ) {
-            if ( $row['time'] == "TOO LONG" ) {
-               break;
-            }
-            $key1 = sprintf("Query_time_hist_%02d", $i);
-            $key2 = sprintf("Query_time_tot_%02d",  $i);
-            $status[$key1] = $row['count'];
-            $status[$key2] = $row['time'];
+            $count_key = sprintf("Query_time_count_%02d", $i);
+            $total_key = sprintf("Query_time_total_%02d", $i);
+            $status[$count_key] = $row['count'];
+            $status[$total_key] = $row['total'];
             $i++;
          }
       }
@@ -717,20 +718,20 @@ function ss_get_mysql_stats( $options ) {
       'key_buffer_size'         => 'ei',
       'Innodb_row_lock_time'    => 'ej',
       'Innodb_row_lock_waits'   => 'ek',
-      'Query_time_hist_00'      => 'el',
-      'Query_time_hist_01'      => 'em',
-      'Query_time_hist_02'      => 'en',
-      'Query_time_hist_03'      => 'eo',
-      'Query_time_hist_04'      => 'ep',
-      'Query_time_hist_05'      => 'eq',
-      'Query_time_hist_06'      => 'er',
-      'Query_time_hist_07'      => 'es',
-      'Query_time_hist_08'      => 'et',
-      'Query_time_hist_09'      => 'eu',
-      'Query_time_hist_10'      => 'ev',
-      'Query_time_hist_11'      => 'ew',
-      'Query_time_hist_12'      => 'ex',
-      'Query_time_hist_13'      => 'ey',
+      'Query_time_count_00'     => 'el',
+      'Query_time_count_01'     => 'em',
+      'Query_time_count_02'     => 'en',
+      'Query_time_count_03'     => 'eo',
+      'Query_time_count_04'     => 'ep',
+      'Query_time_count_05'     => 'eq',
+      'Query_time_count_06'     => 'er',
+      'Query_time_count_07'     => 'es',
+      'Query_time_count_08'     => 'et',
+      'Query_time_count_09'     => 'eu',
+      'Query_time_count_10'     => 'ev',
+      'Query_time_count_11'     => 'ew',
+      'Query_time_count_12'     => 'ex',
+      'Query_time_count_13'     => 'ey',
       'Query_time_total_00'     => 'ez',
       'Query_time_total_01'     => 'fa',
       'Query_time_total_02'     => 'fb',
