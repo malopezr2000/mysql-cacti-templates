@@ -1,6 +1,8 @@
 Changes for templates:
-2010-06-07: 
 
+Unreleased:
+
+  * Added graphs for Percona Server response-time distribution (issue 158).
   * Added graphs for MongoDB (issue 136).
   * Added a minimum option to the template construction logic (issue 169).
   * Added memtotal for Memory (issue 146).
