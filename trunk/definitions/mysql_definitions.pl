@@ -2781,70 +2781,70 @@
          ],
       },
       {  base_value => '1000',
-         name       => 'MySQL Query Time Histogram',
+         name       => 'MySQL Query Time Histogram (Count)',
          hash       => 'hash_00_VER_7d8a8bb50886a021ae030ed0d4e3c7cc',
          dt         => {
             hash  => 'hash_01_VER_1f2509b045aeb9ac0558aa4233737f44',
             input => 'Get MySQL Stats',
-            Query_time_hist_00 => {
+            Query_time_count_00 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_ebfcaa64cdaa60002b5218296daaf2b2',
             },
-            Query_time_hist_01 => {
+            Query_time_count_01 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_8ebe594e9a0ca59e08bf3d60f7f4dde2',
             },
-            Query_time_hist_02 => {
+            Query_time_count_02 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_2bfd3f9e5434fb2a107da232111054a6',
             },
-            Query_time_hist_03 => {
+            Query_time_count_03 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_d99a98833535812b259f2a8420a5a1bc',
             },
-            Query_time_hist_04 => {
+            Query_time_count_04 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_3adae7105613acd6ed1524304f910193',
             },
-            Query_time_hist_05 => {
+            Query_time_count_05 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_c38a66be3f30127ec2137613ff5edebb',
             },
-            Query_time_hist_06 => {
+            Query_time_count_06 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_90c30b3268ace422f88e983b73e4eca8',
             },
-            Query_time_hist_07 => {
+            Query_time_count_07 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_faa45335183bdfc13f5eeecc355ddbc5',
             },
-            Query_time_hist_08 => {
+            Query_time_count_08 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_2fe931f1f6ae9fac2c3d449c0e35501e',
             },
-            Query_time_hist_09 => {
+            Query_time_count_09 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_b260dc170f232d80bc13b8641757ca58',
             },
-            Query_time_hist_10 => {
+            Query_time_count_10 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_12c78ac507951bd96540be4e5fef83ae',
             },
-            Query_time_hist_11 => {
+            Query_time_count_11 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_85365ae6ffcb35e0bed3bfaf4aeb870e',
             },
-            Query_time_hist_12 => {
+            Query_time_count_12 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_e302dc5947bdebe084161a3078af9582',
             },
-            Query_time_hist_13 => {
+            Query_time_count_13 => {
                data_source_type_id => '3',
                hash => 'hash_08_VER_1f1124852774c716695c6ec96b2e3cab',
             },
          },
          items => [
-            {  item => 'Query_time_hist_00',
+            {  item => 'Query_time_count_00',
                color  => 'DE0056',
                hashes => [
                   'hash_10_VER_f91b2d6a2c8d438c050de6eff5b26d3b',
@@ -2856,7 +2856,7 @@
                task => 'hash_09_VER_203b411246409225256cd9e4c1e21347',
                type => 'AREA',
             },
-            {  item => 'Query_time_hist_01',
+            {  item => 'Query_time_count_01',
                color  => '784890',
                hashes => [
                   'hash_10_VER_496f4b82d706e7ed3c60ea70382e96a7',
@@ -2868,7 +2868,7 @@
                task => 'hash_09_VER_011c09c13fbc6c95f41cbe5810fb0de7',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_02',
+            {  item => 'Query_time_count_02',
                color  => 'D1642E',
                hashes => [
                   'hash_10_VER_855176920fbff0216c8c78c1e9c52112',
@@ -2880,7 +2880,7 @@
                task => 'hash_09_VER_737c1386a6a5bc14c131f6bfc5354694',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_03',
+            {  item => 'Query_time_count_03',
                color  => '487860',
                hashes => [
                   'hash_10_VER_dacb5deffe6ad99685d8adcd1cadf21b',
@@ -2892,7 +2892,7 @@
                task => 'hash_09_VER_a0b3e0f48b2f19094adbc08332d81fe8',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_04',
+            {  item => 'Query_time_count_04',
                color  => '907890',
                hashes => [
                   'hash_10_VER_57c86745221cb2504025d814cd883008',
@@ -2904,7 +2904,7 @@
                task => 'hash_09_VER_38aa218d17dfa28eb3fe86101e39e02e',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_05',
+            {  item => 'Query_time_count_05',
                color  => 'DE0056',
                hashes => [
                   'hash_10_VER_e1154b34378d5058b81299b9e0d247b7',
@@ -2916,7 +2916,7 @@
                task => 'hash_09_VER_4ea7085e94c95638e8bf1bb6ab689225',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_06',
+            {  item => 'Query_time_count_06',
                color  => '1693A7',
                hashes => [
                   'hash_10_VER_46ddc0b8daa89d6cf3f3e59516e7e311',
@@ -2928,7 +2928,7 @@
                task => 'hash_09_VER_cdfeda7774d826efa60577c6c5926e7e',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_07',
+            {  item => 'Query_time_count_07',
                color  => '783030',
                hashes => [
                   'hash_10_VER_c0f96e96cdfbeadb1f41dc9fd202f9f5',
@@ -2940,7 +2940,7 @@
                task => 'hash_09_VER_16c85be21cc038121debe6a95b221654',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_08',
+            {  item => 'Query_time_count_08',
                color  => 'FF7F00',
                hashes => [
                   'hash_10_VER_c0e126447f515103984fe9a827267a63',
@@ -2952,7 +2952,7 @@
                task => 'hash_09_VER_1596077c5bda999203d90cccaf70a6a0',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_09',
+            {  item => 'Query_time_count_09',
                color  => '54382A',
                hashes => [
                   'hash_10_VER_960c6ed8b3078b53825f756da4d6f766',
@@ -2964,7 +2964,7 @@
                task => 'hash_09_VER_e91bd2ae52d96a3a2feba0e277efd6f5',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_10',
+            {  item => 'Query_time_count_10',
                color  => 'B83A04',
                hashes => [
                   'hash_10_VER_429cc07d1cf2eb5ddd512f0e00040296',
@@ -2976,7 +2976,7 @@
                task => 'hash_09_VER_c7ade8931484c0456586b72d49eab78c',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_11',
+            {  item => 'Query_time_count_11',
                color  => '6E3803',
                hashes => [
                   'hash_10_VER_e1fdc8fb7c17ed13a79422f5471d35bc',
@@ -2988,7 +2988,7 @@
                task => 'hash_09_VER_6c0d44e7f6c483554a390401b71aa44a',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_12',
+            {  item => 'Query_time_count_12',
                color  => 'B56414',
                hashes => [
                   'hash_10_VER_bbff3a2b0e487c9663e3f7cad1f8c27e',
@@ -3000,7 +3000,7 @@
                task => 'hash_09_VER_211f0be6280b7f83411ed93ffbd0c574',
                type => 'STACK',
             },
-            {  item => 'Query_time_hist_13',
+            {  item => 'Query_time_count_13',
                color  => '6E645A',
                hashes => [
                   'hash_10_VER_52df963aa08737c80f91f1e3f88d2277',
@@ -3015,7 +3015,7 @@
          ],
       },
       {  base_value => '1000',
-         name       => 'MySQL Query Response Time',
+         name       => 'MySQL Query Response Time (Microseconds)',
          hash       => 'hash_00_VER_ab6380d269793b84e5d8ee3e82eb4d35',
          dt         => {
             hash  => 'hash_01_VER_1d68df9da20d390f4f53353e40cd4bb6',
@@ -3481,20 +3481,20 @@
             key_buffer_size            => 'hash_07_VER_1a2d33907bf06696b69cb8e15115f689',
             Innodb_row_lock_waits      => 'hash_07_VER_6ba64246ba233acdff5692b25802bcf7',
             Innodb_row_lock_time       => 'hash_07_VER_aef4b672de23f6d675ea45b6fd0fd5dc',
-            Query_time_hist_00         => 'hash_07_VER_12641105511cf08d7d06673b1ab5edc7',
-            Query_time_hist_01         => 'hash_07_VER_46e4791337ea3bdfb88c200177c252db',
-            Query_time_hist_02         => 'hash_07_VER_5a9e6924558381d75d484d67d7615945',
-            Query_time_hist_03         => 'hash_07_VER_801c4b0a1018399ef9985e97aba355b5',
-            Query_time_hist_04         => 'hash_07_VER_6a0ffae58791501c91c7fdefb1dfc9a6',
-            Query_time_hist_05         => 'hash_07_VER_e553f334a0fc64919de9e3912c7a50a3',
-            Query_time_hist_06         => 'hash_07_VER_3d14aecc290d0be430122a06ac9ea38c',
-            Query_time_hist_07         => 'hash_07_VER_1fa1ef7b14b0d2153f2b2f83d2046fa3',
-            Query_time_hist_08         => 'hash_07_VER_4b931175d307d20d79a164a504e513e2',
-            Query_time_hist_09         => 'hash_07_VER_1c192f60fc3380f9539d41a78cc08ca3',
-            Query_time_hist_10         => 'hash_07_VER_95306204f6eac52daf07452bbfa18ade',
-            Query_time_hist_11         => 'hash_07_VER_190669d2b864aa1f4ac92bdb57d7f43c',
-            Query_time_hist_12         => 'hash_07_VER_60ef6d1ad1d8e3e37b680cfabf5ada3b',
-            Query_time_hist_13         => 'hash_07_VER_e8813f6fbe4fe0afaf95abacedbe61f8',
+            Query_time_count_00        => 'hash_07_VER_12641105511cf08d7d06673b1ab5edc7',
+            Query_time_count_01        => 'hash_07_VER_46e4791337ea3bdfb88c200177c252db',
+            Query_time_count_02        => 'hash_07_VER_5a9e6924558381d75d484d67d7615945',
+            Query_time_count_03        => 'hash_07_VER_801c4b0a1018399ef9985e97aba355b5',
+            Query_time_count_04        => 'hash_07_VER_6a0ffae58791501c91c7fdefb1dfc9a6',
+            Query_time_count_05        => 'hash_07_VER_e553f334a0fc64919de9e3912c7a50a3',
+            Query_time_count_06        => 'hash_07_VER_3d14aecc290d0be430122a06ac9ea38c',
+            Query_time_count_07        => 'hash_07_VER_1fa1ef7b14b0d2153f2b2f83d2046fa3',
+            Query_time_count_08        => 'hash_07_VER_4b931175d307d20d79a164a504e513e2',
+            Query_time_count_09        => 'hash_07_VER_1c192f60fc3380f9539d41a78cc08ca3',
+            Query_time_count_10        => 'hash_07_VER_95306204f6eac52daf07452bbfa18ade',
+            Query_time_count_11        => 'hash_07_VER_190669d2b864aa1f4ac92bdb57d7f43c',
+            Query_time_count_12        => 'hash_07_VER_60ef6d1ad1d8e3e37b680cfabf5ada3b',
+            Query_time_count_13        => 'hash_07_VER_e8813f6fbe4fe0afaf95abacedbe61f8',
             Query_time_total_00        => 'hash_07_VER_eace5192545f2e2a990f430ab14897c6',
             Query_time_total_01        => 'hash_07_VER_d4b242e9e8bc78a1fbcd1d8a1c329245',
             Query_time_total_02        => 'hash_07_VER_8c34a8a86878ba44e7bd475a169582c0',
