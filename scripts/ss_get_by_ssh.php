@@ -445,7 +445,7 @@ function ss_get_by_ssh( $options ) {
       'MONGODB_op_getmores'              => 'ds',
       'MONGODB_op_commands'              => 'dt',
       'MONGODB_slave_lag'                => 'du',
-      # 'dv' used by STAT_memtotal
+      # used by STAT_memtotal            => 'dv',
    );
 
    # Prepare and return the output.  The output we have right now is the whole
