@@ -849,7 +849,7 @@ function w_parse ( $options, $output ) {
    );
 
    foreach ( explode("\n", $output) as $line ) {
-      if ( preg_match_all('/(\d+) user[s]*, .*(\d+\.\d+)$/', $line, $words) ) {
+      if ( preg_match_all('/(\d+) user[s]*, .*?(\d+\.\d+)$/', $line, $words) ) {
          $result['STAT_numusers'] = $words[1][0];
          $result['STAT_loadavg']  = $words[2][0];
       }
