@@ -802,6 +802,11 @@ sub mash_hash {
    return $hash3;
 }
 
+sub make_hash {
+   my ( $type, $seed ) = @_;
+   return sprintf "hash_%02d_VER_%s", $type, md5_hex($seed);
+}
+
 # #############################################################################
 # Do the work.
 # #############################################################################
@@ -969,17 +974,23 @@ foreach my $g ( @{ $t->{graphs} } ) {
    }
    ee('items');
 
-   # The inputs to the script that fills the RRA.
+   # The inputs to the script that fills the RRA.  If --mpds was given, items
+   # mentioned there must be added in <item> tags, with <t_value>on</t_value>,
+   # to make Cacti prompt the user to provide input for these when creating
+   # graphs.
    es('data');
-   my $cnt = 0;
+   my $cnt = 0; # Items are numbered like <item_001> and so on.
+
+   my %mpds_to_add = %{$opts{mpds}};
    foreach my $input ( @{ $i->{inputs} } ) {
       es(sprintf('item_%03d', $cnt));
       # Must generate a unique input ID hash for each DT, hence mash_hash.  The
       # result should be the same value as the one above that does the same
       # thing (in the previous loop, printing out DTs).
-      el('data_input_field_id', mash_hash($input->{hash}, $d->{hash}));
+      my $hash = mash_hash($input->{hash}, $d->{hash});
+      el('data_input_field_id', $hash);
       # If --mpds <foo> was given, --foo is not optional to the script.  But
-      # this one is OPPOSITE the one below, the dirty rascals.
+      # this is OPPOSITE the way it is in <fields> later.
       el('t_value',
          (  $opts{mpds}->{$input->{name}}
             || $input->{override}
@@ -988,7 +999,20 @@ foreach my $g ( @{ $t->{graphs} } ) {
       el('value', '');
       ee(sprintf('item_%03d', $cnt));
       $cnt++;
+      delete $mpds_to_add{$input->{name}}; # So we don't re-add it later.
    }
+
+   # Add more items as required by --mpds.
+   foreach my $mpds ( keys %mpds_to_add ) {
+      es(sprintf('item_%03d', $cnt));
+      my $hash = mash_hash(make_hash(7, $mpds), $d->{hash});
+      el('data_input_field_id', $hash);
+      el('t_value', 'on');
+      el('value', '');
+      ee(sprintf('item_%03d', $cnt));
+      $cnt++;
+   }
+
    ee('data');
 
    ee($d->{hash});
@@ -1013,14 +1037,22 @@ foreach my $g ( @{ $t->{graphs} } ) {
    el('name', "$name_prefix$dt->{input}/$g->{name} IM");
    el('type_id', $i->{type_id});
 
-   # Fix up the --items argument.
-   (my $input_string = $i->{input_string}) =~ s/<items>/$needed/;
+   # Fix up the --items argument.  When --mpds is given, any items that are
+   # per-data-source must be added explicitly to the command-line options for
+   # the input string.
+   my $input_string = $i->{input_string};
+   $input_string =~ s/<items>/$needed/;
+   foreach my $mpds ( keys %{$opts{mpds}} ) {
+      $input_string .= " --$mpds <$mpds>" unless $input_string =~ m/--$mpds /;
+   }
    el('input_string', $input_string);
 
    es('fields');
 
    # Input fields (arguments) to the script.  The --items argument is magical
-   # and has already been replaced above.
+   # and has already been replaced above.  When --mpds is given, additional
+   # elements must be added as well, if they don't already exist.
+   my %mpds_to_add = %{$opts{mpds}};
    foreach my $it ( @{$i->{inputs}} ) {
       my $hash = mash_hash($it->{hash}, $dt->{hash});
       es($hash);
@@ -1033,6 +1065,25 @@ foreach my $g ( @{ $t->{graphs} } ) {
       el('type_code', ($it->{name} =~ m/$is_magic/ ? $it->{name} : ''));
       el('input_output', 'in');
       el('data_name', $it->{name});
+      ee($hash);
+      delete $mpds_to_add{$it->{name}}; # So we don't re-add it later.
+   }
+
+   # Add more inputs as required by --mpds if they were non-existing.
+   foreach my $mpds ( sort keys %mpds_to_add ) {
+      # The elements will need hashes.  Generate a deterministic hash, not a
+      # random one (we don't want templates to be random and non-repeatable).
+      # We base the new hashes off the input's name.  We must generate the same
+      # hash as we did before in the <item> section.
+      my $hash = mash_hash(make_hash(7, $mpds), $dt->{hash});
+      es($hash);
+      el('name', to_words($mpds));
+      el('update_rra',     '');
+      el('regexp_match',   '');
+      el('allow_nulls',    '');
+      el('type_code',      '');
+      el('input_output', 'in');
+      el('data_name',   $mpds);
       ee($hash);
    }
 
