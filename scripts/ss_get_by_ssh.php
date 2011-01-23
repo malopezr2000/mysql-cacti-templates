@@ -527,6 +527,19 @@ function microtime_float() {
 }
 
 # ============================================================================
+# Function to sanitize filenames
+# ============================================================================
+function sanitize_filename($options, $keys, $tail) {
+   $result = "";
+   foreach ( $keys as $k ) {
+      if ( isset($options[$k]) ) {
+         $result .= $options[$k] . '_';
+      }
+   }
+   return str_replace(array(":", "/"), array("", "_"), $result . $tail);
+}
+
+# ============================================================================
 # Execute the command to get the output and return it.
 # ============================================================================
 function get_command_result($cmd, $options) {
@@ -729,9 +742,7 @@ function debug($val) {
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type proc_stat --host 127.0.0.1 --items ag,ah'
 # ============================================================================
 function proc_stat_cachefile ( $options ) {
-   $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   return "${sanitized_host}_proc_stat";
+   return sanitize_filename($options, array('host', 'port'), 'proc_stat');
 }
 
 function proc_stat_cmdline ( $options ) {
@@ -788,9 +799,7 @@ function proc_stat_parse ( $options, $output ) {
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memory --host 127.0.0.1 --items au,av'
 # ============================================================================
 function memory_cachefile ( $options ) {
-   $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   return "${sanitized_host}_memory";
+   return sanitize_filename($options, array('host', 'port'), 'memory');
 }
 
 function memory_cmdline ( $options ) {
@@ -833,9 +842,7 @@ function memory_parse ( $options, $output ) {
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type w --host 127.0.0.1 --items as,at'
 # ============================================================================
 function w_cachefile ( $options ) {
-   $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   return "${sanitized_host}_w";
+   return sanitize_filename($options, array('host', 'port'), 'w');
 }
 
 function w_cmdline ( $options ) {
@@ -863,14 +870,7 @@ function w_parse ( $options, $output ) {
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type apache --host 127.0.0.1 --items ae,af'
 # ============================================================================
 function apache_cachefile ( $options ) {
-   global $status_server;
-   $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   $sanitized_server
-       = str_replace(array(":", "/"), array("", "_"),
-         isset($options['server']) ? $options['server'] : $status_server);
-   $port = isset($options['port2']) ? $options['port2'] : '';
-   return "${sanitized_host}_apache_${sanitized_server}_$port";
+   return sanitize_filename($options, array('host', 'port', 'server'), 'apache');
 }
 
 function apache_cmdline ( $options ) {
@@ -950,14 +950,7 @@ function apache_parse ( $options, $output ) {
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type nginx --host 127.0.0.1 --items az,b0'
 # ============================================================================
 function nginx_cachefile ( $options ) {
-   global $status_server;
-   $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   $sanitized_server
-       = str_replace(array(":", "/"), array("", "_"),
-         isset($options['server']) ? $options['server'] : $status_server);
-   $port = isset($options['port2']) ? $options['port2'] : '';
-   return "${sanitized_host}_nginx_${sanitized_server}_$port";
+   return sanitize_filename($options, array('host', 'port', 'port2', 'server'), 'nginx');
 }
 
 function nginx_cmdline ( $options ) {
@@ -1009,14 +1002,7 @@ function nginx_parse ( $options, $output ) {
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type memcached --host 127.0.0.1 --items b6,b7'
 # ============================================================================
 function memcached_cachefile ( $options ) {
-   global $status_server, $memcache_port;
-   $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   $sanitized_server
-       = str_replace(array(":", "/"), array("", "_"),
-         isset($options['server']) ? $options['server'] : $status_server);
-   $port = isset($options['port2']) ? $options['port2'] : $memcache_port;
-   return "${sanitized_host}_memcached_${sanitized_server}_$port";
+   return sanitize_filename($options, array('host', 'port', 'port2', 'server'), 'memcached');
 }
 
 function memcached_cmdline ( $options ) {
@@ -1053,11 +1039,7 @@ function diskstats_cachefile ( $options ) {
    if ( !isset($options['device']) ) {
       die("--device is required for --type diskstats");
    }
-   $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   $sanitized_dev
-       = str_replace(array(":", "/"), array("", "_"), $options['device']);
-   return "${sanitized_host}_diskstats_${sanitized_dev}";
+   return sanitize_filename($options, array('host', 'port', 'device'), 'diskstats');
 }
 
 function diskstats_cmdline ( $options ) {
@@ -1115,9 +1097,7 @@ function diskstats_parse ( $options, $output ) {
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type openvz --host 127.0.0.1 --items bu,bv,bw,bx,by,bz,c0'
 # ============================================================================
 function openvz_cachefile ( $options ) {
-   $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   return "${sanitized_host}_openvz";
+   return sanitize_filename($options, array('host', 'port'), 'openvz');
 }
 
 function openvz_cmdline ( $options ) {
@@ -1175,13 +1155,7 @@ function openvz_parse ( $options, $output ) {
 # ============================================================================
 function redis_cachefile ( $options ) {
    global $status_server, $redis_port;
-   $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   $sanitized_server
-       = str_replace(array(":", "/"), array("", "_"),
-         isset($options['server']) ? $options['server'] : $status_server);
-   $port = isset($options['port2']) ? $options['port2'] : $redis_port;
-   return "${sanitized_host}_redis_${sanitized_server}_$port";
+   return sanitize_filename($options, array('host', 'port', 'port2', 'server'), 'redis');
 }
 
 # The function redis_get is defined below to use a TCP socket directly, so
@@ -1268,11 +1242,7 @@ function jmx_parse ( $options, $output ) {
 }
 
 function jmx_cachefile ( $options ) {
-   $sanitized_host
-      = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   $sanitized_port2
-      = str_replace(array(":", "/"), array("", "_"), $options['port2']);
-   return "${sanitized_host}_jmx_${sanitized_port2}";
+   return sanitize_filename($options, array('host', 'port', 'port2'), 'jmx');
 }
 
 function jmx_cmdline ( $options ) {
@@ -1286,9 +1256,7 @@ function jmx_cmdline ( $options ) {
 # su - cacti -c 'env -i php /var/www/cacti/scripts/ss_get_by_ssh.php --type mongodb --host 127.0.0.1 --items dc,de,df,dg,dh,di,dj,dk,dl,dm,dn,do,dp,dq,dr,ds,dt,du
 # ============================================================================
 function mongodb_cachefile ( $options ) {
-   $sanitized_host
-       = str_replace(array(":", "/"), array("", "_"), $options['host']);
-   return "${sanitized_host}_" . $options['port2'] . "_mongodb";
+   return sanitize_filename($options, array('host', 'port2'), 'mongodb');
 }
 
 function mongodb_cmdline ( $options ) {

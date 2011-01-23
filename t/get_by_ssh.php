@@ -3,6 +3,15 @@ require('test-more.php');
 require('../scripts/ss_get_by_ssh.php');
 $debug = true;
 
+is(
+   sanitize_filename(
+      array('foo' => 'bar'),
+      array('foo', 'biz'),
+      'tail'),
+   'bar_tail',
+   'sanitize_filename'
+);
+
 is_deeply(
    proc_stat_parse(null, file_get_contents('samples/proc_stat-001.txt')),
    array(
