@@ -1,6 +1,6 @@
 Changes for templates:
 
-Unreleased:
+2011-01-22: version 1.1.8
 
   * The cache file names could conflict due to omitting --port (issue 171).
   * Load-average parsing did not work correctly at high load (issue 170).

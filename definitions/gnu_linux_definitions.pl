@@ -22,7 +22,7 @@
    name   => 'GNU/Linux Server',
    hash   => 'hash_02_VER_0a83853ee620998961253e285c00406a',
    version => {
-      version => '1.1.7',
+      version => '1.1.8',
       hash    => 'hash_06_VER_ac10705723a27cae224aa85dc7e38cdb',
    },
    graphs => [
