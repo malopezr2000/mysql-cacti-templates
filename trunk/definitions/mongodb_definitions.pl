@@ -22,7 +22,7 @@
    name   => 'MongoDB Server',
    hash   => 'hash_02_VER_84ce0c2c9aa026d00b96855bdf871054',
    version => {
-      version => '1.1.7',
+      version => '1.1.8',
       hash    => 'hash_06_VER_a6ad1a38080a578e67ad18fa4be4ac9a',
    },
    graphs => [
