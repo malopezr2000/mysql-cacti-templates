@@ -21,6 +21,19 @@ $version = "1.1.4";
 
 Each step in the following list assumes that you have upgraded to the previous version already.
 
+= Version 1.1.8 =
+
+To upgrade from version 1.1.7, you need to
+
+  * Copy the new ss_get_mysql_stats.php and ss_get_by_ssh.php files into your Cacti scripts directory.  There were changes to both of them.
+  * Re-import the new versions of the templates.
+  * Optionally add new graphs for MySQL, by refreshing the host template for all MySQL servers.
+
+{{{
+e4eaa620a60b8d19427afb2fc47707c9  ss_get_by_ssh.php
+5b8aba21ae03f968320a7c9582fa9935  ss_get_mysql_stats.php
+}}}
+
 = Version 1.1.7 =
 
 To upgrade from version 1.1.6, you need to
