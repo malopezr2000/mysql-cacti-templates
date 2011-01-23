@@ -2,6 +2,7 @@ Changes for templates:
 
 Unreleased:
 
+  * The cache file names could conflict due to omitting --port (issue 171).
   * Load-average parsing did not work correctly at high load (issue 170).
   * The --mpds option to make-template.pl did not create new inputs (issue 133).
   * The url and port were reversed in the Nginx commandline (issue 149).
