@@ -25,6 +25,7 @@
       version => '1.1.8',
       hash    => 'hash_06_VER_0f91ebe15204e0d45977627acaabd138',
    },
+   checksum => 'hash_06_VER_fc13e22cb63305e2ac89c5e350af8337',
    graphs => [
       {  name       => 'Redis Connections',
          base_value => '1000',

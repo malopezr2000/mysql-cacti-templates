@@ -1,5 +1,7 @@
 Changes for templates:
 
+  * Added checksums to templates (issue 176).
+
 2011-01-22: version 1.1.8
 
   * The cache file names could conflict due to omitting --port (issue 171).

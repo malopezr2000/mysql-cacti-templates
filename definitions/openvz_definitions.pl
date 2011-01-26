@@ -25,6 +25,7 @@
       version => '1.1.8',
       hash    => 'hash_06_VER_8583b57ebeb95898fca2dbe4bbf74f11',
    },
+   checksum => 'hash_06_VER_85395be08eb3e8ccc5efe03485626129',
    graphs => [
       {  name       => 'OpenVZ Kernel Memory',
          base_value => '1024',

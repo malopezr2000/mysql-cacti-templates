@@ -25,6 +25,7 @@
       version => '1.1.8',
       hash    => 'hash_06_VER_ac10705723a27cae224aa85dc7e38cdb',
    },
+   checksum => 'hash_06_VER_3abb0ee2e833b9157f8caaaa3b027e9c',
    graphs => [
       {  name       => 'Interrupts',
          base_value => '1000',

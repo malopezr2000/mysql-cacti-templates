@@ -25,6 +25,7 @@
       version => '1.1.8',
       hash    => 'hash_06_VER_ac10705723a27cae224aa85dc7e38cdd',
    },
+   checksum => 'hash_06_VER_c934708128c9378f53521f0842b6ea79',
    graphs => [
       {  name       => 'Nginx Requests',
          base_value => '1000',
