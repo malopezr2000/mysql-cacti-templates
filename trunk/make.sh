@@ -17,10 +17,20 @@ cp -a misc/*.* $DISTDIR/misc
 
 # Build the template.xml files...
 for file in definitions/*.pl; do
+   # Ensure that there's no duplicated hashes
+   tools/unique-hashes.pl ${file} > tmp
+   if ! diff -q ${file} tmp; then
+      echo "${file} has duplicated hashes!"
+      rm tmp
+      exit 1
+   fi
+   rm tmp
    SCRIPT=`grep Autobuild $file | cut -d ' ' -f 3`;
    NAME=`basename $file | sed -e s'/_definitions.pl//'`;
-   perl tools/make-template.pl --script scripts/$SCRIPT $file \
-      > $DISTDIR/templates/cacti_host_template_x_${NAME}_server_ht_0.8.6i-sver${VERSION}.xml
+   FILE="$DISTDIR/templates/cacti_host_template_x_${NAME}_server_ht_0.8.6i-sver${VERSION}.xml"
+   perl tools/make-template.pl --script scripts/$SCRIPT $file > "${FILE}"
+   MD5=`md5sum "${FILE}" | awk '{print $1}'`
+   sed -i -e s/CUSTOMIZED_XML_TEMPLATE/${MD5}/ "${FILE}"
 done
 
 tar czf $DISTDIR.tar.gz $DISTDIR

@@ -25,6 +25,7 @@
       version => '1.1.8',
       hash    => 'hash_06_VER_ac10705723a27cae224aa85dc7e38cdc',
    },
+   checksum => 'hash_06_VER_5e4fdcffaa9d5f03dfb4a4bdd992e555',
    graphs => [
       {  name       => 'Memcached Rusage',
          base_value => '1000',

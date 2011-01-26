@@ -25,6 +25,7 @@
       version => '1.1.8',
       hash    => 'hash_06_VER_a6ad1a38080a578e67ad18fa4be4ac9a',
    },
+   checksum => 'hash_06_VER_821f03ccd62a3befed9a768ac4932858',
    graphs => [
       {  name       => 'MongoDB Connections',
          base_value => '1000',

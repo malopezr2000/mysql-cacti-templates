@@ -24,6 +24,7 @@
       version => '1.1.8',
       hash    => 'hash_06_VER_30ad6e39e56f911b3c93545c8d44c984',
    },
+   checksum => 'hash_06_VER_9a101a62d4dc2ace6f7b022cf16010d1',
    graphs => [
       {  name       => 'JMX Heap Memory Usage',
          base_value => '1024',

@@ -25,6 +25,7 @@
       version => '1.1.8',
       hash    => 'hash_06_VER_ac10705723a27cae224aa85dc7e38cd0',
    },
+   checksum    => 'hash_06_VER_f6212a68c24f9ef744bb58b4a45345b4',
    graphs => [
       {  name       => 'Apache Requests',
          base_value => '1000',

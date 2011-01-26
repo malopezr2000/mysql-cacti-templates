@@ -622,6 +622,10 @@ $t->{gprints}->{$t->{name} . " Version $version_string"} = {
    gprint_text => $version_string,
    hash        => $t->{version}->{hash},
 };
+$t->{gprints}->{$t->{name} . " Checksum CUSTOMIZED_XML_TEMPLATE"} = {
+   gprint_text => 'CUSTOMIZED_XML_TEMPLATE',
+   hash        => $t->{checksum},
+};
 
 # #############################################################################
 # Global variables.

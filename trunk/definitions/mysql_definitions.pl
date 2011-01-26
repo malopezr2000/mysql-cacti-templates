@@ -24,6 +24,7 @@
       version => '1.1.8',
       hash    => 'hash_06_VER_ac10705723a27cae224aa85dc7e38cde',
    },
+   checksum => 'hash_06_VER_dc65b1c0c05896bd738df875c336858b',
    graphs => [
       {  base_value => '1000',
          dt         => {
