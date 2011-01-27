@@ -31,7 +31,14 @@ for file in definitions/*.pl; do
    perl tools/make-template.pl --script scripts/$SCRIPT $file > "${FILE}"
    MD5=`md5sum "${FILE}" | awk '{print $1}'`
    sed -i -e s/CUSTOMIZED_XML_TEMPLATE/${MD5}/ "${FILE}"
+   grep Checksum "${FILE}" | sed -e 's/^.*<name>//' -e 's/<.name>//'  >> md5sums
 done
 
 tar czf $DISTDIR.tar.gz $DISTDIR
 rm -rf $DISTDIR
+
+set +x
+echo "{{{"
+cat md5sums
+echo "}}}"
+rm md5sums
