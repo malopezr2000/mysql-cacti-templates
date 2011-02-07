@@ -37,7 +37,7 @@ you know how to do this better, please contribute your knowledge!
 
 Then you need to install ant and the XML file with the JMX definitions. Copy
 misc/jmx-monitor.xml (or download
-[http://mysql-cacti-templates.googlecode.com/svn/trunk/tools/jmx-monitor.xml
+[http://mysql-cacti-templates.googlecode.com/svn/trunk/misc/jmx-monitor.xml
 jmx-monitor.xml]) to the monitoring user's `$HOME` directory on the server you
 want to monitor. Then download catalina-ant-jmx.jar (this file is part of
 [http://tomcat.apache.org/download-60.cgi tomcat]) to the `$HOME/.ant/lib`
