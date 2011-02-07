@@ -84,6 +84,6 @@ http://mysql-cacti-templates.googlecode.com/svn/data/disk_read_write_time.png
 
 = Disk Elapsed IO Time (ms) =
 
-This graph shows how much time was spent in disk I/O overall, and how much weighted time was spent doing disk I/O.  The latter is a useful indication of I/O backlog.
+This graph shows how much time was spent in disk I/O overall (busy time), and how much weighted time was spent doing disk I/O.  The latter is a useful indication of I/O backlog.  The weighted time is the number of requests multiplied by the busy time, so if there are 5 requests that take 1 second, it is 5 seconds.  (If they all happen at the same time, the busy time is only 1 second.)
 
 http://mysql-cacti-templates.googlecode.com/svn/data/disk_elapsed_io_time.png
