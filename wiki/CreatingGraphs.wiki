@@ -485,7 +485,7 @@ $ tools/unique-hashes.pl definitions/gnu_linux_definitions.pl > temp.pl
 
 Now examine the generated file `temp.pl` and make sure it looks OK.  What I usually do is `vimdiff` that file and the original definitions file.  Among other things, I'm looking to make sure that I always pasted my hashes *below* where I copied them from.  *Hashes of the definition elements that pre-dated your work should never be changed!*  If they are, they can mess up people's Cacti installations.  The `diff` or `vimdiff` should reveal that new lines were added, but no old lines were changed.  After you verify that, you can replace the original file with the `temp.pl` file.
 
-If you are creating a new definitions file based on existing one, you can use the `--refresh` option to replace all hashes.
+If you are creating a new definitions file based on an existing one, you can use the `--refresh` option to replace all hashes.
 
 = Generate Templates =
 
