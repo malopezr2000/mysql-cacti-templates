@@ -111,7 +111,8 @@ Finally, I'll test the script to see if it can connect and retrieve values.  It 
 
 {{{
 debian:~# su - www-data -c 'env -i php /usr/share/cacti/site/scripts/ss_get_by_ssh.php --type memory --host 192.168.1.107 --items au,av'
-au:30842880 av:2244608debian:~# 
+au:30842880 av:2244608
+debian:~# 
 }}}
 
 In the example above, the script did not print a newline after its output, so the next prompt is a bit messed up, but the output is "au:30842880 av:2244608", followed by the command prompt, "debian:~# ".
