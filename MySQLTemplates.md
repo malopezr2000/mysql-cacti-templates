@@ -1,0 +1,1 @@
+The Better Cacti Templates project is now part of the [Percona Monitoring Plugins](http://www.percona.com/software/percona-monitoring-plugins/) project.
